@@ -407,6 +407,7 @@
 				14CE0C7D1B30E53F00AF27DC /* Sources */,
 				14CE0C7E1B30E53F00AF27DC /* Frameworks */,
 				14CE0C7F1B30E53F00AF27DC /* Resources */,
+				1477D1F21B62DBB700AB61E1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -464,6 +465,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1477D1F21B62DBB700AB61E1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"${CONFIGURATION}\" = \"Debug\" ]; then\nTAGS=\"NOTICE:\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}\" \\( -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ error: \\$1/\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		14CE0C7D1B30E53F00AF27DC /* Sources */ = {

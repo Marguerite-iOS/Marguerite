@@ -109,7 +109,6 @@ class RealtimeShuttlesGetter: NSObject, NSXMLParserDelegate {
         let url = NSURL(string: MargueriteShuttleLookupURL)
         
         if url == nil {
-            self.delegate?.busUpdateDidFail(NSError(domain: "edu.stanford.Marguerite", code: 3, userInfo: nil))
             return
         }
         

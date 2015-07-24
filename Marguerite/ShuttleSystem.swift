@@ -166,8 +166,6 @@ class ShuttleSystem: NSObject, NSXMLParserDelegate, RealtimeShuttlesGetterProtoc
         case 2:
             message = NSLocalizedString("Data Validation Error Message", comment: "")
             Answers.logCustomEventWithName("Data Validation Error", customAttributes: [:])
-        case 3:
-            message = "Invalid URL in Secrets file"
         default:
             break
         }
