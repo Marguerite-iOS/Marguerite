@@ -84,7 +84,7 @@
 		147C66FE1B311979001A716F /* StopInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopInfoTableViewController.swift; sourceTree = "<group>"; };
 		147D4BB61B446D86004E2CF1 /* StopTimeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopTimeTableViewCell.swift; sourceTree = "<group>"; };
 		147EC3AA1B311063006A4607 /* LiveMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveMapViewController.swift; sourceTree = "<group>"; };
-		1490A1EA1B3F194D00172CA4 /* StanfordBus-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "StanfordBus-Bridging-Header.h"; sourceTree = "<group>"; };
+		1490A1EA1B3F194D00172CA4 /* Marguerite-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Marguerite-Bridging-Header.h"; sourceTree = "<group>"; };
 		1490A22F1B3F1B0A00172CA4 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		149984E11B4EF2FD00EF92C9 /* FileHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		149AC2B61B40BDA700E0C5B7 /* CoreLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreLocationController.swift; sourceTree = "<group>"; };
@@ -296,7 +296,7 @@
 				14CE0C8D1B30E53F00AF27DC /* Images.xcassets */,
 				14CE0C851B30E53F00AF27DC /* Info.plist */,
 				14BB23C61B4F567D004098DC /* BundledGTFS.zip */,
-				1490A1EA1B3F194D00172CA4 /* StanfordBus-Bridging-Header.h */,
+				1490A1EA1B3F194D00172CA4 /* Marguerite-Bridging-Header.h */,
 				1457CAFF1B5EF69E004DBF3D /* Localizable.strings */,
 			);
 			name = "Supporting Files";
@@ -651,7 +651,7 @@
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = Marguerite;
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Marguerite/StanfordBus-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Marguerite/Marguerite-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -674,7 +674,7 @@
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = Marguerite;
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "Marguerite/StanfordBus-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Marguerite/Marguerite-Bridging-Header.h";
 			};
 			name = Release;
 		};

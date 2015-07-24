@@ -10,6 +10,8 @@
 	<string>Marguerite</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>8BCF0167EFD919CE1E70B16727D5B033466AC986</key>
+		<string>https://github.com/Marguerite-iOS/Marguerite.git</string>
 		<key>AF0B917E747E23FA2823531E5ACE84C5F25D9420</key>
 		<string>https://github.com/J3D1-WARR10R/StanfordBus.git</string>
 	</dict>
@@ -17,17 +19,27 @@
 	<string>Marguerite.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>AF0B917E747E23FA2823531E5ACE84C5F25D9420</key>
+		<key>8BCF0167EFD919CE1E70B16727D5B033466AC986</key>
 		<string>../..</string>
+		<key>AF0B917E747E23FA2823531E5ACE84C5F25D9420</key>
+		<string>../../../StanfordBus</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/J3D1-WARR10R/StanfordBus.git</string>
+	<string>https://github.com/Marguerite-iOS/Marguerite.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>AF0B917E747E23FA2823531E5ACE84C5F25D9420</string>
+	<string>8BCF0167EFD919CE1E70B16727D5B033466AC986</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>8BCF0167EFD919CE1E70B16727D5B033466AC986</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Marguerite</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
