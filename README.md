@@ -1,6 +1,6 @@
 # Marguerite
 
-Marguerite is an iOS app that makes it easier for riders to use the free [Stanford Marguerite shuttle bus system](http://transportation.stanford.edu/marguerite/).
+Marguerite is an iOS app that makes it easier for riders to use the free [Stanford Marguerite shuttle bus system](http://transportation.stanford.edu/marguerite/). Previous versions of the app are located [here](https://github.com/cardinaldevs/marguerite-ios).
 
 ### Features
 * See what buses are arriving next at the Marguerite stop closest to your current location.
