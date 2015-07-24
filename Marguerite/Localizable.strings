@@ -1,0 +1,52 @@
+/* 
+  Localizable.strings
+  Marguerite
+
+  Created by Andrew Finke on 7/21/15.
+  Copyright (c) 2015 Andrew Finke. All rights reserved.
+*/
+
+"All Title" = "All";
+"Stops Title" = "Stops";
+"Shuttles Title" = "Shuttles";
+"Live Map Title" = "Live Map";
+"Favorites Title" = "Favorites";
+"Nearby Title" = "Nearby";
+
+"GTFS Updated Text" = "GTFS data last updated %@";
+
+"Upcoming Shuttles Header" = "Upcoming Shuttles";
+"No Upcoming Shuttles Footer" = "No upcoming departures";
+
+"Updating Shuttles Error Title" = "Error Updating Shuttles";
+"Server Connect Error Message" = "Couldn't connect to the server.";
+"Data Validation Error Message" = "Failed to validate the data.";
+"Try Again Error Message End" = " Please try again later.";
+
+"Dismiss Button" = "Dismiss";
+"Try Again Button" = "Try again";
+
+"No Shuttles Message" = "No Shuttles in Service";
+
+"Map Title" = "Map";
+"Schedule Title" = "Schedule";
+
+"About Title" = "About Marguerite App";
+"Features Header" = "More features coming soon";
+"Features Footer" = "The full bus app will be released this fall when the Marguerite system upgrade is complete. Until then, please enjoy the live map view.";
+
+"Credits Header" = "Credits";
+"Updated Version Title" = "Updated Version";
+"Original App Title" = "Original App";
+"Branding Title" = "Branding";
+"Misc. Images Title" = "Misc. Images";
+
+"Contact Marguerite Header" = "Contact Marguerite";
+"Main Office Title" = "Main Office";
+"Lost and Found Title" = "Lost and Found";
+"Website Title" = "Website";
+"Service Feedback Title" = "Service Feedback";
+
+"Open-source Header" = "Open-source";
+"GitHub Title" = "On GitHub";
+"Open-source Footer" = "This app is open-source. All of the code is available on GitHub, and anyone can contribute to improving the app. Using SSZipArchive, GTFS Importer, and FMDB.";
