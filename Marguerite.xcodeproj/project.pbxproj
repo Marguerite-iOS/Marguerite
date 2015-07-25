@@ -81,6 +81,7 @@
 		14491E981B5C993100A65C87 /* DarkModeColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DarkModeColors.swift; sourceTree = "<group>"; };
 		144DBD651B310ACC00D31AB1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		1457CAFF1B5EF69E004DBF3D /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		1477D1F31B62EAAC00AB61E1 /* Marguerite.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Marguerite.entitlements; sourceTree = "<group>"; };
 		147C66FE1B311979001A716F /* StopInfoTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopInfoTableViewController.swift; sourceTree = "<group>"; };
 		147D4BB61B446D86004E2CF1 /* StopTimeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopTimeTableViewCell.swift; sourceTree = "<group>"; };
 		147EC3AA1B311063006A4607 /* LiveMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveMapViewController.swift; sourceTree = "<group>"; };
@@ -276,6 +277,7 @@
 		14CE0C831B30E53F00AF27DC /* Marguerite */ = {
 			isa = PBXGroup;
 			children = (
+				1477D1F31B62EAAC00AB61E1 /* Marguerite.entitlements */,
 				14CE0C861B30E53F00AF27DC /* AppDelegate.swift */,
 				14FD8FA21B43C3D800C42F7F /* View Controllers */,
 				14FD8F9F1B43C36B00C42F7F /* MapKit */,
@@ -407,7 +409,6 @@
 				14CE0C7D1B30E53F00AF27DC /* Sources */,
 				14CE0C7E1B30E53F00AF27DC /* Frameworks */,
 				14CE0C7F1B30E53F00AF27DC /* Resources */,
-				1477D1F21B62DBB700AB61E1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -431,6 +432,11 @@
 					14CE0C801B30E53F00AF27DC = {
 						CreatedOnToolsVersion = 6.3.2;
 						DevelopmentTeam = V7H4B3C39A;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -465,22 +471,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		1477D1F21B62DBB700AB61E1 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" = \"Debug\" ]; then\nTAGS=\"NOTICE:\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}\" \\( -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ error: \\$1/\"\nfi";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		14CE0C7D1B30E53F00AF27DC /* Sources */ = {
@@ -639,6 +629,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Marguerite/Marguerite.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -662,6 +653,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Marguerite/Marguerite.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (

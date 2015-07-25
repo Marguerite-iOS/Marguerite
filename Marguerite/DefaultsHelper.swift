@@ -8,7 +8,7 @@
 
 class DefaultsHelper: NSObject {
     
-    static let appGroup = NSUserDefaults(suiteName: "")!
+    static let appGroup = NSUserDefaults(suiteName: "group.edu.stanford.Marguerite")!
     
     /**
     Gets an NSUserDefaults NSData value and unarchives it

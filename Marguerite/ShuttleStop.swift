@@ -198,17 +198,4 @@ class ShuttleStop: NSObject {
         }
         return height
     }
-    
-    /**
-    The path to where the image of the routes is save
-    
-    :returns: The path.
-    */
-    private func routeBubblesImagePath() -> String {
-        let documentsPath = (NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! NSString)
-        if routesString == "" {
-            return documentsPath.stringByAppendingPathComponent(routesString + "NONE.png")
-        }
-        return documentsPath.stringByAppendingPathComponent(routesString + ".png")
-    }
 }
