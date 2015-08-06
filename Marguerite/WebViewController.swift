@@ -15,12 +15,17 @@ let showRouteInfoSegueIdentifier = "showRouteInfo"
 class WebViewController: UIViewController, UIToolbarDelegate {
 
     private let webView = WKWebView()
-    @IBOutlet private weak var segmentedControl: UISegmentedControl!
+    @IBOutlet private weak var segmentedControl: UISegmentedControl! {
+        didSet {
+            segmentedControl.setTitle(NSLocalizedString("Map Title", comment: ""), forSegmentAtIndex: 0)
+            segmentedControl.setTitle(NSLocalizedString("Schedule Title", comment: ""), forSegmentAtIndex: 1)
+        }
+    }
     
     var route: ShuttleRoute! {
         didSet {
             webView.loadRequest(NSURLRequest(URL: getMapURLForRoute()))
-            title = route.displayName()
+            title = route.displayName
         }
     }
     
@@ -28,8 +33,6 @@ class WebViewController: UIViewController, UIToolbarDelegate {
         findHairlineImageViewUnder(navigationController?.navigationBar)?.hidden = true
         
         segmentedControl.frame = CGRectMake(0, 0, view.frame.width - 30, segmentedControl.frame.height)
-        segmentedControl.setTitle(NSLocalizedString("Map Title", comment: ""), forSegmentAtIndex: 0)
-        segmentedControl.setTitle(NSLocalizedString("Schedule Title", comment: ""), forSegmentAtIndex: 1)
         
         webView.setTranslatesAutoresizingMaskIntoConstraints(false)
         webView.backgroundColor = UIColor(red: 128.0/255.0, green: 128.0/255.0, blue: 128.0/255.0, alpha: 1.0)
@@ -94,13 +97,14 @@ class WebViewController: UIViewController, UIToolbarDelegate {
         switch route!.shortName.lowercaseString {
         case "w":
             return NSURL(string: "http://transportation.stanford.edu/marguerite/w/map.pdf")!
+        case "eb ex":
+            return NSURL(string: "http://transportation.stanford.edu/marguerite/eb/eb.pdf")!
         case "mc-hol":
             return NSURL(string: "http://transportation.stanford.edu/marguerite/mch/mch.pdf")!
         case "h-dir":
             return NSURL(string: "http://transportation.stanford.edu/marguerite/hd/hd.pdf")!
         case "se":
-            let url = isSESpecial() ? NSURL(string: "http://transportation.stanford.edu/marguerite/sesp/sesp.pdf")! : route!.routeURL.URLByAppendingPathComponent("/map.pdf")
-            return url
+            return isSESpecial() ? NSURL(string: "http://transportation.stanford.edu/marguerite/sesp/sesp.pdf")! : route!.routeURL.URLByAppendingPathComponent("/map.pdf")
         default:
             return route!.routeURL.URLByAppendingPathComponent("/" + route!.shortName!.lowercaseString + ".pdf")
         }
@@ -134,7 +138,7 @@ class WebViewController: UIViewController, UIToolbarDelegate {
     */
     @IBAction private func shareURL(sender: AnyObject) {
         let content = segmentedControl.selectedSegmentIndex == 0 ? NSLocalizedString("Map Title", comment: "") : NSLocalizedString("Schedule Title", comment: "")
-        let string = route.displayName() + " " + content
+        let string = route.displayName + " " + content
         Answers.logShareWithMethod("WebViewController",
             contentName: route.shortName + content,
             contentType: "url",

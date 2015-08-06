@@ -22,7 +22,7 @@ class ShuttleSystemAnnotation: MKPointAnnotation {
         case None
     }
     
-    var type: ShuttleSystemAnnotationType = .None
+    lazy var type: ShuttleSystemAnnotationType = .None
     // Used to store the system object, such as a ShuttleStop object
     var object: AnyObject?
     

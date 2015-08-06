@@ -19,7 +19,7 @@ let UpdatedThemeNotification = "UpdatesTheme"
 let LocationAvailableNotification = "LocationAvailable"
 let LocationUnavailableNotification = "LocationUnavailable"
 
-class ShuttleSystem: NSObject, NSXMLParserDelegate, RealtimeShuttlesGetterProtocol, CoreLocationControllerDelegate {
+class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationControllerDelegate {
     
     static let sharedInstance = ShuttleSystem()
     
@@ -68,7 +68,7 @@ class ShuttleSystem: NSObject, NSXMLParserDelegate, RealtimeShuttlesGetterProtoc
     }
     
     func attemptStart() {
-        if fileHelper.hasCompletedInitalSetup() {
+        if fileHelper.hasCompletedInitalSetup {
             println("Device has GTFS")
             loadData()
         } else {
@@ -198,7 +198,7 @@ class ShuttleSystem: NSObject, NSXMLParserDelegate, RealtimeShuttlesGetterProtoc
     
     :returns: The region.
     */
-    func region() -> MKCoordinateRegion {
+    var region: MKCoordinateRegion {
         let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
         return MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 37.432233, longitude: -122.171183), span: span)
     }

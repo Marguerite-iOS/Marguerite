@@ -47,7 +47,7 @@ class ShuttleRoute: NSObject {
         image = RouteBubbleView.saveBubbleForRoute(self)
     }
     
-    func displayName() -> String {
+    var displayName: String {
         if let longName = longName {
             return longName
         }

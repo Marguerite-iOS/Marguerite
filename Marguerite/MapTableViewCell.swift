@@ -15,12 +15,11 @@ class MapTableViewCell: UITableViewCell, MKMapViewDelegate {
     Displays a map view in a table view cell
     */
     
-    @IBOutlet private weak var mapView: MKMapView!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        mapView.showsUserLocation = true
-        mapView.delegate = self
+    @IBOutlet private weak var mapView: MKMapView! {
+        didSet {
+            mapView.showsUserLocation = true
+            mapView.delegate = self
+        }
     }
     
     /**
@@ -29,7 +28,7 @@ class MapTableViewCell: UITableViewCell, MKMapViewDelegate {
     :param: stop The stop to display
     */
     func displayStop(stop: ShuttleStop) {
-        mapView.showAnnotations([stop.annotation()], animated: false)
+        mapView.showAnnotations([stop.annotation], animated: false)
     }
     
     // MARK: - Map view delegate

@@ -11,34 +11,41 @@ import MapKit
 import Crashlytics
 
 class LiveMapViewController: UIViewController, MKMapViewDelegate {
-
-    @IBOutlet private weak var mapView: MKMapView!
-    @IBOutlet private weak var segmentedControl: UISegmentedControl!
+    
+    @IBOutlet private weak var mapView: MKMapView! {
+        didSet {
+            mapView.region = ShuttleSystem.sharedInstance.region
+        }
+    }
+    @IBOutlet private weak var segmentedControl: UISegmentedControl! {
+        didSet {
+            segmentedControl.setTitle(NSLocalizedString("All Title", comment: ""), forSegmentAtIndex: 0)
+            segmentedControl.setTitle(NSLocalizedString("Stops Title", comment: ""), forSegmentAtIndex: 1)
+            segmentedControl.setTitle(NSLocalizedString("Shuttles Title", comment: ""), forSegmentAtIndex: 2)
+        }
+    }
     
     private var stopAnnontations: [ShuttleSystemAnnotation] = []
     private var shuttleAnnontations: [ShuttleSystemAnnotation] = []
-
+    
     private var showingStops = false
     private var showingShuttles = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Prepares the MKMapView
-        mapView.region = ShuttleSystem.sharedInstance.region()
-        
         // Gathers the stop annotations
         for stop in ShuttleSystem.sharedInstance.stops {
-            stopAnnontations.append(stop.annotation())
+            stopAnnontations.append(stop.annotation)
         }
         
         // Gathers the live shuttle annotations
         for shuttle in ShuttleSystem.sharedInstance.shuttles {
-            if let annotation = shuttle.annotation() {
+            if let annotation = shuttle.annotation {
                 shuttleAnnontations.append(annotation)
             }
         }
-   
+        
         updateMapAnnotations()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didUpdateShuttles", name: UpdatedShuttlesNotification, object: nil)
@@ -62,7 +69,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
             if let coordinate = shuttle.location?.coordinate {
                 var foundShuttle = false
                 for shuttleAnnontation in shuttleAnnontations {
-                    if shuttleAnnontation.title == shuttle.annotationTitle() {
+                    if shuttleAnnontation.title == shuttle.annotationTitle {
                         foundShuttle = true
                         UIView.animateWithDuration(0.8, animations: {
                             shuttleAnnontation.coordinate = coordinate
@@ -70,7 +77,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
                     }
                 }
                 if !foundShuttle {
-                    if let annotation = shuttle.annotation() {
+                    if let annotation = shuttle.annotation {
                         mapView.addAnnotation(annotation)
                         shuttleAnnontations.append(annotation)
                     }
@@ -145,7 +152,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     // MARK: - Map view delegate
-
+    
     // delegate method for rendering the shuttles and stops
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
         if annotation.isKindOfClass(MKUserLocation) {
@@ -173,7 +180,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     // moves stop annotations behind shuttle ones
     func mapView(mapView: MKMapView!, didAddAnnotationViews views: [AnyObject]!) {
         for annotationView in views {
-            if let annotation = annotationView.annotation as? ShuttleSystemAnnotation where annotation.type == .Stop {
+            if let annotationView = annotationView as? ShuttleSystemShuttleAnnotationView, let annotation = annotationView.annotation as? ShuttleSystemAnnotation where annotation.type == .Stop {
                 annotationView.layer.zPosition = -1
             }
         }
@@ -214,23 +221,17 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
             Answers.logContentViewWithName("WebViewController", contentType: "View Controller", contentId: "content-Web", customAttributes: ["Origin": "LiveMapViewController", "RouteName": route.shortName, "RouteID": route.routeID])
         }
     }
-
+    
     // MARK: - Other
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        segmentedControl.setTitle(NSLocalizedString("All Title", comment: ""), forSegmentAtIndex: 0)
-        segmentedControl.setTitle(NSLocalizedString("Stops Title", comment: ""), forSegmentAtIndex: 1)
-        segmentedControl.setTitle(NSLocalizedString("Shuttles Title", comment: ""), forSegmentAtIndex: 2)
-        
         title = NSLocalizedString("Live Map Title", comment: "")
-        
         setFilledTabBarItemImage("MapFilled")
     }
 }

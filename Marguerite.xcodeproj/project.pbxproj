@@ -298,8 +298,8 @@
 				14CE0C8D1B30E53F00AF27DC /* Images.xcassets */,
 				14CE0C851B30E53F00AF27DC /* Info.plist */,
 				14BB23C61B4F567D004098DC /* BundledGTFS.zip */,
-				1490A1EA1B3F194D00172CA4 /* Marguerite-Bridging-Header.h */,
 				1457CAFF1B5EF69E004DBF3D /* Localizable.strings */,
+				1490A1EA1B3F194D00172CA4 /* Marguerite-Bridging-Header.h */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -409,6 +409,7 @@
 				14CE0C7D1B30E53F00AF27DC /* Sources */,
 				14CE0C7E1B30E53F00AF27DC /* Frameworks */,
 				14CE0C7F1B30E53F00AF27DC /* Resources */,
+				14FCE43E1B63675100CB8D31 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -431,7 +432,7 @@
 				TargetAttributes = {
 					14CE0C801B30E53F00AF27DC = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = V7H4B3C39A;
+						DevelopmentTeam = CQRZ4E7K9U;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -471,6 +472,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		14FCE43E1B63675100CB8D31 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 80c3b2d37f1bca4e182e7fbf7976e6f069340b4d d0bc3219cfdb92e9f323b3c5f0de3ef22835401f8cda5fc54391593a8c285431";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		14CE0C7D1B30E53F00AF27DC /* Sources */ = {
@@ -630,18 +647,18 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Marguerite/Marguerite.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Stanford University";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Stanford University";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Marguerite/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = Marguerite;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "4aeab3db-2195-4815-b8be-fad947aea9b8";
 				SWIFT_OBJC_BRIDGING_HEADER = "Marguerite/Marguerite-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -654,18 +671,18 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Marguerite/Marguerite.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Stanford University";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Stanford University";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Marguerite/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_NAME = Marguerite;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "4aeab3db-2195-4815-b8be-fad947aea9b8";
 				SWIFT_OBJC_BRIDGING_HEADER = "Marguerite/Marguerite-Bridging-Header.h";
 			};
 			name = Release;

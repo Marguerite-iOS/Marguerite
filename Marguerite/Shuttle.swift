@@ -68,14 +68,14 @@ class Shuttle: NSObject {
     
     :returns: The annotation.
     */
-    func annotation() -> ShuttleSystemAnnotation? {
+    var annotation: ShuttleSystemAnnotation? {
         if let coordinate = location?.coordinate {
-            return ShuttleSystemAnnotation(annotationTitle: annotationTitle(), annotationObject: self, annotationType: .Shuttle, annotationCoordinate: coordinate)
+            return ShuttleSystemAnnotation(annotationTitle: annotationTitle, annotationObject: self, annotationType: .Shuttle, annotationCoordinate: coordinate)
         }
         return nil
     }
     
-    func annotationTitle() -> String {
+    var annotationTitle: String {
         return route.shortName + ": " + name.description
     }
     

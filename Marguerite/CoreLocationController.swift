@@ -38,7 +38,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate {
         }
     }
 
-    func locationEnabled() -> Bool {
+    var locationEnabled: Bool {
         return CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse
     }
     

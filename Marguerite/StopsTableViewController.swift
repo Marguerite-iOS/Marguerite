@@ -12,7 +12,12 @@ import Crashlytics
 
 class StopsTableViewController: UITableViewController {
     
-    @IBOutlet private weak var segmentedControl: UISegmentedControl!
+    @IBOutlet private weak var segmentedControl: UISegmentedControl! {
+        didSet {
+            segmentedControl.setTitle(NSLocalizedString("All Title", comment: ""), forSegmentAtIndex: 0)
+            segmentedControl.setTitle(NSLocalizedString("Favorites Title", comment: ""), forSegmentAtIndex: 1)
+        }
+    }
     @IBOutlet private weak var nightModeBarButtonItem: UIBarButtonItem!
     
     private var lastTableViewOffset: [CGFloat] = []
@@ -151,8 +156,6 @@ class StopsTableViewController: UITableViewController {
         super.awakeFromNib()
         
         title = NSLocalizedString("Stops Title", comment: "")
-        segmentedControl.setTitle(NSLocalizedString("All Title", comment: ""), forSegmentAtIndex: 0)
-        segmentedControl.setTitle(NSLocalizedString("Favorites Title", comment: ""), forSegmentAtIndex: 1)
         
         setFilledTabBarItemImage("BusFilled")
         seperatorColor = tableView.separatorColor

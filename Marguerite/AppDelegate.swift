@@ -19,14 +19,12 @@ let LiveMapModeOnlyKey = "Live Map Mode Only"
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    // TODO: - Fix Issues @ https://github.com/J3D1-WARR10R/StanfordBus/issues
-    
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
-       // Fabric.with([Crashlytics()])
+        Fabric.with([Crashlytics()])
 
         setAppearances()
         FileHelper.ensureFolderExistance()

@@ -8,7 +8,7 @@
 
 class DefaultsHelper: NSObject {
     
-    static let appGroup = NSUserDefaults(suiteName: "group.edu.stanford.Marguerite")!
+    static let appGroupDefaults = NSUserDefaults(suiteName: appGroupIdentifier)!
     
     /**
     Gets an NSUserDefaults NSData value and unarchives it
@@ -18,7 +18,7 @@ class DefaultsHelper: NSObject {
     :returns: The object
     */
     class func getObjectForKey(key : String) -> AnyObject? {
-        let object: AnyObject? = appGroup.objectForKey(key)
+        let object: AnyObject? = appGroupDefaults.objectForKey(key)
         if object != nil {
             return object
         }
@@ -32,8 +32,8 @@ class DefaultsHelper: NSObject {
     :param: key The NSUserDefaults key
     */
     class func saveDataForKey(object : AnyObject, key : String) {
-        appGroup.setObject(object, forKey: key)
-        appGroup.synchronize()
+        appGroupDefaults.setObject(object, forKey: key)
+        appGroupDefaults.synchronize()
     }
     
     /**
@@ -44,7 +44,7 @@ class DefaultsHelper: NSObject {
     :returns: value The bool value
     */
     class func key(key : String) -> Bool {
-        return appGroup.boolForKey(key)
+        return appGroupDefaults.boolForKey(key)
     }
     
     /**
@@ -54,7 +54,7 @@ class DefaultsHelper: NSObject {
     :param: key The NSUserDefaults key
     */
     class func keyIs(value : Bool, key : String) {
-        appGroup.setBool(value, forKey: key)
-        appGroup.synchronize()
+        appGroupDefaults.setBool(value, forKey: key)
+        appGroupDefaults.synchronize()
     }
 }

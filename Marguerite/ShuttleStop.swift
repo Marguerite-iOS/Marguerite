@@ -134,7 +134,7 @@ class ShuttleStop: NSObject {
     
     :returns: The annotation.
     */
-    func annotation() -> ShuttleSystemAnnotation {
+    var annotation: ShuttleSystemAnnotation {
         return ShuttleSystemAnnotation(annotationTitle: name, annotationObject: self, annotationType: .Stop, annotationCoordinate: location.coordinate)
     }
     
