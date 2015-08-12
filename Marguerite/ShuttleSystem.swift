@@ -108,9 +108,23 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
         }
         
         println("Loading ShuttleRoute Objects")
-        Route.getAllRoutes().map({self.routes.append(ShuttleRoute(dictionary: $0 as! [String : AnyObject]))})
+        Route.getAllRoutes().map { dictionary -> Void in
+            if let dictionary = dictionary as? [String:AnyObject] {
+                if let newRoute = ShuttleRoute(dictionary: dictionary) {
+                    self.routes.append(newRoute)
+                }
+            }
+            return
+        }
         println("Loading ShuttleStop Objects")
-        Stop.getAllStops().map({self.stops.append(ShuttleStop(dictionary: $0 as! [String : AnyObject]))})
+        Stop.getAllStops().map { dictionary -> Void in
+            if let dictionary = dictionary as? [String:AnyObject] {
+                if let newStop = ShuttleStop(dictionary: dictionary) {
+                    self.stops.append(newStop)
+                }
+            }
+            return
+        }
         
         if !liveMapModeOnly {
             println("--- Loading Stops Into Routes ---")
@@ -138,14 +152,18 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
         for shuttle in shuttlesInfo {
             if let shuttleName = shuttle["name"] {
                 if let mapping = mappingInfo[shuttleName] {
-                    let shuttle = Shuttle(dictionary: shuttle)
-                    if let route = shuttleRouteWithID(mapping) {
-                        shuttle.route = route
-                        shuttles.append(shuttle)
-                    } else {
-                        println(shuttleName + ": bad route: " + mapping)
-                        shuttleNamesWithErrors.append(shuttleName)
-                        Answers.logCustomEventWithName("Bad Shuttle Route", customAttributes: ["Shuttle": shuttleName, "RouteMapping": mapping])
+                    if let shuttle = Shuttle(dictionary: shuttle) {
+                        if let route = shuttleRouteWithID(mapping) {
+                            shuttle.route = route
+                            shuttles.append(shuttle)
+                        } else {
+                            println(shuttleName + ": bad route: " + mapping)
+                            shuttleNamesWithErrors.append(shuttleName)
+                            Answers.logCustomEventWithName("Bad Shuttle Route", customAttributes: ["Shuttle": shuttleName, "RouteMapping": mapping])
+                        }
+                    }
+                    else {
+                        CLSLogv("Create bus object error: %@", getVaList([shuttle]))
                     }
                 } else {
                     shuttleNamesWithErrors.append(shuttleName)

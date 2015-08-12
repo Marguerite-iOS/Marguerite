@@ -28,18 +28,25 @@ class ShuttleRoute: NSObject {
     
     :param: dictionary The shuttle route attributes.
     */
-    init(dictionary: [String:AnyObject]) {
+    init?(dictionary: [String:AnyObject]?) {
         super.init()
-        if let dicLongName = dictionary["route_long_name"] as? String where count(dicLongName) > 3 {
-            longName = dicLongName
+        if let dictionaryLongName = dictionary?["route_long_name"] as? String where count(dictionaryLongName) > 3 {
+            longName = dictionaryLongName
         }
         
-        routeID = (dictionary["route_id"]! as! String).toInt()
-        shortName = (dictionary["route_short_name"]! as! String)
-        routeURL = NSURL(string: dictionary["route_url"] as! String)!
+        if let dictionaryRouteID = (dictionary?["route_id"] as? String)?.toInt(), dictionaryShortName = dictionary?["route_short_name"] as? String, dictionaryRouteURLString = dictionary?["route_url"] as? String, dictionaryRouteURL = NSURL(string: dictionaryRouteURLString), dictionaryRouteColor =  dictionary?["route_color"] as? String, dictionaryRouteTextColor =  dictionary?["route_text_color"] as? String {
+            routeID = dictionaryRouteID
+            shortName = dictionaryShortName
+            routeURL = dictionaryRouteURL
+            
+            routeColor = hexStringToUIColor(dictionaryRouteColor)
+            routeTextColor = hexStringToUIColor(dictionaryRouteTextColor)
+        }
+        else {
+            return nil
+        }
         
-        routeColor = hexStringToUIColor(dictionary["route_color"] as! String)
-        routeTextColor = hexStringToUIColor(dictionary["route_text_color"] as! String)
+        
         if longName == "Va Tram" {
             shortName = "VA"
         }

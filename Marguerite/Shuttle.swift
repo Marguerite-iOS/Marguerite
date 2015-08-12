@@ -41,24 +41,29 @@ class Shuttle: NSObject {
     
     :param: dictionary The shuttle attributes.
     */
-    init(dictionary: [String:String]) {
+    init?(dictionary: [String:String]) {
         super.init()
-        name = dictionary[ShuttleElement.name]!.toInt()
-        tripID = dictionary[ShuttleElement.tripId]!.toInt()
-        routeID = dictionary[ShuttleElement.routeId]!.toInt()
+        if let dictionaryName = dictionary[ShuttleElement.name]?.toInt(), dictionaryTripID = dictionary[ShuttleElement.tripId]?.toInt(), dictionaryRouteID = dictionary[ShuttleElement.routeId]?.toInt() {
+            name = dictionaryName
+            tripID = dictionaryTripID
+            routeID = dictionaryRouteID
+        }
+        else {
+            return nil
+        }
         
-        if let timeString = dictionary[ShuttleElement.time] {
-            time = (timeString as NSString).doubleValue
+        if let dictionaryTime = dictionary[ShuttleElement.time] {
+            time = (dictionaryTime as NSString).doubleValue
         }
-        if let speedString = dictionary[ShuttleElement.speed] {
-            speed = (speedString as NSString).doubleValue
+        if let dictionarysSpeed = dictionary[ShuttleElement.speed] {
+            speed = (dictionarysSpeed as NSString).doubleValue
         }
-        if let headingString = dictionary[ShuttleElement.heading] {
-            heading = (headingString as NSString).doubleValue
+        if let dictionaryHeading = dictionary[ShuttleElement.heading] {
+            heading = (dictionaryHeading as NSString).doubleValue
         }
-        if let latString = dictionary[ShuttleElement.latitude], longString = dictionary[ShuttleElement.longitude] {
-            let lat = (latString as NSString).doubleValue
-            let long = (longString as NSString).doubleValue
+        if let dictionaryLat = dictionary[ShuttleElement.latitude], dictionaryLong = dictionary[ShuttleElement.longitude] {
+            let lat = (dictionaryLat as NSString).doubleValue
+            let long = (dictionaryLong as NSString).doubleValue
             location = CLLocation(latitude: lat, longitude: long)
         }
     }

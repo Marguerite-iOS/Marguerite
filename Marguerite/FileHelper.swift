@@ -59,14 +59,15 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
     :returns: The date of the newest file
     */
     private func getLatestFileInFolder(path: String) -> NSDate {
-        let contents = fileManager.contentsOfDirectoryAtPath(path, error: nil) as! [String]
         var latestDate = NSDate(timeIntervalSince1970: 0)
-        for fileName in contents {
-            if fileName.pathExtension == "txt" {
-                let path = path.stringByAppendingPathComponent(fileName)
-                let attributes = fileManager.attributesOfItemAtPath(path, error: nil)
-                if let modificationDate = attributes?[NSFileModificationDate] as? NSDate where latestDate.timeIntervalSinceDate(modificationDate) < 0 {
-                    latestDate = modificationDate
+        if let contents = fileManager.contentsOfDirectoryAtPath(path, error: nil) as? [String] {
+            for fileName in contents {
+                if fileName.pathExtension == "txt" {
+                    let path = path.stringByAppendingPathComponent(fileName)
+                    let attributes = fileManager.attributesOfItemAtPath(path, error: nil)
+                    if let modificationDate = attributes?[NSFileModificationDate] as? NSDate where latestDate.timeIntervalSinceDate(modificationDate) < 0 {
+                        latestDate = modificationDate
+                    }
                 }
             }
         }
@@ -95,9 +96,10 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
                 println("Keeping current data")
             }
             println("Clearing temp folder")
-            let contents = self.fileManager.contentsOfDirectoryAtPath(tempFolder, error: nil) as! [String]
-            for fileName in contents {
-                self.fileManager.removeItemAtPath(tempFolder.stringByAppendingPathComponent(fileName), error: nil)
+            if let contents = self.fileManager.contentsOfDirectoryAtPath(tempFolder, error: nil) as? [String] {
+                for fileName in contents {
+                    self.fileManager.removeItemAtPath(tempFolder.stringByAppendingPathComponent(fileName), error: nil)
+                }
             }
             println("--- Handled GTFS Data ---")
         }
@@ -154,7 +156,7 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
     }
     
     class var documentsPath: String {
-        return NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String//NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(appGroupIdentifier)!.absoluteString!
+        return NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
     }
     
 }

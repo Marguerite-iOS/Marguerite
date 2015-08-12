@@ -33,15 +33,19 @@ class ShuttleStop: NSObject {
     
     :param: dictionary The shuttle stop attributes.
     */
-    init(dictionary: [String:AnyObject]) {
+    init?(dictionary: [String:AnyObject]?) {
         super.init()
-        name = dictionary["stop_name"]! as! String
-        stopID = (dictionary["stop_id"]! as! String).toInt()
-        let lat = (dictionary["stop_lat"]! as! NSNumber).doubleValue
-        let long = (dictionary["stop_lon"]! as! NSNumber).doubleValue
-        location = CLLocation(latitude: lat, longitude: long)
+        if let dictionaryStopName = dictionary?["stop_name"] as? String, dictionaryStopID = (dictionary?["stop_id"] as? String)?.toInt(), dictionaryLat = (dictionary?["stop_lat"] as? NSNumber)?.doubleValue, dictionaryLon = (dictionary?["stop_lon"] as? NSNumber)?.doubleValue {
+            name = dictionaryStopName
+            stopID = dictionaryStopID
+            location = CLLocation(latitude: dictionaryLat, longitude: dictionaryLon)
+        }
+        else {
+            return nil
+        }
+        
         if !liveMapModeOnly {
-            createRoutes(dictionary)
+            createRoutes(dictionary!)
             stopTimes = getShuttleStopTimes()
             routeBubblesImage = getRouteBubblesImage()
         }
