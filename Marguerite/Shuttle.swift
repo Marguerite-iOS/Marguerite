@@ -24,12 +24,11 @@ class Shuttle: NSObject {
     
     // Neccesary
     var name: Int!
+    var location: CLLocation!
     private var tripID: Int!
     private var routeID: Int!
     
     // Optional
-    var location: CLLocation?
-    private var time: Double?
     private var speed: Double?
     private var heading: Double?
     
@@ -43,28 +42,23 @@ class Shuttle: NSObject {
     */
     init?(dictionary: [String:String]) {
         super.init()
-        if let dictionaryName = dictionary[ShuttleElement.name]?.toInt(), dictionaryTripID = dictionary[ShuttleElement.tripId]?.toInt(), dictionaryRouteID = dictionary[ShuttleElement.routeId]?.toInt() {
+        if let dictionaryName = dictionary[ShuttleElement.name]?.toInt(), dictionaryTripID = dictionary[ShuttleElement.tripId]?.toInt(), dictionaryRouteID = dictionary[ShuttleElement.routeId]?.toInt(), dictionaryLat = dictionary[ShuttleElement.latitude], dictionaryLong = dictionary[ShuttleElement.longitude] {
             name = dictionaryName
             tripID = dictionaryTripID
             routeID = dictionaryRouteID
+            let lat = (dictionaryLat as NSString).doubleValue
+            let long = (dictionaryLong as NSString).doubleValue
+            location = CLLocation(latitude: lat, longitude: long)
         }
         else {
             return nil
         }
         
-        if let dictionaryTime = dictionary[ShuttleElement.time] {
-            time = (dictionaryTime as NSString).doubleValue
-        }
         if let dictionarysSpeed = dictionary[ShuttleElement.speed] {
             speed = (dictionarysSpeed as NSString).doubleValue
         }
         if let dictionaryHeading = dictionary[ShuttleElement.heading] {
             heading = (dictionaryHeading as NSString).doubleValue
-        }
-        if let dictionaryLat = dictionary[ShuttleElement.latitude], dictionaryLong = dictionary[ShuttleElement.longitude] {
-            let lat = (dictionaryLat as NSString).doubleValue
-            let long = (dictionaryLong as NSString).doubleValue
-            location = CLLocation(latitude: lat, longitude: long)
         }
     }
     
@@ -73,11 +67,8 @@ class Shuttle: NSObject {
     
     :returns: The annotation.
     */
-    var annotation: ShuttleSystemAnnotation? {
-        if let coordinate = location?.coordinate {
-            return ShuttleSystemAnnotation(annotationTitle: annotationTitle, annotationObject: self, annotationType: .Shuttle, annotationCoordinate: coordinate)
-        }
-        return nil
+    var annotation: ShuttleSystemAnnotation {
+        return ShuttleSystemAnnotation(annotationTitle: annotationTitle, annotationObject: self, annotationType: .Shuttle, annotationCoordinate: location.coordinate)
     }
     
     var annotationTitle: String {

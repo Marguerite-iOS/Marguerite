@@ -12,7 +12,7 @@ class TabBarControllerDelegate: NSObject, UITabBarControllerDelegate {
     
     private var lastSelectedTitle = ""
     private var lastSelectedCount = 0
-    
+    private var resetTimer: NSTimer?
     /**
     This method is for toggling between the map only mode and full mode
     */
@@ -29,6 +29,12 @@ class TabBarControllerDelegate: NSObject, UITabBarControllerDelegate {
                 (UIApplication.sharedApplication().delegate as! AppDelegate).toggleMapOnlyMode()
             }
         }
+        resetTimer?.invalidate()
+        resetTimer = NSTimer(timeInterval: 10.0, target: self, selector: "resetCount", userInfo: nil, repeats: false)
         return true
+    }
+    
+    func resetCount() {
+        lastSelectedCount = 0
     }
 }

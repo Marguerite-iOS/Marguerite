@@ -41,9 +41,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
         
         // Gathers the live shuttle annotations
         for shuttle in ShuttleSystem.sharedInstance.shuttles {
-            if let annotation = shuttle.annotation {
-                shuttleAnnontations.append(annotation)
-            }
+            shuttleAnnontations.append(shuttle.annotation)
         }
         
         updateMapAnnotations()
@@ -66,22 +64,19 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     */
     func didUpdateShuttles() {
         for shuttle in ShuttleSystem.sharedInstance.shuttles {
-            if let coordinate = shuttle.location?.coordinate {
-                var foundShuttle = false
-                for shuttleAnnontation in shuttleAnnontations {
-                    if shuttleAnnontation.title == shuttle.annotationTitle {
-                        foundShuttle = true
-                        UIView.animateWithDuration(0.8, animations: {
-                            shuttleAnnontation.coordinate = coordinate
-                        })
-                    }
+            var foundShuttle = false
+            for shuttleAnnontation in shuttleAnnontations {
+                if shuttleAnnontation.title == shuttle.annotationTitle {
+                    foundShuttle = true
+                    UIView.animateWithDuration(0.8, animations: {
+                        shuttleAnnontation.coordinate = shuttle.location.coordinate
+                    })
                 }
-                if !foundShuttle {
-                    if let annotation = shuttle.annotation {
-                        mapView.addAnnotation(annotation)
-                        shuttleAnnontations.append(annotation)
-                    }
-                }
+            }
+            if !foundShuttle {
+                let annotation = shuttle.annotation
+                mapView.addAnnotation(annotation)
+                shuttleAnnontations.append(annotation)
             }
         }
         navigationItem.prompt = ShuttleSystem.sharedInstance.shuttles.count == 0 ? NSLocalizedString("No Shuttles Message", comment: "") : nil

@@ -277,14 +277,12 @@
 		14CE0C831B30E53F00AF27DC /* Marguerite */ = {
 			isa = PBXGroup;
 			children = (
-				1477D1F31B62EAAC00AB61E1 /* Marguerite.entitlements */,
 				14CE0C861B30E53F00AF27DC /* AppDelegate.swift */,
 				14FD8FA21B43C3D800C42F7F /* View Controllers */,
 				14FD8F9F1B43C36B00C42F7F /* MapKit */,
 				14FD8FA31B43C3F800C42F7F /* Views */,
 				14FD8FA01B43C37D00C42F7F /* Shuttle System */,
 				14FD8FA51B43C41B00C42F7F /* Helpers */,
-				14CE0C8A1B30E53F00AF27DC /* Main.storyboard */,
 				14CE0C841B30E53F00AF27DC /* Supporting Files */,
 			);
 			path = Marguerite;
@@ -299,6 +297,7 @@
 				14CE0C851B30E53F00AF27DC /* Info.plist */,
 				14BB23C61B4F567D004098DC /* BundledGTFS.zip */,
 				1457CAFF1B5EF69E004DBF3D /* Localizable.strings */,
+				1477D1F31B62EAAC00AB61E1 /* Marguerite.entitlements */,
 				1490A1EA1B3F194D00172CA4 /* Marguerite-Bridging-Header.h */,
 			);
 			name = "Supporting Files";
@@ -378,6 +377,7 @@
 		14FD8FA31B43C3F800C42F7F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				14CE0C8A1B30E53F00AF27DC /* Main.storyboard */,
 				14C495211B43B58E00BF5FE0 /* RouteBubbleView.swift */,
 				1444F4011B3127EE00151431 /* MapTableViewCell.swift */,
 				14AAE8011B43B6EB00BFF12E /* StopTableViewCell.swift */,

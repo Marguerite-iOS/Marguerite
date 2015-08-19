@@ -35,7 +35,6 @@ class RealtimeShuttlesGetter: NSObject, NSXMLParserDelegate {
             dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.value), 0)) { () -> Void in
                 if let parser = NSXMLParser(contentsOfURL: url) {
                     parser.delegate = self
-                    
                     if !parser.parse() {
                         self.delegate?.busUpdateDidFail(NSError(domain: "edu.stanford.Marguerite", code: 1, userInfo: nil))
                     }
@@ -65,36 +64,32 @@ class RealtimeShuttlesGetter: NSObject, NSXMLParserDelegate {
     
     private var parsingVehicle = false
     private var currentElement: String?
+    private var currentVehicleDictionary: [String:String]?
     private var vehicleDictionaries = [[String:String]]()
-    private var currentVehicleDictionary = [String:String]()
     
     func parserDidStartDocument(parser: NSXMLParser) {
-        vehicleDictionaries.removeAll(keepCapacity: true)
+        vehicleDictionaries = []
     }
     
     func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [NSObject : AnyObject]) {
-        if elementName == XMLElement.vehicle {
-            if let gpsStatus = attributeDict[XMLElement.gpsStatus] as? String, opStatus = attributeDict[XMLElement.opStatus] as? String where gpsStatus == XMLElement.goodStatus {
-                if !parsingVehicle {
-                    currentVehicleDictionary.removeAll(keepCapacity: true)
-                    parsingVehicle = true
-                }
-            }
+        if !parsingVehicle && elementName == XMLElement.vehicle, let gpsStatus = attributeDict[XMLElement.gpsStatus] as? String, opStatus = attributeDict[XMLElement.opStatus] as? String where gpsStatus == XMLElement.goodStatus {
+            currentVehicleDictionary = [String:String]()
+            parsingVehicle = true
         }
         currentElement = elementName
     }
     
     func parser(parser: NSXMLParser, foundCharacters string: String?) {
-        if parsingVehicle, let current = currentElement {
-            CLSLogv("Logging vehicle %@ %@", getVaList([current, currentVehicleDictionary]))
-            currentVehicleDictionary[current] = string
+        if parsingVehicle, let current = currentElement where currentVehicleDictionary != nil {
+            currentVehicleDictionary?[current] = string
         }
     }
     
     func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         if elementName == XMLElement.vehicle {
-            if parsingVehicle {
+            if parsingVehicle, let currentVehicleDictionary = currentVehicleDictionary {
                 vehicleDictionaries.append(currentVehicleDictionary)
+                self.currentVehicleDictionary = nil
             }
             parsingVehicle = false
         }
@@ -138,6 +133,11 @@ class RealtimeShuttlesGetter: NSObject, NSXMLParserDelegate {
                 self.delegate?.busUpdateDidFail(NSError(domain: "edu.stanford.Marguerite", code: 2, userInfo: nil))
             }
         })
+    }
+    
+    
+    func parser(parser: NSXMLParser, parseErrorOccurred parseError: NSError) {
+        CLSLogv("Parsing error: %@", getVaList([parseError]))
     }
     
     /**

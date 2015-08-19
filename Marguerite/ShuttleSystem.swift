@@ -14,7 +14,7 @@ let NeedsDatabaseUpdateKey = "Needs Database Update"
 let NightModeKey = "Night Mode"
 let FavoriteStopsIDKey = "Favorite Stop IDs"
 
-let UpdatedShuttlesNotification = "UpdatesShuttles"
+let UpdatedShuttlesNotification = "UpdatedShuttles"
 let UpdatedThemeNotification = "UpdatesTheme"
 let LocationAvailableNotification = "LocationAvailable"
 let LocationUnavailableNotification = "LocationUnavailable"
@@ -35,6 +35,9 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
     var stops: [ShuttleStop]!
     var closestStops: [ShuttleStop]!
     var favoriteStops: [ShuttleStop]!
+    
+    var updatingShuttles = false
+    
     private var favoriteStopIDs: [Int]!
     
     private var updateTimer: NSTimer?
@@ -162,9 +165,6 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
                             Answers.logCustomEventWithName("Bad Shuttle Route", customAttributes: ["Shuttle": shuttleName, "RouteMapping": mapping])
                         }
                     }
-                    else {
-                        CLSLogv("Create bus object error: %@", getVaList([shuttle]))
-                    }
                 } else {
                     shuttleNamesWithErrors.append(shuttleName)
                 }
@@ -172,7 +172,8 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
         }
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
         NSNotificationCenter.defaultCenter().postNotificationName(UpdatedShuttlesNotification, object: nil)
-        updateTimer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: "updateRealtimeLocations", userInfo: nil, repeats: false)
+        updatingShuttles = false
+        updateTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target: self, selector: "updateRealtimeLocations", userInfo: nil, repeats: false)
     }
     
     func busUpdateDidFail(error: NSError) {
@@ -187,9 +188,7 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
         default:
             break
         }
-        
-        CLSLogv("Live buses error: %@", getVaList([message]))
-        
+
         let alertController = UIAlertController(title: NSLocalizedString("Updating Shuttles Error Title", comment: ""), message: message + NSLocalizedString("Try Again Error Message End", comment: ""), preferredStyle: .Alert)
         alertController.addAction(UIAlertAction(title: NSLocalizedString("Dismiss Button", comment: ""), style: .Cancel, handler: nil))
         
@@ -197,16 +196,22 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
             self.updateRealtimeLocations()
         }
         alertController.addAction(action)
-        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-            if let rootViewController = appDelegate.window?.rootViewController {
-                rootViewController.presentViewController(alertController, animated: true, completion: nil)
-            }
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate, rootViewController = appDelegate.window?.rootViewController {
+            rootViewController.presentViewController(alertController, animated: true, completion: nil)
         }
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+        NSNotificationCenter.defaultCenter().postNotificationName(UpdatedShuttlesNotification, object: nil)
+        updatingShuttles = false
+
     }
     
     func updateRealtimeLocations() {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        realtimeShuttlesGetter.update()
+        if !updatingShuttles {
+            updatingShuttles = true
+            updateTimer?.invalidate()
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+            realtimeShuttlesGetter.update()
+        }
     }
     
     // MARK: - Shuttle system attributes

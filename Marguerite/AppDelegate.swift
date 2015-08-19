@@ -36,11 +36,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         liveMapModeOnly = DefaultsHelper.key(LiveMapModeOnlyKey)
         
-        if let tabBarController = window?.rootViewController as? UITabBarController {
-            if liveMapModeOnly {
-                // Only show the map view controller in the tab bar
-                tabBarController.viewControllers = [tabBarController.viewControllers![1]]
-            }
+        // Only show the map view controller in the tab bar
+        if liveMapModeOnly, let tabBarController = window?.rootViewController as? UITabBarController {
+            tabBarController.viewControllers = [tabBarController.viewControllers![1]]
         }
     
         ShuttleSystem.sharedInstance.attemptStart()
@@ -56,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DefaultsHelper.keyIs(true, key: NeedsDatabaseUpdateKey)
         liveMapModeOnly = !liveMapModeOnly
         DefaultsHelper.keyIs(liveMapModeOnly, key: LiveMapModeOnlyKey)
-        let alertController = UIAlertController(title: "Only Live Map Mode: " + liveMapModeOnly.description.capitalizedString, message: "Please force quit the app", preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "Full Release Mode: " + (!liveMapModeOnly).description.capitalizedString, message: "Toggled developer mode", preferredStyle: .Alert)
         let action = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
             DefaultsHelper.keyIs(false, key: NeedsDatabaseUpdateKey)
             liveMapModeOnly = !liveMapModeOnly

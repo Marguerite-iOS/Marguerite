@@ -30,10 +30,6 @@ class ShuttleRoute: NSObject {
     */
     init?(dictionary: [String:AnyObject]?) {
         super.init()
-        if let dictionaryLongName = dictionary?["route_long_name"] as? String where count(dictionaryLongName) > 3 {
-            longName = dictionaryLongName
-        }
-        
         if let dictionaryRouteID = (dictionary?["route_id"] as? String)?.toInt(), dictionaryShortName = dictionary?["route_short_name"] as? String, dictionaryRouteURLString = dictionary?["route_url"] as? String, dictionaryRouteURL = NSURL(string: dictionaryRouteURLString), dictionaryRouteColor =  dictionary?["route_color"] as? String, dictionaryRouteTextColor =  dictionary?["route_text_color"] as? String {
             routeID = dictionaryRouteID
             shortName = dictionaryShortName
@@ -46,9 +42,11 @@ class ShuttleRoute: NSObject {
             return nil
         }
         
-        
-        if longName == "Va Tram" {
-            shortName = "VA"
+        if let dictionaryLongName = dictionary?["route_long_name"] as? String where count(dictionaryLongName) > 3 {
+            longName = dictionaryLongName
+            if longName == "Va Tram" {
+                shortName = "VA"
+            }
         }
         
         image = RouteBubbleView.saveBubbleForRoute(self)
