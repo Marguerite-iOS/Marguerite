@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="15A235d" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="i58-az-MU7">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="i58-az-MU7">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -81,14 +82,14 @@
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" id="OC9-XN-1hk">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="XCd-jT-6xE">
-                                <rect key="frame" x="558" y="11" width="22" height="22"/>
+                                <rect key="frame" x="558" y="41" width="22" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <animations/>
                                 <state key="normal">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="XAD-jd-oNn" kind="presentation" id="4t0-DZ-8kq"/>
+                                    <segue destination="XAD-jd-oNn" kind="presentation" modalPresentationStyle="formSheet" id="4t0-DZ-8kq"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -153,14 +154,14 @@
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" id="U4D-7J-fYv">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="ZB2-gO-EBM">
-                                <rect key="frame" x="16" y="7" width="22" height="22"/>
+                                <rect key="frame" x="558" y="11" width="22" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <animations/>
                                 <state key="normal">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="XAD-jd-oNn" kind="presentation" id="Rlk-SC-wMn"/>
+                                    <segue destination="XAD-jd-oNn" kind="presentation" modalPresentationStyle="formSheet" id="Rlk-SC-wMn"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -228,7 +229,7 @@
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="bip-cf-6sb" customClass="StopTimeTableViewCell" customModule="Marguerite" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="113.5" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="143.5" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bip-cf-6sb" id="oDw-7W-pYt">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -271,7 +272,7 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MapCell" rowHeight="160" id="trK-7g-dko" customClass="MapTableViewCell" customModule="Marguerite" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="157.5" width="600" height="160"/>
+                                <rect key="frame" x="0.0" y="187.5" width="600" height="160"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="trK-7g-dko" id="M0q-ml-BqL">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="159.5"/>
@@ -431,21 +432,20 @@
                         <animations/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                         <sections>
-                            <tableViewSection headerTitle="More Features Coming soon" id="msu-US-Jkp">
-                                <string key="footerTitle">The full bus app will be released this fall when the Marguerite system upgrade is complete. Until then, please enjoy the live map view.</string>
+                            <tableViewSection headerTitle="More Features Coming soon" footerTitle="Detailed stop and route information will be released when the Marguerite system upgrade is complete." id="msu-US-Jkp">
                                 <cells/>
                             </tableViewSection>
                             <tableViewSection headerTitle="Credits" id="QRL-o8-ot7">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="SOE-NX-eDi" detailTextLabel="xlK-5a-G4r" style="IBUITableViewCellStyleValue1" id="xvF-jm-ZjX">
-                                        <rect key="frame" x="0.0" y="193.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="176" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xvF-jm-ZjX" id="GLn-QR-Xem">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Updated Version" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="SOE-NX-eDi">
-                                                    <rect key="frame" x="15" y="12" width="121.5" height="19.5"/>
+                                                    <rect key="frame" x="15" y="12" width="121" height="19.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -453,7 +453,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Andrew Finke" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xlK-5a-G4r">
-                                                    <rect key="frame" x="486.5" y="12" width="98.5" height="19.5"/>
+                                                    <rect key="frame" x="487" y="12" width="98" height="19.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -466,7 +466,7 @@
                                         <animations/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="PQJ-g4-MPt" detailTextLabel="Si1-hn-8KH" style="IBUITableViewCellStyleValue1" id="SU4-B5-OyL">
-                                        <rect key="frame" x="0.0" y="237.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="220" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SU4-B5-OyL" id="hb8-94-KQ2">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -494,7 +494,7 @@
                                         <animations/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="XaV-sp-GAa" detailTextLabel="O52-Ob-dwf" style="IBUITableViewCellStyleValue1" id="FRQ-QD-F6l">
-                                        <rect key="frame" x="0.0" y="281.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="264" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FRQ-QD-F6l" id="iqE-8L-HlO">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -522,7 +522,7 @@
                                         <animations/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" textLabel="Z4I-YW-je6" detailTextLabel="WRU-d3-fuR" style="IBUITableViewCellStyleValue1" id="t44-Yq-Aj2">
-                                        <rect key="frame" x="0.0" y="325.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="308" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="t44-Yq-Aj2" id="UTV-fy-5Gv">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -554,7 +554,7 @@
                             <tableViewSection headerTitle="Contact Marguerite" id="lZT-e5-flv">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="XfO-eA-qz6" detailTextLabel="U2w-fe-Vf5" style="IBUITableViewCellStyleValue1" id="3jl-nI-vK4">
-                                        <rect key="frame" x="0.0" y="411.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="394" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3jl-nI-vK4" id="Rap-kl-tKe">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -582,7 +582,7 @@
                                         <animations/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="PKr-MG-SM1" detailTextLabel="bjc-Z8-C4p" style="IBUITableViewCellStyleValue1" id="LeE-Jl-dw8">
-                                        <rect key="frame" x="0.0" y="455.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="438" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LeE-Jl-dw8" id="99m-kR-8lD">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -610,7 +610,7 @@
                                         <animations/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="eSm-uq-LfJ" style="IBUITableViewCellStyleDefault" id="hgp-NT-7cx">
-                                        <rect key="frame" x="0.0" y="543.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="482" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hgp-NT-7cx" id="XmG-HA-YXD">
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
@@ -630,7 +630,7 @@
                                         <animations/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="wlJ-B6-4oI" style="IBUITableViewCellStyleDefault" id="aiQ-hA-u9w">
-                                        <rect key="frame" x="0.0" y="587.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="526" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aiQ-hA-u9w" id="CFw-th-mmB">
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
@@ -655,7 +655,7 @@
                                 <string key="footerTitle">This app is open-source. All of the code is available on GitHub, and anyone can contribute to improving the app. Using SSZipArchive, GTFS Importer, and FMDB.</string>
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="NwJ-nR-edG" style="IBUITableViewCellStyleDefault" id="83g-Ms-NFU">
-                                        <rect key="frame" x="0.0" y="673.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="612" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="83g-Ms-NFU" id="HlB-wq-pIy">
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
@@ -706,7 +706,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Rlk-SC-wMn"/>
-        <segue reference="61Q-Di-hhd"/>
         <segue reference="9HW-Vs-oco"/>
+        <segue reference="61Q-Di-hhd"/>
     </inferredMetricsTieBreakers>
 </document>

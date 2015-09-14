@@ -42,17 +42,17 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate {
         return CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse
     }
     
-    func locationManager(manager: CLLocationManager!, didUpdateToLocation newLocation: CLLocation!, fromLocation oldLocation: CLLocation!) {
+    func locationManager(manager: CLLocationManager, didUpdateToLocation newLocation: CLLocation, fromLocation oldLocation: CLLocation) {
         delegate?.locationUpdate(newLocation)
         locationManager.stopUpdatingLocation()
     }
     
-    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         delegate?.locationError(error)
         locationManager.stopUpdatingLocation()
     }
     
-    func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         let enabled = status == .AuthorizedWhenInUse
         delegate?.locationAuthorizationStatusChanged(enabled)
     }

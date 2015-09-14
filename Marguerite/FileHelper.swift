@@ -1,6 +1,6 @@
 //
 //  FileHelper.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 7/9/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.
@@ -20,21 +20,21 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
     
     // Path to latest zipped gtfs data
     class var tempZipPath: String {
-        return tempFolderPath.stringByAppendingPathComponent("temp.zip")
+        return tempFolderPath.stringByAppendingString("/temp.zip")
     }
     
     // Path to the folder where the downloaded gtfs zip is stored and unzipped
     class var tempFolderPath: String {
-        return FileHelper.documentsPath.stringByAppendingPathComponent("TempGTFSFiles")
+        return FileHelper.documentsPath.stringByAppendingString("/TempGTFSFiles")
     }
     
     /**
     Detects if the neccessary gtfs files are in place
     
-    :returns: Whether the files exist
+    - returns: Whether the files exist
     */
     var hasCompletedInitalSetup: Bool {
-        return NSFileManager.defaultManager().contentsOfDirectoryAtPath(Util.getTransitFilesBasepath(), error: nil)?.count > 1
+        return (try? NSFileManager.defaultManager().contentsOfDirectoryAtPath(Util.getTransitFilesBasepath()))?.count > 1
     }
     
     /**
@@ -44,7 +44,7 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
         if let url = NSURL(string: MargueriteGTFSDataURL) {
             let task = NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
                 if let data = data where error == nil {
-                    println("Downloaded new gtfs data")
+                    print("Downloaded new gtfs data")
                     data.writeToFile(FileHelper.tempZipPath, atomically: true)
                     self.movedNewZipToTempFolder()
                 }
@@ -56,15 +56,15 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
     /**
     Detects the newest file in the folder at path
     
-    :returns: The date of the newest file
+    - returns: The date of the newest file
     */
     private func getLatestFileInFolder(path: String) -> NSDate {
         var latestDate = NSDate(timeIntervalSince1970: 0)
-        if let contents = fileManager.contentsOfDirectoryAtPath(path, error: nil) as? [String] {
+        if let contents = try? fileManager.contentsOfDirectoryAtPath(path) {
             for fileName in contents {
-                if fileName.pathExtension == "txt" {
-                    let path = path.stringByAppendingPathComponent(fileName)
-                    let attributes = fileManager.attributesOfItemAtPath(path, error: nil)
+                if let url = NSURL(string: fileName) where url.pathExtension == "txt" {
+                    let path = path.stringByAppendingString("/" + fileName)
+                    let attributes = try? fileManager.attributesOfItemAtPath(path)
                     if let modificationDate = attributes?[NSFileModificationDate] as? NSDate where latestDate.timeIntervalSinceDate(modificationDate) < 0 {
                         latestDate = modificationDate
                     }
@@ -80,28 +80,34 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
     private func movedNewZipToTempFolder() {
         let tempFolder = FileHelper.tempFolderPath
         let tempZipPath = FileHelper.tempZipPath
-        SSZipArchive.unzipFileAtPath(tempZipPath, toDestination: tempFolder, progressHandler: nil) { (path: String?, succeeded: Bool, error: NSError?) -> Void in
-            var latestFileInTemp = self.getLatestFileInFolder(tempFolder)
-            var latestFileInCurrent = self.getLatestFileInFolder(Util.getTransitFilesBasepath())
-            println("--- New GTFS Data ---")
-            println(latestFileInTemp)
-            println(latestFileInCurrent)
-            println("Unzipped new data")
+        
+        SSZipArchive.unzipFileAtPath(tempZipPath, toDestination: tempFolder, progressHandler: nil) { (path: String!, succeeded: Bool, error: NSError!) -> Void in
+            let latestFileInTemp = self.getLatestFileInFolder(tempFolder)
+            let latestFileInCurrent = self.getLatestFileInFolder(Util.getTransitFilesBasepath())
+            print("--- New GTFS Data ---")
+            print(latestFileInTemp)
+            print(latestFileInCurrent)
+            print("Unzipped new data")
             if latestFileInTemp.timeIntervalSinceDate(latestFileInCurrent) > 0 {
-                println("Replacing older data")
+                print("Replacing older data")
                 self.moveTempFilesToTransitFolder()
                 DefaultsHelper.keyIs(true, key: NeedsDatabaseUpdateKey)
                 DefaultsHelper.saveDataForKey(latestFileInTemp, key: "GTFS Date")
             } else {
-                println("Keeping current data")
+                print("Keeping current data")
             }
-            println("Clearing temp folder")
-            if let contents = self.fileManager.contentsOfDirectoryAtPath(tempFolder, error: nil) as? [String] {
+            print("Clearing temp folder")
+            if let contents = try? self.fileManager.contentsOfDirectoryAtPath(tempFolder) {
                 for fileName in contents {
-                    self.fileManager.removeItemAtPath(tempFolder.stringByAppendingPathComponent(fileName), error: nil)
+                    do {
+                        try self.fileManager.removeItemAtPath(tempFolder.stringByAppendingString("/" + fileName))
+                    }
+                    catch {
+                        
+                    }
                 }
             }
-            println("--- Handled GTFS Data ---")
+            print("--- Handled GTFS Data ---")
         }
     }
     
@@ -111,11 +117,17 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
     private func moveTempFilesToTransitFolder() {
         let tempFolder = FileHelper.tempFolderPath
         for fileName in FileHelper.gtfsFileNames {
-            let destinationPath = Util.getTransitFilesBasepath().stringByAppendingPathComponent(fileName + ".txt")
+            let destinationPath = Util.getTransitFilesBasepath().stringByAppendingString("/" + fileName + ".txt")
             if NSFileManager.defaultManager().fileExistsAtPath(destinationPath) {
-                NSFileManager.defaultManager().removeItemAtPath(destinationPath, error: nil)
+                do {
+                    try NSFileManager.defaultManager().removeItemAtPath(destinationPath)
+                } catch _ {
+                }
             }
-            NSFileManager.defaultManager().moveItemAtPath(tempFolder.stringByAppendingPathComponent(fileName + ".txt"), toPath: destinationPath, error: nil)
+            do {
+                try NSFileManager.defaultManager().moveItemAtPath(tempFolder.stringByAppendingString("/" + fileName + ".txt"), toPath: destinationPath)
+            } catch _ {
+            }
         }
     }
     
@@ -123,10 +135,10 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
     Moves the bundled gtfs data to the temp folder as if downloaded
     */
     class func moveBundleToTempFolder() {
-        let folderPath = tempFolderPath
-        for fileNames in gtfsFileNames {
-            if let path = NSBundle.mainBundle().pathForResource("BundledGTFS", ofType: "zip") {
-                NSFileManager.defaultManager().copyItemAtPath(path, toPath: folderPath.stringByAppendingPathComponent("temp.zip"), error: nil)
+        if let path = NSBundle.mainBundle().pathForResource("BundledGTFS", ofType: "zip") {
+            do {
+                try NSFileManager.defaultManager().copyItemAtPath(path, toPath: tempFolderPath.stringByAppendingString("/temp.zip"))
+            } catch {
             }
         }
         ShuttleSystem.sharedInstance.fileHelper.movedNewZipToTempFolder()
@@ -145,18 +157,21 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
     */
     private class func checkFolder(folderName: String) {
         let path = (documentsPath as NSString).stringByAppendingPathComponent(folderName)
-        println(path)
         let fileManager = NSFileManager.defaultManager()
         var isDir : ObjCBool = false
         if !fileManager.fileExistsAtPath(path, isDirectory:&isDir) {
             var error: NSError?
-            fileManager.createDirectoryAtPath(path, withIntermediateDirectories: true, attributes: nil, error: &error)
-            println(error)
+            do {
+                try fileManager.createDirectoryAtPath(path, withIntermediateDirectories: true, attributes: nil)
+            } catch let error1 as NSError {
+                error = error1
+            }
+            print(error)
         }
     }
     
     class var documentsPath: String {
-        return NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
+        return NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] 
     }
     
 }

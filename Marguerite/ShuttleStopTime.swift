@@ -1,6 +1,6 @@
 //
 //  ShuttleStopTime.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 6/29/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.
@@ -9,9 +9,21 @@
 import UIKit
 
 class ShuttleStopTime: NSObject {
-    var departureTime: NSDate?
-    var route: ShuttleRoute?
-    var tripId: String?
+    var route: ShuttleRoute!
+    var tripID: String!
+    
+    var departureTime: NSDate! {
+        didSet {
+            formattedTime = ShuttleSystem.sharedInstance.displayFormatter.stringFromDate(departureTime)
+        }
+    }
     // Formatted departure time for display purposes
-    var formattedTime: String?
+    var formattedTime: String!
+    
+    init(route: ShuttleRoute, tripID: String, departureTime: NSDate) {
+        super.init()
+        self.route = route
+        self.tripID = tripID
+        self.departureTime = departureTime
+    }
 }

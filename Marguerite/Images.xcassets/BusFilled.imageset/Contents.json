@@ -2,18 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "Bus Filled-100 copy.png"
+      "filename" : "Bus Filled-100 copy.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "Bus Filled-100 copy 2.png"
+      "filename" : "Bus Filled-100 copy 2.png",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "Bus Filled-100.png"
+      "filename" : "Bus Filled-100.png",
+      "scale" : "3x"
     }
   ],
   "info" : {

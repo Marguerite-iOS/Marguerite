@@ -1,6 +1,6 @@
 //
 //  StopsTableViewController.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 6/16/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.
@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreLocation
-import Crashlytics
 
 class StopsTableViewController: UITableViewController {
     
@@ -27,19 +26,15 @@ class StopsTableViewController: UITableViewController {
     private let sunFilledImage = UIImage(named: "SunFilled")
     private let sunEmptyImage = UIImage(named: "SunEmpty")
     
-    override func viewDidLoad() {
-        Answers.logContentViewWithName("StopsTableViewController", contentType: "View Controller", contentId: "content-Stops", customAttributes: [:])
-    }
-    
     /**
     Sets the filled tab bar image. Setting the filled image in the storyboard does nothing. Could use a work around in the storyboard but code is easier to understand.
     
-    :param: imageName The name of the filled image.
+    - parameter imageName: The name of the filled image.
     */
     private func setFilledTabBarItemImage(imageName: String) {
-        if let viewControllers = self.tabBarController?.viewControllers as? [UIViewController],
-            index = find(viewControllers, navigationController!),
-            items = self.tabBarController?.tabBar.items as? [UITabBarItem] {
+        if let viewControllers = self.tabBarController?.viewControllers,
+            index = viewControllers.indexOf(navigationController!),
+            items = self.tabBarController?.tabBar.items {
             items[index].selectedImage = UIImage(named: imageName)
         }
     }
@@ -50,9 +45,6 @@ class StopsTableViewController: UITableViewController {
         tableView.reloadData()
         lastSelectedSegementIndex = segmentedControl.selectedSegmentIndex
         tableView.contentOffset.y = lastTableViewOffset[lastSelectedSegementIndex]
-        if let newScope = segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) {
-            Answers.logCustomEventWithName("Stops Scope Update", customAttributes: ["SelectedScope" : newScope])
-        }
     }
     
     
@@ -137,11 +129,9 @@ class StopsTableViewController: UITableViewController {
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let indexPath = tableView.indexPathForSelectedRow() {
+        if let indexPath = tableView.indexPathForSelectedRow, controller = segue.destinationViewController as? StopInfoTableViewController  {
             let stop = stopForIndexPath(indexPath)
-            let controller = segue.destinationViewController as! StopInfoTableViewController
             controller.stop = stop
-            Answers.logContentViewWithName("StopInfoTableViewController", contentType: "View Controller", contentId: "content-StopInfo", customAttributes: ["Origin": "StopsTableViewController", "StopName": stop.name, "StopID": stop.stopID])
         }
     }
     
@@ -161,8 +151,8 @@ class StopsTableViewController: UITableViewController {
         seperatorColor = tableView.separatorColor
         updateTheme()
         
-        for var index = 0; index < 3; index++ {
-            if let height =  navigationController?.navigationBar.frame.height {
+        if let height =  navigationController?.navigationBar.frame.height {
+            for var index = 0; index < 3; index++ {
                 lastTableViewOffset.append(-height - 20)
             }
         }
@@ -179,9 +169,9 @@ class StopsTableViewController: UITableViewController {
     /**
     Gets the stop at index path based on the selected segemented control index
     
-    :param: indexPath The index path
+    - parameter indexPath: The index path
     
-    :returns: The stop
+    - returns: The stop
     */
     private func stopForIndexPath(indexPath: NSIndexPath) -> ShuttleStop {
         switch segmentedControl.selectedSegmentIndex {

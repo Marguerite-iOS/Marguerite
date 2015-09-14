@@ -8,7 +8,7 @@
 //  http://lbre-apps.stanford.edu/transportation/stanford_ivl/
 //
 //  Created by Kevin Conley on 3/8/15.
-//  Copyright (c) 2015 Kevin Conley. All rights reserved.
+//  Copyright (c) 2015 Kevin Conley & Andrew Finke. All rights reserved.
 //
 
 import UIKit
@@ -31,14 +31,18 @@ class RealtimeShuttlesGetter: NSObject, NSXMLParserDelegate {
     Refresh the buses by downloading the XML feed, asynchronously.
     */
     func update() {
-        if let url = NSURL(string: urlString) {
-            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_UTILITY.value), 0)) { () -> Void in
-                if let parser = NSXMLParser(contentsOfURL: url) {
-                    parser.delegate = self
-                    if !parser.parse() {
-                        self.delegate?.busUpdateDidFail(NSError(domain: "edu.stanford.Marguerite", code: 1, userInfo: nil))
-                    }
-                }
+        guard let url = NSURL(string: urlString) else {
+            delegate?.busUpdateDidFail(NSError(domain: "edu.stanford.Marguerite", code: 1, userInfo: nil))
+            return
+        }
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0)) { () -> Void in
+            guard let parser = NSXMLParser(contentsOfURL: url) else {
+                self.delegate?.busUpdateDidFail(NSError(domain: "edu.stanford.Marguerite", code: 1, userInfo: nil))
+                return
+            }
+            parser.delegate = self
+            if !parser.parse() {
+                self.delegate?.busUpdateDidFail(NSError(domain: "edu.stanford.Marguerite", code: 1, userInfo: nil))
             }
         }
     }
@@ -71,15 +75,15 @@ class RealtimeShuttlesGetter: NSObject, NSXMLParserDelegate {
         vehicleDictionaries = []
     }
     
-    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [NSObject : AnyObject]) {
-        if !parsingVehicle && elementName == XMLElement.vehicle, let gpsStatus = attributeDict[XMLElement.gpsStatus] as? String, opStatus = attributeDict[XMLElement.opStatus] as? String where gpsStatus == XMLElement.goodStatus {
+    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+        if !parsingVehicle && elementName == XMLElement.vehicle, let gpsStatus = attributeDict[XMLElement.gpsStatus], _ = attributeDict[XMLElement.opStatus] where gpsStatus == XMLElement.goodStatus {
             currentVehicleDictionary = [String:String]()
             parsingVehicle = true
         }
         currentElement = elementName
     }
     
-    func parser(parser: NSXMLParser, foundCharacters string: String?) {
+    func parser(parser: NSXMLParser, foundCharacters string: String) {
         if parsingVehicle, let current = currentElement where currentVehicleDictionary != nil {
             currentVehicleDictionary?[current] = string
         }
@@ -101,69 +105,67 @@ class RealtimeShuttlesGetter: NSObject, NSXMLParserDelegate {
         
         // Perform POST request
         
-        let url = NSURL(string: MargueriteShuttleLookupURL)
-        
-        if url == nil {
+        guard let url = NSURL(string: MargueriteShuttleLookupURL) else {
             return
         }
         
-        let request = NSMutableURLRequest(URL: url!)
+        let request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = "POST"
         
         let postString = "name=\(vehicleIdString)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: { (response, data, error) -> Void in
-            if error != nil {
+            
+            guard error == nil, let data = data else {
                 self.delegate?.busUpdateDidFail(NSError(domain: "edu.stanford.Marguerite", code: 1, userInfo: nil))
-                println(error)
+                print(error)
                 return
             }
-            var jsonError: NSError? = nil
-            if let jsonData = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &jsonError) as? [String:AnyObject], mappings = jsonData["DATA"] as? [[AnyObject]] {
-                var vehicleIdsToFareboxIds = [String:String]()
-                for mapping  in mappings as [[AnyObject]] {
-                    // Each input bus id returns as an array of objects with the bus id and farebox id of the bus's route
-                    if mapping.count == 2 {
-                        vehicleIdsToFareboxIds[String(format: "%@", mapping[0].description)] = self.getRouteIdWithFareboxId(String(format: "%@", mapping[1].description))
-                    }
-                }
-                self.delegate?.didUpdateShuttles(self.vehicleDictionaries, mappingInfo: vehicleIdsToFareboxIds)
-            } else {
-                println(error)
+            guard let jsonData = try? NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String:AnyObject], unwrappedJSONdata = jsonData, mappings = unwrappedJSONdata["DATA"] as? [[AnyObject]] else {
                 self.delegate?.busUpdateDidFail(NSError(domain: "edu.stanford.Marguerite", code: 2, userInfo: nil))
+                print(error)
+                return
             }
+            var vehicleIdsToFareboxIds = [String:String]()
+            for mapping  in mappings as [[AnyObject]] {
+                // Each input bus id returns as an array of objects with the bus id and farebox id of the bus's route
+                if mapping.count == 2 {
+                    vehicleIdsToFareboxIds[String(format: "%@", mapping[0].description)] = self.getRouteIdWithFareboxId(String(format: "%@", mapping[1].description))
+                }
+            }
+            self.delegate?.didUpdateShuttles(self.vehicleDictionaries, mappingInfo: vehicleIdsToFareboxIds)
         })
     }
     
     
     func parser(parser: NSXMLParser, parseErrorOccurred parseError: NSError) {
-        CLSLogv("Parsing error: %@", getVaList([parseError]))
+        Answers.logCustomEventWithName("Parser Failed", customAttributes: [:])
+        delegate?.busUpdateDidFail(NSError(domain: "edu.stanford.Marguerite", code: 1, userInfo: nil))
     }
     
     /**
     Create a string of comma-separated vehicleIds from a list of bus XML dictionaries.
     
-    :param: busDictionaries The list of bus dictionaries constructed from XML.
+    - parameter busDictionaries: The list of bus dictionaries constructed from XML.
     
-    :returns: The comma-separated string of vehicleIds.
+    - returns: The comma-separated string of vehicleIds.
     */
     private func extractVehicleIdsFromBusDictionaries(busDictionaries: [[String:String]]) -> String {
         var vehicleIds = [String]()
         
         for busDictionary in busDictionaries {
             if let vehicleId = busDictionary[ShuttleElement.name] {
-                var id: String = vehicleId
-                
                 // this is a hack for SMP, following the web-based live map
                 if busDictionary[ShuttleElement.routeId] == "8888" {
-                    id = "8888"
+                    vehicleIds.append("8888")
                 }
-                
-                vehicleIds.append(id)
+                else {
+                    vehicleIds.append(vehicleId)
+                }
             }
         }
         
-        return ",".join(vehicleIds)
+        return vehicleIds.joinWithSeparator(",")
     }
     
     /**
@@ -175,12 +177,12 @@ class RealtimeShuttlesGetter: NSObject, NSXMLParserDelegate {
     
     This function translates a farebox ID into the corresponding GTFS route ID.
     
-    :param: fareboxId The fareboxId to translate to a GTFS route ID.
+    - parameter fareboxId: The fareboxId to translate to a GTFS route ID.
     
-    :returns: The resulting GTFS route ID, or nil upon failure.
+    - returns: The resulting GTFS route ID, or nil upon failure.
     */
     func getRouteIdWithFareboxId(fareboxId: String) -> String? {
-        if let fareboxIdInt = fareboxId.toInt() {
+        if let fareboxIdInt = Int(fareboxId) {
             switch fareboxIdInt {
             case 8888:
                 //Stanford Menlo Park

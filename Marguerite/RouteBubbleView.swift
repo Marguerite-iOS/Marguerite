@@ -1,6 +1,6 @@
 //
 //  RouteBubbleView.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 6/30/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.
@@ -15,7 +15,7 @@ class RouteBubbleView: UIView {
     /**
     Creates a logo as a UIView for a shuttle route to be displayed thoughout the app.
     
-    :param: route The shuttle route to create a UIView for.
+    - parameter route: The shuttle route to create a UIView for.
     */
     init(route: ShuttleRoute) {
         super.init(frame: CGRectZero)
@@ -32,7 +32,7 @@ class RouteBubbleView: UIView {
         clipsToBounds = true
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -41,12 +41,12 @@ class RouteBubbleView: UIView {
     /**
     Creates a logo image for a shuttle route to be displayed thoughout the app.
     
-    :param: route The shuttle route to save the image of.
+    - parameter route: The shuttle route to save the image of.
     */
     class func saveBubbleForRoute(route: ShuttleRoute) -> UIImage {
         let bubble = RouteBubbleView(route: route)
         UIGraphicsBeginImageContextWithOptions(bubble.bounds.size, false, 0.0)
-        let context = UIGraphicsGetCurrentContext()
+        let _ = UIGraphicsGetCurrentContext()
         bubble.drawViewHierarchyInRect(bubble.bounds, afterScreenUpdates: true)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()

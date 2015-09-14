@@ -1,6 +1,6 @@
 //
 //  WebViewController.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 6/30/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.
@@ -8,11 +8,10 @@
 
 import UIKit
 import WebKit
-import Crashlytics
 
 let showRouteInfoSegueIdentifier = "showRouteInfo"
 
-class WebViewController: UIViewController, UIToolbarDelegate {
+class WebViewController: UIViewController, UIToolbarDelegate, WKNavigationDelegate {
 
     private let webView = WKWebView()
     @IBOutlet private weak var segmentedControl: UISegmentedControl! {
@@ -32,20 +31,36 @@ class WebViewController: UIViewController, UIToolbarDelegate {
     override func viewDidLoad() {
         findHairlineImageViewUnder(navigationController?.navigationBar)?.hidden = true
         
-        segmentedControl.frame = CGRectMake(0, 0, view.frame.width - 30, segmentedControl.frame.height)
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+            segmentedControl.frame = CGRectMake(0, 0, view.frame.width - 30, segmentedControl.frame.height)
+        }
+        else {
+            segmentedControl.frame = CGRectMake(0, 0, view.frame.width / 2 - 30, segmentedControl.frame.height)
+        }
         
-        webView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        
+        
+        webView.translatesAutoresizingMaskIntoConstraints = false
         webView.backgroundColor = UIColor(red: 128.0/255.0, green: 128.0/255.0, blue: 128.0/255.0, alpha: 1.0)
+        webView.navigationDelegate = self
         
         view.addSubview(webView)
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[web]|", options: nil, metrics: nil, views: ["web":webView]))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(44.0)-[web]|", options: nil, metrics: nil, views: ["web":webView]))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[web]|", options: [], metrics: nil, views: ["web":webView]))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(44.0)-[web]|", options: [], metrics: nil, views: ["web":webView]))
         view.sendSubviewToBack(webView)
         view.backgroundColor = UIColor(red: 128.0/255.0, green: 128.0/255.0, blue: 128.0/255.0, alpha: 1.0)
     }
     
     func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
         return .Top
+    }
+    
+    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    }
+    
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
     }
     
     //From http://stackoverflow.com/questions/25392469/how-to-hide-uinavigationbar-hairline-with-swift
@@ -57,7 +72,7 @@ class WebViewController: UIViewController, UIToolbarDelegate {
             return view
         }
         
-        for subview in view.subviews as! [UIView] {
+        for subview in view.subviews {
             if let foundView = self.findHairlineImageViewUnder(subview) {
                 return foundView
             }
@@ -71,9 +86,9 @@ class WebViewController: UIViewController, UIToolbarDelegate {
     /**
     Some of the routes have bogus URLs, so handle those cases with this function.
     
-    :param: route The route.
+    - parameter route: The route.
     
-    :returns: The URL for the map of the given route.
+    - returns: The URL for the map of the given route.
     */
     private func getMapURLForRoute() -> NSURL {
         switch route!.shortName.lowercaseString {
@@ -89,12 +104,12 @@ class WebViewController: UIViewController, UIToolbarDelegate {
     /**
     Some of the routes have bogus URLs, so handle those cases with this function.
     
-    :param: route The route.
+    - parameter route: The route.
     
-    :returns: The URL for the schedule of the given route.
+    - returns: The URL for the schedule of the given route.
     */
     private func getScheduleURLForRoute() -> NSURL {
-        switch route!.shortName.lowercaseString {
+        switch route.shortName.lowercaseString {
         case "w":
             return NSURL(string: "http://transportation.stanford.edu/marguerite/w/map.pdf")!
         case "eb ex":
@@ -104,9 +119,9 @@ class WebViewController: UIViewController, UIToolbarDelegate {
         case "h-dir":
             return NSURL(string: "http://transportation.stanford.edu/marguerite/hd/hd.pdf")!
         case "se":
-            return isSESpecial() ? NSURL(string: "http://transportation.stanford.edu/marguerite/sesp/sesp.pdf")! : route!.routeURL.URLByAppendingPathComponent("/map.pdf")
+            return isSESpecial() ? NSURL(string: "http://transportation.stanford.edu/marguerite/sesp/sesp.pdf")! : route.routeURL.URLByAppendingPathComponent("/" + route.shortName.lowercaseString + ".pdf")
         default:
-            return route!.routeURL.URLByAppendingPathComponent("/" + route!.shortName!.lowercaseString + ".pdf")
+            return route.routeURL.URLByAppendingPathComponent("/" + route.shortName.lowercaseString + ".pdf")
         }
     }
     
@@ -114,9 +129,7 @@ class WebViewController: UIViewController, UIToolbarDelegate {
     During the summer the shopping express has a special version.
     */
     private func isSESpecial() -> Bool {
-        let formatter = NSDateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        if formatter.dateFromString("2015-09-13")?.timeIntervalSinceNow > 0 {
+        if ShuttleSystem.sharedInstance.databaseDateFormatter.dateFromString("2015-09-10")?.timeIntervalSinceNow > 0 {
             return true
         }
         return false
@@ -128,9 +141,6 @@ class WebViewController: UIViewController, UIToolbarDelegate {
     @IBAction private func didChangeView(sender: AnyObject) {
         let url = segmentedControl.selectedSegmentIndex == 0 ? getMapURLForRoute() : getScheduleURLForRoute()
         webView.loadRequest(NSURLRequest(URL: url))
-        if let newContent = segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) {
-            Answers.logCustomEventWithName("Web View Content Update", customAttributes: ["SelectedContent" : newContent, "RouteName": route.shortName])
-        }
     }
     
     /**
@@ -139,13 +149,9 @@ class WebViewController: UIViewController, UIToolbarDelegate {
     @IBAction private func shareURL(sender: AnyObject) {
         let content = segmentedControl.selectedSegmentIndex == 0 ? NSLocalizedString("Map Title", comment: "") : NSLocalizedString("Schedule Title", comment: "")
         let string = route.displayName + " " + content
-        Answers.logShareWithMethod("WebViewController",
-            contentName: route.shortName + content,
-            contentType: "url",
-            contentId: "share-Web",
-            customAttributes: [:])
         let url = segmentedControl.selectedSegmentIndex == 0 ? getMapURLForRoute() : getScheduleURLForRoute()
         let viewController = UIActivityViewController(activityItems: [string, url], applicationActivities: nil)
+        viewController.popoverPresentationController?.barButtonItem = sender as? UIBarButtonItem
         presentViewController(viewController, animated: true, completion: nil)
     }
 }

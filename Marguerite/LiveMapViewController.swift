@@ -1,6 +1,6 @@
 //
 //  LiveMapViewController.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 6/16/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.
@@ -8,13 +8,15 @@
 
 import UIKit
 import MapKit
-import Crashlytics
 
 class LiveMapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet private weak var mapView: MKMapView! {
         didSet {
             mapView.region = ShuttleSystem.sharedInstance.region
+            if #available(iOS 9.0, *) {
+                mapView.showsTraffic = true
+            }
         }
     }
     @IBOutlet private weak var segmentedControl: UISegmentedControl! {
@@ -24,6 +26,9 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
             segmentedControl.setTitle(NSLocalizedString("Shuttles Title", comment: ""), forSegmentAtIndex: 2)
         }
     }
+    
+    private var loadingBarButton: UIBarButtonItem!
+    private var reloadBarButton: UIBarButtonItem!
     
     private var stopAnnontations: [ShuttleSystemAnnotation] = []
     private var shuttleAnnontations: [ShuttleSystemAnnotation] = []
@@ -35,21 +40,31 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
         super.viewDidLoad()
         
         // Gathers the stop annotations
-        for stop in ShuttleSystem.sharedInstance.stops {
-            stopAnnontations.append(stop.annotation)
-        }
+        ShuttleSystem.sharedInstance.stops.forEach({stopAnnontations.append($0.annotation)})
         
         // Gathers the live shuttle annotations
-        for shuttle in ShuttleSystem.sharedInstance.shuttles {
-            shuttleAnnontations.append(shuttle.annotation)
-        }
+        ShuttleSystem.sharedInstance.shuttles.forEach({shuttleAnnontations.append($0.annotation)})
         
         updateMapAnnotations()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatingShuttles", name: UpdatingShuttlesNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didUpdateShuttles", name: UpdatedShuttlesNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didFailToUpdateShuttles:", name: FailedToUpdateShuttlesNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "tappedRoute:", name: RouteAnnotationTappedNotification, object: nil)
-        
-        Answers.logContentViewWithName("LiveMapViewController", contentType: "View Controller", contentId: "content-LiveMap", customAttributes: [:])
+
+        loadingBarButton = createLoadingBarButtonItem()
+        reloadBarButton = navigationItem.leftBarButtonItem!
+    }
+    
+    
+    /**
+    Creates the loading bar button item for refreshes
+    */
+    private func createLoadingBarButtonItem() -> UIBarButtonItem {
+        let activityView = UIActivityIndicatorView(activityIndicatorStyle: .White)
+        activityView.sizeToFit()
+        activityView.startAnimating()
+        return UIBarButtonItem(customView: activityView)
     }
     
     /**
@@ -60,32 +75,73 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     /**
+    Called when updating begins
+    */
+    func updatingShuttles() {
+        dispatch_async(dispatch_get_main_queue(),{
+            self.navigationItem.leftBarButtonItem = self.loadingBarButton
+        })
+    }
+    
+    /**
     Called when the latest shuttle data is downloaded
     */
     func didUpdateShuttles() {
-        for shuttle in ShuttleSystem.sharedInstance.shuttles {
-            var foundShuttle = false
-            for shuttleAnnontation in shuttleAnnontations {
-                if shuttleAnnontation.title == shuttle.annotationTitle {
-                    foundShuttle = true
-                    UIView.animateWithDuration(0.8, animations: {
-                        shuttleAnnontation.coordinate = shuttle.location.coordinate
-                    })
+        dispatch_async(dispatch_get_main_queue(),{
+            self.shuttleAnnontations.forEach({$0.hasUpdatedLocation = false})
+            for shuttle in ShuttleSystem.sharedInstance.shuttles {
+                var didFindShuttle = false
+                for shuttleAnnontation in self.shuttleAnnontations {
+                    if shuttleAnnontation.title == shuttle.annotationTitle {
+                        didFindShuttle = true
+                        shuttleAnnontation.hasUpdatedLocation = true
+                        UIView.animateWithDuration(0.8, animations: {
+                            shuttleAnnontation.coordinate = shuttle.location.coordinate
+                        })
+                    }
+                }
+                if !didFindShuttle {
+                    let annotation = shuttle.annotation
+                    annotation.hasUpdatedLocation = true
+                    self.mapView.addAnnotation(annotation)
+                    self.shuttleAnnontations.append(annotation)
                 }
             }
-            if !foundShuttle {
-                let annotation = shuttle.annotation
-                mapView.addAnnotation(annotation)
-                shuttleAnnontations.append(annotation)
+            self.shuttleAnnontations = self.shuttleAnnontations.filter({ (annotation: ShuttleSystemAnnotation) -> Bool in
+                if annotation.hasUpdatedLocation {
+                    return true
+                }
+                else {
+                    self.mapView.removeAnnotation(annotation)
+                    return false
+                }
+            })
+            self.navigationItem.prompt = ShuttleSystem.sharedInstance.shuttles.count == 0 ? NSLocalizedString("No Shuttles Message", comment: "") : nil
+            self.navigationItem.leftBarButtonItem = self.reloadBarButton
+        })
+    }
+    
+    func didFailToUpdateShuttles(notification: NSNotification) {
+        dispatch_async(dispatch_get_main_queue(),{
+            self.navigationItem.leftBarButtonItem = self.reloadBarButton
+            guard self.navigationController?.visibleViewController == self else {
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                return
             }
-        }
-        navigationItem.prompt = ShuttleSystem.sharedInstance.shuttles.count == 0 ? NSLocalizedString("No Shuttles Message", comment: "") : nil
+            let alertController = UIAlertController(title: NSLocalizedString("Updating Shuttles Error Title", comment: ""), message: (notification.object as! String) + NSLocalizedString("Try Again Error Message End", comment: ""), preferredStyle: .Alert)
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("Dismiss Button", comment: ""), style: .Cancel, handler: nil))
+            let action = UIAlertAction(title: NSLocalizedString("Try Again Button", comment: ""), style: .Default) { (action) in
+                ShuttleSystem.sharedInstance.updateRealtimeLocations()
+            }
+            alertController.addAction(action)
+            self.presentViewController(alertController, animated: true, completion: nil)
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+        })
     }
     
     // MARK: - UI changes
     
     @IBAction private func refreshShuttles(sender: AnyObject) {
-        Answers.logCustomEventWithName("Force Shuttles Refresh", customAttributes: [:])
         ShuttleSystem.sharedInstance.updateRealtimeLocations()
     }
     
@@ -93,9 +149,6 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     Called when a user changes the selected segmented index and removes/adds corresponding annotations
     */
     @IBAction private func didChangeScope(sender: AnyObject) {
-        if let newScope = segmentedControl.titleForSegmentAtIndex(segmentedControl.selectedSegmentIndex) {
-            Answers.logCustomEventWithName("Live Map Scope Update", customAttributes: ["SelectedScope" : newScope])
-        }
         updateMapAnnotations()
     }
     
@@ -136,20 +189,18 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     /**
     Sets the filled tab bar image. Setting the filled image in the storyboard does nothing. Could use a work around in the storyboard but code is easier to understand.
     
-    :param: imageName The name of the filled image.
+    - parameter imageName: The name of the filled image.
     */
     private func setFilledTabBarItemImage(imageName: String) {
-        if let viewControllers = self.tabBarController?.viewControllers as? [UIViewController],
-            index = find(viewControllers, navigationController!),
-            items = self.tabBarController?.tabBar.items as? [UITabBarItem] {
-                items[index].selectedImage = UIImage(named: imageName)
+        if let viewControllers = tabBarController?.viewControllers, navigationController = navigationController, index = viewControllers.indexOf(navigationController), items = tabBarController?.tabBar.items {
+            items[index].selectedImage = UIImage(named: imageName)
         }
     }
     
     // MARK: - Map view delegate
     
     // delegate method for rendering the shuttles and stops
-    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation.isKindOfClass(MKUserLocation) {
             return nil
         }
@@ -160,7 +211,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
                 pinView.pinColor = .Red
                 pinView.canShowCallout = true
                 if !liveMapModeOnly {
-                    pinView.rightCalloutAccessoryView = UIButton.buttonWithType(.DetailDisclosure) as! UIView
+                    pinView.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
                 }
                 return pinView
             case .Shuttle:
@@ -173,7 +224,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     // moves stop annotations behind shuttle ones
-    func mapView(mapView: MKMapView!, didAddAnnotationViews views: [AnyObject]!) {
+    func mapView(mapView: MKMapView, didAddAnnotationViews views: [MKAnnotationView]) {
         for annotationView in views {
             if let annotationView = annotationView as? ShuttleSystemShuttleAnnotationView, let annotation = annotationView.annotation as? ShuttleSystemAnnotation where annotation.type == .Stop {
                 annotationView.layer.zPosition = -1
@@ -182,21 +233,21 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     // segues to detail controller for data type
-    func mapView(mapView: MKMapView!, annotationView view: MKAnnotationView!, calloutAccessoryControlTapped control: UIControl!) {
-        if let object: AnyObject = (view.annotation as? ShuttleSystemAnnotation)?.object, stop = object as? ShuttleStop {
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        if let stop = (view.annotation as? ShuttleSystemAnnotation)?.object as? ShuttleStop {
             performSegueWithIdentifier(showStopInfoSegueIdentifier, sender: stop)
         }
     }
     
     // moves annotation to front when tapped
-    func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
         if let annotation = view.annotation as? ShuttleSystemAnnotation where annotation.type == .Stop {
             view.layer.zPosition = 0
         }
     }
     
     // moves annotation to back when dseleted
-    func mapView(mapView: MKMapView!, didDeselectAnnotationView view: MKAnnotationView!) {
+    func mapView(mapView: MKMapView, didDeselectAnnotationView view: MKAnnotationView) {
         if let annotation = view.annotation as? ShuttleSystemAnnotation where annotation.type == .Stop {
             view.layer.zPosition = -1
         }
@@ -205,15 +256,11 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == showStopInfoSegueIdentifier, let stop = sender as? ShuttleStop {
-            let controller = segue.destinationViewController as! StopInfoTableViewController
+        if segue.identifier == showStopInfoSegueIdentifier, let stop = sender as? ShuttleStop, controller = segue.destinationViewController as? StopInfoTableViewController {
             controller.stop = stop
-            Answers.logContentViewWithName("StopInfoTableViewController", contentType: "View Controller", contentId: "content-StopInfo", customAttributes: ["Origin": "LiveMapViewController", "StopName": stop.name, "StopID": stop.stopID])
         }
-        else if segue.identifier == showRouteInfoSegueIdentifier, let route = sender as? ShuttleRoute {
-            let controller = segue.destinationViewController as! WebViewController
+        else if segue.identifier == showRouteInfoSegueIdentifier, let route = sender as? ShuttleRoute, controller = segue.destinationViewController as? WebViewController {
             controller.route = route
-            Answers.logContentViewWithName("WebViewController", contentType: "View Controller", contentId: "content-Web", customAttributes: ["Origin": "LiveMapViewController", "RouteName": route.shortName, "RouteID": route.routeID])
         }
     }
     

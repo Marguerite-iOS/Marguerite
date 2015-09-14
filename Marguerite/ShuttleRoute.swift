@@ -1,6 +1,6 @@
 //
 //  ShuttleRoute.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 6/16/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.
@@ -19,33 +19,37 @@ class ShuttleRoute: NSObject {
     var routeURL: NSURL!
     
     // All the stops on the route
-    private var stops: [ShuttleStop] = []
+    //private var stops: [ShuttleStop] = []
     private var longName: String?
     
     // MARK: - Loading Data
     /**
     Initilizes a shuttle route object from the GTFS data formatted into a dictionary.
     
-    :param: dictionary The shuttle route attributes.
+    - parameter dictionary: The shuttle route attributes.
     */
     init?(dictionary: [String:AnyObject]?) {
         super.init()
-        if let dictionaryRouteID = (dictionary?["route_id"] as? String)?.toInt(), dictionaryShortName = dictionary?["route_short_name"] as? String, dictionaryRouteURLString = dictionary?["route_url"] as? String, dictionaryRouteURL = NSURL(string: dictionaryRouteURLString), dictionaryRouteColor =  dictionary?["route_color"] as? String, dictionaryRouteTextColor =  dictionary?["route_text_color"] as? String {
-            routeID = dictionaryRouteID
-            shortName = dictionaryShortName
-            routeURL = dictionaryRouteURL
-            
-            routeColor = hexStringToUIColor(dictionaryRouteColor)
-            routeTextColor = hexStringToUIColor(dictionaryRouteTextColor)
-        }
-        else {
+        
+        guard let dictionary = dictionary, dictionaryRouteID = dictionary["route_id"] as? String, dictionaryShortName = dictionary["route_short_name"] as? String, dictionaryRouteURLString = dictionary["route_url"] as? String, dictionaryRouteURL = NSURL(string: dictionaryRouteURLString), dictionaryRouteColor =  dictionary["route_color"] as? String, dictionaryRouteTextColor =  dictionary["route_text_color"] as? String else {
             return nil
         }
         
-        if let dictionaryLongName = dictionary?["route_long_name"] as? String where count(dictionaryLongName) > 3 {
+        routeID = Int(dictionaryRouteID)
+        shortName = dictionaryShortName
+        routeURL = dictionaryRouteURL
+        
+        routeColor = hexStringToUIColor(dictionaryRouteColor)
+        routeTextColor = hexStringToUIColor(dictionaryRouteTextColor)
+        
+        if let dictionaryLongName = dictionary["route_long_name"] as? String where dictionaryLongName.characters.count > 3 {
             longName = dictionaryLongName
             if longName == "Va Tram" {
                 shortName = "VA"
+            }
+            else if longName == "Mc Holiday" {
+                shortName = "MCH"
+                longName = "MC Holiday"
             }
         }
         
@@ -63,16 +67,16 @@ class ShuttleRoute: NSObject {
     /**
     Gets the routes UIColor from a hex value. Thanks to http://stackoverflow.com/questions/24263007/how-to-use-hex-colour-values-in-swift-ios.
     
-    :param: The hex string.
+    - parameter The: hex string.
     */
     private func hexStringToUIColor (hex:String) -> UIColor {
         var cString:String = hex.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet() as NSCharacterSet).uppercaseString
         
         if (cString.hasPrefix("#")) {
-            cString = cString.substringFromIndex(advance(cString.startIndex, 1))
+            cString = cString.substringFromIndex(cString.startIndex.advancedBy(1))
         }
         
-        if (count(cString) != 6) {
+        if (cString.characters.count != 6) {
             return UIColor.grayColor()
         }
         
@@ -87,7 +91,7 @@ class ShuttleRoute: NSObject {
         )
     }
     
-    
+    /*
     /**
     Begins the process of fetching all stops on the route
     */
@@ -96,12 +100,7 @@ class ShuttleRoute: NSObject {
             if !db.open() {}
             let currentDate = NSDate()
             
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            let todaysDate = dateFormatter.stringFromDate(currentDate)
-            dateFormatter.dateFormat = "HH:mm:ss"
-            let timeString = dateFormatter.stringFromDate(currentDate)
-            
+            let (todaysDate, timeString) = ShuttleSystem.sharedInstance.databaseQueryStringsFromDate(currentDate)
             
             if let routeID = routeID {
                 let queryString = String(format: "SELECT DISTINCT stops.stop_id FROM trips INNER JOIN stop_times ON stop_times.trip_id = trips.trip_id INNER JOIN stops ON stops.stop_id = stop_times.stop_id WHERE route_id = %@", arguments: [routeID.description])
@@ -121,5 +120,6 @@ class ShuttleRoute: NSObject {
             }
         }
     }
+*/
 }
 

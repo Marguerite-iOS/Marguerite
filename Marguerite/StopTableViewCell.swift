@@ -1,6 +1,6 @@
 //
 //  StopTableViewCell.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 6/30/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.
@@ -43,10 +43,10 @@ class StopTableViewCell: UITableViewCell  {
     func updateTheme() {
         if ShuttleSystem.sharedInstance.nightModeEnabled {
             stopNameLabel.textColor = UIColor.whiteColor()
-            selectedBackgroundView.backgroundColor = UIColor.darkModeCellSelectionColor()
+            selectedBackgroundView?.backgroundColor = UIColor.darkModeCellSelectionColor()
         } else {
             stopNameLabel.textColor = UIColor.blackColor()
-            selectedBackgroundView.backgroundColor = UIColor(red: 216.75/255.0, green: 216.75/255.0, blue: 216.75/255.0, alpha: 1.0)
+            selectedBackgroundView?.backgroundColor = UIColor(red: 216.75/255.0, green: 216.75/255.0, blue: 216.75/255.0, alpha: 1.0)
         }
     }
 }

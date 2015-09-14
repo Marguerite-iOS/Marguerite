@@ -1,6 +1,6 @@
 //
 //  ShuttleSystemAnnotation.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 6/17/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.
@@ -25,20 +25,21 @@ class ShuttleSystemAnnotation: MKPointAnnotation {
     lazy var type: ShuttleSystemAnnotationType = .None
     // Used to store the system object, such as a ShuttleStop object
     var object: AnyObject?
+    var hasUpdatedLocation = false
     
     /**
     Initializes the annotation with necessary objects.
     
-    :param: annotationTitle The title to be displayed.
-    :param: annotationObject The object of the annotation.
-    :param: annotationType The type of shuttle system object.
-    :param: annotationCoordinate The coordniates of the annotation.
+    - parameter annotationTitle: The title to be displayed.
+    - parameter annotationObject: The object of the annotation.
+    - parameter annotationType: The type of shuttle system object.
+    - parameter annotationCoordinate: The coordniates of the annotation.
     */
-    init(annotationTitle: String, annotationObject: AnyObject?, annotationType: ShuttleSystemAnnotationType,  annotationCoordinate: CLLocationCoordinate2D) {
+    init(title: String, object: AnyObject?, type: ShuttleSystemAnnotationType, coordinate: CLLocationCoordinate2D) {
         super.init()
-        title = annotationTitle
-        coordinate = annotationCoordinate
-        object = annotationObject
-        type = annotationType
+        self.title = title
+        self.coordinate = coordinate
+        self.object = object
+        self.type = type
     }
 }

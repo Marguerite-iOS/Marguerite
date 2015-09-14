@@ -1,6 +1,6 @@
 //
 //  ShuttleSystemShuttleAnnotationView.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 7/7/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.
@@ -18,20 +18,21 @@ class ShuttleSystemShuttleAnnotationView: MKAnnotationView {
     
     // MARK: - Initializers
     
-    init!(annotation: ShuttleSystemAnnotation) {
+    init?(annotation: ShuttleSystemAnnotation) {
         super.init(annotation: annotation, reuseIdentifier: arc4random().description)
-        let shuttle = annotation.object as! Shuttle
+        guard let shuttle = annotation.object as? Shuttle, image = UIImage(named: "ShuttleIndicator") else {
+            return nil
+        }
         route = shuttle.route
         // Indicator down image from route bubble to spot on the map
-        let indicatorImage = UIImage(named: "ShuttleIndicator")!.imageWithRenderingMode(.AlwaysTemplate)
-        indicatorImageView = UIImageView(image: indicatorImage)
-        indicatorImageView?.tintColor = route.routeColor
+        indicatorImageView = UIImageView(image: image)
+        indicatorImageView.tintColor = route.routeColor
         addSubview(indicatorImageView)
         // The image that has the actual route name
         bubbleImageView = UIImageView(image: route.image)
         bubbleImageView.userInteractionEnabled = true
         addSubview(bubbleImageView)
-        bubbleImageView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        bubbleImageView.translatesAutoresizingMaskIntoConstraints = false
         // Contraints
         var constraints = [NSLayoutConstraint]()
         constraints.append(NSLayoutConstraint(item: bubbleImageView, attribute: .CenterX, relatedBy: .Equal, toItem: indicatorImageView, attribute: .CenterX, multiplier: 1.0, constant: 0.0))
@@ -46,11 +47,11 @@ class ShuttleSystemShuttleAnnotationView: MKAnnotationView {
         super.init(frame: frame)
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         NSNotificationCenter.defaultCenter().postNotificationName(RouteAnnotationTappedNotification, object: route)
     }
 }

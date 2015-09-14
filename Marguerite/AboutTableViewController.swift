@@ -37,7 +37,6 @@ class AboutTableViewController: UITableViewController {
             formatter.dateFormat = "MMMM dd, yyyy"
             lastUpdateString =  "GTFS data last updated " + formatter.stringFromDate(date)
         }
-        Answers.logContentViewWithName("AboutViewController", contentType: "View Controller", contentId: "content-About", customAttributes: [:])
     }
     // MARK: - Actions
     

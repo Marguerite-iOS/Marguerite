@@ -37,8 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         liveMapModeOnly = DefaultsHelper.key(LiveMapModeOnlyKey)
         
         // Only show the map view controller in the tab bar
-        if liveMapModeOnly, let tabBarController = window?.rootViewController as? UITabBarController {
-            tabBarController.viewControllers = [tabBarController.viewControllers![1]]
+        if liveMapModeOnly, let tabBarController = window?.rootViewController as? UITabBarController, viewControllers = tabBarController.viewControllers {
+            tabBarController.viewControllers = [viewControllers[1]]
         }
     
         ShuttleSystem.sharedInstance.attemptStart()
@@ -61,20 +61,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             DefaultsHelper.keyIs(liveMapModeOnly, key: LiveMapModeOnlyKey)
         }
         alertController.addAction(action)
-        window!.rootViewController?.presentViewController(alertController, animated: true, completion: nil)
-        Answers.logCustomEventWithName("Only Map Mode Toggled", customAttributes: ["Enabled": liveMapModeOnly.description.capitalizedString])
+        if let rootViewController = window?.rootViewController {
+            rootViewController.presentViewController(alertController, animated: true, completion: nil)
+            Answers.logCustomEventWithName("Only Map Mode Toggled", customAttributes: ["Enabled": liveMapModeOnly.description.capitalizedString])
+        }
     }
     
     /**
     Sets the app's appearance properties
     */
     func setAppearances() {
-        let shuttleSystemColor = ShuttleSystem.sharedInstance.color()
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
-        UINavigationBar.appearance().barTintColor = shuttleSystemColor
+        UINavigationBar.appearance().barTintColor = UIColor.cardinalColor()
         UITabBar.appearance().tintColor = UIColor.whiteColor()
-        UITabBar.appearance().barTintColor = shuttleSystemColor
+        UITabBar.appearance().barTintColor = UIColor.cardinalColor()
     }
 
     func applicationWillResignActive(application: UIApplication) {

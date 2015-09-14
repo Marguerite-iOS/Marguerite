@@ -1,6 +1,6 @@
 //
 //  Shuttle.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 6/16/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.
@@ -28,51 +28,49 @@ class Shuttle: NSObject {
     private var tripID: Int!
     private var routeID: Int!
     
-    // Optional
-    private var speed: Double?
-    private var heading: Double?
-    
     // Traveling route
     var route: ShuttleRoute!
     
     /**
     Initilizes a shuttle object from the live feed data dictionary.
     
-    :param: dictionary The shuttle attributes.
+    - parameter dictionary: The shuttle attributes.
     */
     init?(dictionary: [String:String]) {
         super.init()
-        if let dictionaryName = dictionary[ShuttleElement.name]?.toInt(), dictionaryTripID = dictionary[ShuttleElement.tripId]?.toInt(), dictionaryRouteID = dictionary[ShuttleElement.routeId]?.toInt(), dictionaryLat = dictionary[ShuttleElement.latitude], dictionaryLong = dictionary[ShuttleElement.longitude] {
-            name = dictionaryName
-            tripID = dictionaryTripID
-            routeID = dictionaryRouteID
-            let lat = (dictionaryLat as NSString).doubleValue
-            let long = (dictionaryLong as NSString).doubleValue
-            location = CLLocation(latitude: lat, longitude: long)
-        }
-        else {
+        
+        guard let dictionaryName = dictionary[ShuttleElement.name], dictionaryTripID = dictionary[ShuttleElement.tripId], dictionaryRouteID = dictionary[ShuttleElement.routeId], dictionaryLat = dictionary[ShuttleElement.latitude], dictionaryLong = dictionary[ShuttleElement.longitude] else {
             return nil
         }
         
-        if let dictionarysSpeed = dictionary[ShuttleElement.speed] {
-            speed = (dictionarysSpeed as NSString).doubleValue
+        let latitude = (dictionaryLat as NSString).doubleValue
+        let longitude = (dictionaryLong as NSString).doubleValue
+        
+        guard !ShuttleSystem.sharedInstance.coordinatesInParkingLot(latitude, longitude: longitude) else {
+            return nil
         }
-        if let dictionaryHeading = dictionary[ShuttleElement.heading] {
-            heading = (dictionaryHeading as NSString).doubleValue
-        }
+        
+        name = Int(dictionaryName)
+        tripID = Int(dictionaryTripID)
+        routeID = Int(dictionaryRouteID)
+        location = CLLocation(latitude: latitude, longitude: longitude)
     }
     
     /**
     The annotation for the live map is the shuttle has a location.
     
-    :returns: The annotation.
+    - returns: The annotation.
     */
     var annotation: ShuttleSystemAnnotation {
-        return ShuttleSystemAnnotation(annotationTitle: annotationTitle, annotationObject: self, annotationType: .Shuttle, annotationCoordinate: location.coordinate)
+        return ShuttleSystemAnnotation(title: annotationTitle, object: self, type: .Shuttle, coordinate: location.coordinate)
     }
     
     var annotationTitle: String {
         return route.shortName + ": " + name.description
+    }
+    
+    override var description: String {
+        return route.shortName + ": " + name.description + ", Location: " + location.description
     }
     
 }

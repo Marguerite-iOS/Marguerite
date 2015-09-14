@@ -1,6 +1,6 @@
 //
 //  MapTableViewCell.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 6/16/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.
@@ -25,7 +25,7 @@ class MapTableViewCell: UITableViewCell, MKMapViewDelegate {
     /**
     Adds the stop annotiation to the map.
     
-    :param: stop The stop to display
+    - parameter stop: The stop to display
     */
     func displayStop(stop: ShuttleStop) {
         mapView.showAnnotations([stop.annotation], animated: false)
@@ -34,7 +34,7 @@ class MapTableViewCell: UITableViewCell, MKMapViewDelegate {
     // MARK: - Map view delegate
     
     // delegate method for rendering the shuttles and stops
-    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation.isKindOfClass(MKUserLocation) {
             return nil
         }

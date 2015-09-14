@@ -1,6 +1,6 @@
 //
 //  TabBarControllerDelegate.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 7/19/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.

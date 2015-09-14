@@ -1,13 +1,12 @@
 //
 //  StopInfoTableViewController.swift
-//  StanfordBus
+//  Marguerite
 //
 //  Created by Andrew Finke on 6/16/15.
 //  Copyright © 2015 Andrew Finke. All rights reserved.
 //
 
 import UIKit
-import Crashlytics
 
 let showStopInfoSegueIdentifier = "showStopInfo"
 
@@ -128,17 +127,15 @@ class StopInfoTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        if indexPath.section == 1, let route = stop.stopTimes[indexPath.row].route {
-            Answers.logContentViewWithName("WebViewController", contentType: "View Controller", contentId: "content-Web", customAttributes: ["Origin": "StopInfoTableViewController", "RouteName": route.shortName, "RouteID": route.routeID])
-            performSegueWithIdentifier(showRouteInfoSegueIdentifier, sender: route)
+        if indexPath.section == 1 {
+            performSegueWithIdentifier(showRouteInfoSegueIdentifier, sender: stop.stopTimes[indexPath.row].route)
         }
     }
     
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == showRouteInfoSegueIdentifier, let route = sender as? ShuttleRoute {
-            let controller = segue.destinationViewController as! WebViewController
+        if segue.identifier == showRouteInfoSegueIdentifier, let route = sender as? ShuttleRoute, controller = segue.destinationViewController as? WebViewController {
             controller.route = route
         }
     }
