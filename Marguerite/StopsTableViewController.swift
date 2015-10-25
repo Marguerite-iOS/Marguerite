@@ -164,6 +164,26 @@ class StopsTableViewController: UITableViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTheme", name: UpdatedThemeNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideNearbyStops", name: LocationUnavailableNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showNearbyStops", name: LocationAvailableNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "removeStopFromFavorites:", name: RemoveStopFromFavoritesNotification, object: nil)
+        
+    }
+    
+    func removeStopFromFavorites(notification: NSNotification) {
+        guard let stop = notification.object as? ShuttleStop, let index = ShuttleSystem.sharedInstance.favoriteStops.indexOf(stop) else {
+            return
+        }
+        
+        ShuttleSystem.sharedInstance.removeStopFromFavorites(stop)
+        
+        if segmentedControl.selectedSegmentIndex == 1 {
+            tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        if traitCollection.forceTouchCapability == .Available {
+            registerForPreviewingWithDelegate(self, sourceView: view)
+        }
     }
     
     /**
@@ -173,7 +193,7 @@ class StopsTableViewController: UITableViewController {
     
     - returns: The stop
     */
-    private func stopForIndexPath(indexPath: NSIndexPath) -> ShuttleStop {
+    func stopForIndexPath(indexPath: NSIndexPath) -> ShuttleStop {
         switch segmentedControl.selectedSegmentIndex {
         case 1:
             return ShuttleSystem.sharedInstance.favoriteStops[indexPath.row]

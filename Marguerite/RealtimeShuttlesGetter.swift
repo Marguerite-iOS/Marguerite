@@ -114,8 +114,8 @@ class RealtimeShuttlesGetter: NSObject, NSXMLParserDelegate {
         
         let postString = "name=\(vehicleIdString)"
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler: { (response, data, error) -> Void in
-            
+        
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: {(data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
             guard error == nil, let data = data else {
                 self.delegate?.busUpdateDidFail(NSError(domain: "edu.stanford.Marguerite", code: 1, userInfo: nil))
                 print(error)
@@ -135,6 +135,7 @@ class RealtimeShuttlesGetter: NSObject, NSXMLParserDelegate {
             }
             self.delegate?.didUpdateShuttles(self.vehicleDictionaries, mappingInfo: vehicleIdsToFareboxIds)
         })
+        task.resume()
     }
     
     

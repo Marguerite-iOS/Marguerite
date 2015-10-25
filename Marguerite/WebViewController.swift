@@ -67,7 +67,12 @@ class WebViewController: UIViewController, UIToolbarDelegate, WKNavigationDelega
     /**
     Hides the thin line between the navigation bar and toolbar
     */
-    private func findHairlineImageViewUnder(view:UIView!) -> UIView? {
+    func findHairlineImageViewUnder(view: UIView?) -> UIView? {
+        
+        guard let view = view else {
+            return nil
+        }
+        
         if view is UIImageView && view.bounds.size.height <= 1.0 {
             return view
         }

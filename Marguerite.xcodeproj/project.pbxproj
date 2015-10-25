@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		140722CE1BDD46E1001014D9 /* StopsTableViewController+UIViewControllerPreviewing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140722CD1BDD46E1001014D9 /* StopsTableViewController+UIViewControllerPreviewing.swift */; };
+		140722D01BDD4969001014D9 /* StopInfoTableViewController+UIViewControllerPreviewing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140722CF1BDD4969001014D9 /* StopInfoTableViewController+UIViewControllerPreviewing.swift */; };
+		140722F21BDD5221001014D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 140722F11BDD5221001014D9 /* LaunchScreen.storyboard */; };
 		140782711B5C9EE7009070AF /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1407826F1B5C9EE7009070AF /* Fabric.framework */; };
 		140782721B5C9EE7009070AF /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 140782701B5C9EE7009070AF /* Crashlytics.framework */; };
 		141D513F1B5C6D6B0000FDF1 /* TabBarControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141D513E1B5C6D6B0000FDF1 /* TabBarControllerDelegate.swift */; };
@@ -67,6 +70,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		140722CD1BDD46E1001014D9 /* StopsTableViewController+UIViewControllerPreviewing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "StopsTableViewController+UIViewControllerPreviewing.swift"; sourceTree = "<group>"; };
+		140722CF1BDD4969001014D9 /* StopInfoTableViewController+UIViewControllerPreviewing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "StopInfoTableViewController+UIViewControllerPreviewing.swift"; sourceTree = "<group>"; };
+		140722F11BDD5221001014D9 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1407826F1B5C9EE7009070AF /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
 		140782701B5C9EE7009070AF /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
 		141D513E1B5C6D6B0000FDF1 /* TabBarControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarControllerDelegate.swift; sourceTree = "<group>"; };
@@ -366,7 +372,9 @@
 			isa = PBXGroup;
 			children = (
 				14C7E39B1B310D91007321C8 /* StopsTableViewController.swift */,
+				140722CD1BDD46E1001014D9 /* StopsTableViewController+UIViewControllerPreviewing.swift */,
 				147C66FE1B311979001A716F /* StopInfoTableViewController.swift */,
+				140722CF1BDD4969001014D9 /* StopInfoTableViewController+UIViewControllerPreviewing.swift */,
 				147EC3AA1B311063006A4607 /* LiveMapViewController.swift */,
 				14F4A2801B43BE6900F5D1D6 /* WebViewController.swift */,
 				1435267C1B43376D00D8350B /* AboutTableViewController.swift */,
@@ -378,6 +386,7 @@
 			isa = PBXGroup;
 			children = (
 				14CE0C8A1B30E53F00AF27DC /* Main.storyboard */,
+				140722F11BDD5221001014D9 /* LaunchScreen.storyboard */,
 				14C495211B43B58E00BF5FE0 /* RouteBubbleView.swift */,
 				1444F4011B3127EE00151431 /* MapTableViewCell.swift */,
 				14AAE8011B43B6EB00BFF12E /* StopTableViewCell.swift */,
@@ -468,6 +477,7 @@
 				14CE0C8C1B30E53F00AF27DC /* Main.storyboard in Resources */,
 				1457CB001B5EF69E004DBF3D /* Localizable.strings in Resources */,
 				14CE0C8E1B30E53F00AF27DC /* Images.xcassets in Resources */,
+				140722F21BDD5221001014D9 /* LaunchScreen.storyboard in Resources */,
 				14BB23C71B4F567D004098DC /* BundledGTFS.zip in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -498,6 +508,7 @@
 				149AC33F1B40C28300E0C5B7 /* FareRules.m in Sources */,
 				14DC0A251B5F14720041C979 /* Secrets.swift in Sources */,
 				149AC3431B40C28300E0C5B7 /* StopTime.m in Sources */,
+				140722CE1BDD46E1001014D9 /* StopsTableViewController+UIViewControllerPreviewing.swift in Sources */,
 				149984E21B4EF2FD00EF92C9 /* FileHelper.swift in Sources */,
 				14FE60161B5B552900ABAD94 /* StopTableViewCell.swift in Sources */,
 				14F910D11B4EFF9900D9B83E /* zip.c in Sources */,
@@ -526,6 +537,7 @@
 				149AC33E1B40C28300E0C5B7 /* FareAttributes.m in Sources */,
 				1427668C1B4CF9E600E4ADFB /* ShuttleSystemShuttleAnnotationView.swift in Sources */,
 				149AC2BB1B40BF1F00E0C5B7 /* DefaultsHelper.swift in Sources */,
+				140722D01BDD4969001014D9 /* StopInfoTableViewController+UIViewControllerPreviewing.swift in Sources */,
 				149AC3401B40C28300E0C5B7 /* Route.m in Sources */,
 				143628711B313B2C006ACC86 /* ShuttleSystemAnnotation.swift in Sources */,
 				149AC3441B40C28300E0C5B7 /* Transformations.m in Sources */,
@@ -646,17 +658,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Marguerite/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.stanford.$(PRODUCT_NAME:rfc1034identifier)";
@@ -672,17 +683,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Marguerite/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.stanford.$(PRODUCT_NAME:rfc1034identifier)";

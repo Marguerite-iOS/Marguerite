@@ -28,7 +28,7 @@ class CoreLocationController: NSObject, CLLocationManagerDelegate {
     }
     
     func refreshLocation() {
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         
         if CLLocationManager.authorizationStatus() == .NotDetermined {
             locationManager.requestWhenInUseAuthorization()

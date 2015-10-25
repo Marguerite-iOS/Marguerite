@@ -14,9 +14,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet private weak var mapView: MKMapView! {
         didSet {
             mapView.region = ShuttleSystem.sharedInstance.region
-            if #available(iOS 9.0, *) {
-                mapView.showsTraffic = true
-            }
+            mapView.showsTraffic = true
         }
     }
     @IBOutlet private weak var segmentedControl: UISegmentedControl! {
@@ -208,7 +206,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
             switch annotation.type {
             case .Stop:
                 let pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "Stop")
-                pinView.pinColor = .Red
+                pinView.pinTintColor = UIColor.redColor()
                 pinView.canShowCallout = true
                 if !liveMapModeOnly {
                     pinView.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView

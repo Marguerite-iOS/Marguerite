@@ -36,6 +36,12 @@ class StopInfoTableViewController: UITableViewController {
         updateTheme()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        if traitCollection.forceTouchCapability == .Available {
+            registerForPreviewingWithDelegate(self, sourceView: view)
+        }
+    }
+    
     // MARK: - Night Mode
     
     /**
@@ -64,12 +70,16 @@ class StopInfoTableViewController: UITableViewController {
     Called when the user taps the favrotie bar button item. Tells the shuttle system manager to either remove it or add it to favorites and updates the bar button image
     */
     @IBAction private func favoriteButtonTapped(sender: AnyObject) {
+        toggleFavoriteStatus()
+        updateFavoriteBarButtonItem()
+    }
+    
+    func toggleFavoriteStatus () {
         if ShuttleSystem.sharedInstance.isStopFavorited(stop) {
             ShuttleSystem.sharedInstance.removeStopFromFavorites(stop)
         } else {
             ShuttleSystem.sharedInstance.addStopToFavorites(stop)
         }
-        updateFavoriteBarButtonItem()
     }
     
     // MARK: - Table view data source
@@ -145,5 +155,21 @@ class StopInfoTableViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func previewActionItems() -> [UIPreviewActionItem] {
+        var previewAction: UIPreviewAction!
+        
+        if ShuttleSystem.sharedInstance.isStopFavorited(stop) {
+            previewAction = UIPreviewAction(title: "Remove From Favorites", style: .Destructive) { (previewAction: UIPreviewAction, viewController: UIViewController) -> Void in
+                NSNotificationCenter.defaultCenter().postNotificationName(RemoveStopFromFavoritesNotification, object: self.stop)
+            }
+        } else {
+            previewAction = UIPreviewAction(title: "Favorite", style: .Default) { (previewAction: UIPreviewAction, viewController: UIViewController) -> Void in
+                self.toggleFavoriteStatus()
+            }
+        }
+        
+        return [previewAction]
     }
 }

@@ -12,11 +12,7 @@ class ShuttleStopTime: NSObject {
     var route: ShuttleRoute!
     var tripID: String!
     
-    var departureTime: NSDate! {
-        didSet {
-            formattedTime = ShuttleSystem.sharedInstance.displayFormatter.stringFromDate(departureTime)
-        }
-    }
+    var departureTime: NSDate!
     // Formatted departure time for display purposes
     var formattedTime: String!
     
@@ -25,5 +21,6 @@ class ShuttleStopTime: NSObject {
         self.route = route
         self.tripID = tripID
         self.departureTime = departureTime
+        formattedTime = ShuttleSystem.sharedInstance.displayFormatter.stringFromDate(departureTime)
     }
 }

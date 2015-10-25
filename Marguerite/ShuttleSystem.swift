@@ -20,6 +20,7 @@ let UpdatedShuttlesNotification = "UpdatedShuttles"
 let UpdatedThemeNotification = "UpdatesTheme"
 let LocationAvailableNotification = "LocationAvailable"
 let LocationUnavailableNotification = "LocationUnavailable"
+let RemoveStopFromFavoritesNotification = "RemoveStopFromFavorites"
 
 class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationControllerDelegate {
     
@@ -335,7 +336,7 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
         favoriteStops.append(stop)
         favoriteStopIDs.append(stop.stopID)
         DefaultsHelper.saveDataForKey(favoriteStopIDs, key: FavoriteStopsIDKey)
-        Answers.logCustomEventWithName("Added Stop To Favorites", customAttributes: ["StopID": stop, "StopName": stop.name])
+        Answers.logCustomEventWithName("Added Stop To Favorites", customAttributes: ["StopID": stop.stopID, "StopName": stop.name])
     }
     
     /**

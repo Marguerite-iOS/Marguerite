@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="i58-az-MU7">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="i58-az-MU7">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -20,32 +20,32 @@
                                 <rect key="frame" x="0.0" y="116" width="600" height="88"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gft-t7-On9" id="z1Q-KH-BO0">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="87.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="88"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EsF-dQ-KOr">
-                                            <rect key="frame" x="8" y="12" width="584" height="20"/>
+                                            <rect key="frame" x="16" y="12" width="568" height="20"/>
                                             <animations/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="20" id="Bh6-co-Zsm"/>
+                                                <constraint firstAttribute="height" constant="20" id="8Gw-F7-mlK"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1U9-CP-mFZ">
-                                            <rect key="frame" x="8" y="35" width="584" height="44"/>
+                                            <rect key="frame" x="16" y="36" width="568" height="44"/>
                                             <animations/>
                                         </imageView>
                                     </subviews>
                                     <animations/>
                                     <constraints>
-                                        <constraint firstItem="1U9-CP-mFZ" firstAttribute="top" secondItem="EsF-dQ-KOr" secondAttribute="bottom" constant="3" id="C7Y-12-Toa"/>
-                                        <constraint firstItem="1U9-CP-mFZ" firstAttribute="trailing" secondItem="z1Q-KH-BO0" secondAttribute="trailingMargin" id="Ihq-cp-mrk"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="1U9-CP-mFZ" secondAttribute="bottom" constant="0.5" id="JdZ-g1-TO2"/>
-                                        <constraint firstItem="1U9-CP-mFZ" firstAttribute="trailing" secondItem="EsF-dQ-KOr" secondAttribute="trailing" id="dw9-CZ-y0m"/>
-                                        <constraint firstItem="EsF-dQ-KOr" firstAttribute="top" secondItem="z1Q-KH-BO0" secondAttribute="topMargin" constant="4" id="laj-D3-d6I"/>
-                                        <constraint firstItem="1U9-CP-mFZ" firstAttribute="leading" secondItem="EsF-dQ-KOr" secondAttribute="leading" id="pUc-Xh-cF7"/>
-                                        <constraint firstItem="EsF-dQ-KOr" firstAttribute="leading" secondItem="z1Q-KH-BO0" secondAttribute="leadingMargin" id="sWA-Ag-9vc"/>
+                                        <constraint firstItem="EsF-dQ-KOr" firstAttribute="leading" secondItem="1U9-CP-mFZ" secondAttribute="leading" id="Epi-NF-vIX"/>
+                                        <constraint firstItem="EsF-dQ-KOr" firstAttribute="centerX" secondItem="z1Q-KH-BO0" secondAttribute="centerX" id="M9Z-Sp-B4W"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="1U9-CP-mFZ" secondAttribute="bottom" constant="-0.5" id="Z90-Oo-4Ba"/>
+                                        <constraint firstItem="EsF-dQ-KOr" firstAttribute="top" secondItem="z1Q-KH-BO0" secondAttribute="topMargin" constant="4" id="byw-PA-4LK"/>
+                                        <constraint firstItem="1U9-CP-mFZ" firstAttribute="top" secondItem="EsF-dQ-KOr" secondAttribute="bottom" constant="4" id="ouA-e8-nmR"/>
+                                        <constraint firstItem="1U9-CP-mFZ" firstAttribute="leading" secondItem="z1Q-KH-BO0" secondAttribute="leadingMargin" constant="8" id="see-AI-YCG"/>
+                                        <constraint firstItem="EsF-dQ-KOr" firstAttribute="trailing" secondItem="1U9-CP-mFZ" secondAttribute="trailing" id="v8Z-Dd-PbA"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <animations/>
@@ -62,14 +62,14 @@
                             <outlet property="delegate" destination="voF-ux-UHX" id="LtB-7k-gf7"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Stops" prompt="Currently in dev mode. This data is outdated." id="ngJ-JB-R5C">
+                    <navigationItem key="navigationItem" title="Stops" id="ngJ-JB-R5C">
                         <barButtonItem key="leftBarButtonItem" image="SunFilled" id="jbj-Wg-dRr">
                             <connections>
                                 <action selector="toggleNightMode:" destination="voF-ux-UHX" id="BtW-n1-TRg"/>
                             </connections>
                         </barButtonItem>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="5kN-v9-s81">
-                            <rect key="frame" x="194" y="37" width="212" height="30"/>
+                            <rect key="frame" x="194" y="7" width="212" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <animations/>
                             <segments>
@@ -82,7 +82,7 @@
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" id="OC9-XN-1hk">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="XCd-jT-6xE">
-                                <rect key="frame" x="558" y="41" width="22" height="22"/>
+                                <rect key="frame" x="558" y="11" width="22" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <animations/>
                                 <state key="normal">
@@ -221,7 +221,7 @@
         <!--Title-->
         <scene sceneID="daa-Dz-ePv">
             <objects>
-                <tableViewController id="Etk-TQ-y68" customClass="StopInfoTableViewController" customModule="Marguerite" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="StopInfoTableViewController" id="Etk-TQ-y68" customClass="StopInfoTableViewController" customModule="Marguerite" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="8Gm-Di-whI">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -302,7 +302,7 @@
                             <outlet property="delegate" destination="Etk-TQ-y68" id="RBq-pj-H9b"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Title" prompt="This is a dev mode. This data is outdated." id="oek-DL-GhX">
+                    <navigationItem key="navigationItem" title="Title" id="oek-DL-GhX">
                         <barButtonItem key="rightBarButtonItem" image="FavFilled" id="b9C-Ve-aWq">
                             <connections>
                                 <action selector="favoriteButtonTapped:" destination="Etk-TQ-y68" id="y3t-O5-4MQ"/>
@@ -321,7 +321,7 @@
         <!--Web View Controller-->
         <scene sceneID="ZcW-PM-aI3">
             <objects>
-                <viewController id="2rb-vc-mn6" customClass="WebViewController" customModule="Marguerite" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewController" id="2rb-vc-mn6" customClass="WebViewController" customModule="Marguerite" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="hqF-Mh-Bww"/>
                         <viewControllerLayoutGuide type="bottom" id="6kW-jK-j1L"/>
@@ -705,8 +705,8 @@
         <image name="SunFilled" width="27" height="27"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Rlk-SC-wMn"/>
-        <segue reference="9HW-Vs-oco"/>
-        <segue reference="61Q-Di-hhd"/>
+        <segue reference="4t0-DZ-8kq"/>
+        <segue reference="hB8-My-XJt"/>
+        <segue reference="byL-Jk-fWl"/>
     </inferredMetricsTieBreakers>
 </document>
