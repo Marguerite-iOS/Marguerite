@@ -23,6 +23,9 @@ extension StopsTableViewController: UIViewControllerPreviewingDelegate {
         let stop = stopForIndexPath(indexPath)
         stopInfoTableViewController.stop = stop
         previewingContext.sourceRect = cell.frame
+        if stop.stopTimes.count == 0 {
+            stopInfoTableViewController.preferredContentSize = tableView.contentSize
+        }
         
         return stopInfoTableViewController
     }

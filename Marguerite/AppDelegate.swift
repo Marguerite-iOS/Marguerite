@@ -16,35 +16,35 @@ So this is a thing... The Marguerite department is in the middle of an upgrade. 
 var liveMapModeOnly = true
 let LiveMapModeOnlyKey = "Live Map Mode Only"
 
+enum ShortcutIdentifier: String {
+    case OpenStops
+    case OpenLiveMap
+}
+
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
 
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
         Fabric.with([Crashlytics()])
 
-        setAppearances()
-        FileHelper.ensureFolderExistance()
-        if !DefaultsHelper.key(MovedGTFSBundleKey) {
-            FileHelper.moveBundleToTempFolder()
-            DefaultsHelper.keyIs(true, key: MovedGTFSBundleKey)
-            DefaultsHelper.keyIs(true, key: LiveMapModeOnlyKey)
-        }
+        checkIntegrity()
+        ShuttleSystem.sharedInstance.start()
         
-        liveMapModeOnly = DefaultsHelper.key(LiveMapModeOnlyKey)
-        
-        // Only show the map view controller in the tab bar
-        if liveMapModeOnly, let tabBarController = window?.rootViewController as? UITabBarController, viewControllers = tabBarController.viewControllers {
-            tabBarController.viewControllers = [viewControllers[1]]
-        }
-    
-        ShuttleSystem.sharedInstance.attemptStart()
-        UIApplication.sharedApplication().statusBarHidden = false
+        loadAppearances()
+        loadInterface()
         
         return true
+    }
+    
+    func application(application: UIApplication, performActionForShortcutItem shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
+        guard let shortcutIdentifier = ShortcutIdentifier(rawValue: shortcutItem.type) else {
+            return completionHandler(false)
+        }
+        (window!.rootViewController as! UITabBarController).selectedIndex = shortcutIdentifier == ShortcutIdentifier.OpenStops ? 0 : 1
+        return completionHandler(true)
     }
     
     /**
@@ -70,12 +70,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /**
     Sets the app's appearance properties
     */
-    func setAppearances() {
+    func loadAppearances() {
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         UINavigationBar.appearance().barTintColor = UIColor.cardinalColor()
         UITabBar.appearance().tintColor = UIColor.whiteColor()
         UITabBar.appearance().barTintColor = UIColor.cardinalColor()
+    }
+    
+    func loadInterface() {
+        let tabBarController = window!.rootViewController as! UITabBarController
+        let splitViewController = tabBarController.viewControllers![0] as! UISplitViewController
+        let navigationController = splitViewController.viewControllers[splitViewController.viewControllers.count-1] as! UINavigationController
+        navigationController.topViewController!.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem()
+        splitViewController.preferredDisplayMode = .AllVisible
+        splitViewController.preferredPrimaryColumnWidthFraction = 0.5
+        splitViewController.delegate = self
+        
+        // Only show the map view controller in the tab bar
+        if liveMapModeOnly {
+            tabBarController.viewControllers = [tabBarController.viewControllers![1]]
+        }
+        else {
+            let stops = UIApplicationShortcutItem(type: ShortcutIdentifier.OpenStops.rawValue, localizedTitle: "Show Stops", localizedSubtitle: nil, icon: UIApplicationShortcutIcon(templateImageName: "BusEmpty")
+                , userInfo: nil)
+            let map = UIApplicationShortcutItem(type: ShortcutIdentifier.OpenLiveMap.rawValue, localizedTitle: "Show Live Map", localizedSubtitle: nil, icon: UIApplicationShortcutIcon(templateImageName: "MapEmpty")
+                , userInfo: nil)
+            UIApplication.sharedApplication().shortcutItems = [stops, map]
+        }
+        UIApplication.sharedApplication().statusBarHidden = false
+    }
+    
+    func checkIntegrity() {
+        FileHelper.ensureFolderExistance()
+        if !DefaultsHelper.key(MovedGTFSBundleKey) {
+            FileHelper.moveBundleToTempFolder()
+            DefaultsHelper.keyIs(true, key: MovedGTFSBundleKey)
+            DefaultsHelper.keyIs(true, key: LiveMapModeOnlyKey)
+        }
+        liveMapModeOnly = DefaultsHelper.key(LiveMapModeOnlyKey)
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -98,6 +131,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    // MARK: - Split view
+    
+    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController:UIViewController, ontoPrimaryViewController primaryViewController:UIViewController) -> Bool {
+        guard let secondaryAsNavController = secondaryViewController as? UINavigationController else { return false }
+        guard let topAsDetailController = secondaryAsNavController.topViewController as? StopInfoTableViewController else { return false }
+        if topAsDetailController.stop == nil {
+            // Return true to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
+            return true
+        }
+        return false
     }
 }
 

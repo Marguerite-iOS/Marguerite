@@ -8,8 +8,6 @@
 
 import MapKit
 
-let RouteAnnotationTappedNotification = "RouteTapped"
-
 class ShuttleSystemShuttleAnnotationView: MKAnnotationView {
 
     private var indicatorImageView: UIImageView!
@@ -30,7 +28,6 @@ class ShuttleSystemShuttleAnnotationView: MKAnnotationView {
         addSubview(indicatorImageView)
         // The image that has the actual route name
         bubbleImageView = UIImageView(image: route.image)
-        bubbleImageView.userInteractionEnabled = true
         addSubview(bubbleImageView)
         bubbleImageView.translatesAutoresizingMaskIntoConstraints = false
         // Contraints
@@ -49,9 +46,5 @@ class ShuttleSystemShuttleAnnotationView: MKAnnotationView {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
-    
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        NSNotificationCenter.defaultCenter().postNotificationName(RouteAnnotationTappedNotification, object: route)
     }
 }

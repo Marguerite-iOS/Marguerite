@@ -20,6 +20,7 @@ let UpdatedShuttlesNotification = "UpdatedShuttles"
 let UpdatedThemeNotification = "UpdatesTheme"
 let LocationAvailableNotification = "LocationAvailable"
 let LocationUnavailableNotification = "LocationUnavailable"
+let AddStopToFavoritesNotification = "AddStopToFavorites"
 let RemoveStopFromFavoritesNotification = "RemoveStopFromFavorites"
 
 class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationControllerDelegate {
@@ -32,12 +33,12 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
     
     let fileHelper = FileHelper()
     
-    var shuttles: [Shuttle]!
-    var routes: [ShuttleRoute]!
+    var shuttles = [Shuttle]()
+    var routes = [ShuttleRoute]()
     
-    var stops: [ShuttleStop]!
-    var closestStops: [ShuttleStop]!
-    var favoriteStops: [ShuttleStop]!
+    var stops = [ShuttleStop]()
+    var closestStops = [ShuttleStop]()
+    var favoriteStops = [ShuttleStop]()
     
     private var updatingShuttles = false
     private var didFailLastUpdate = false
@@ -105,7 +106,7 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
         createParkingLotPath()
     }
     
-    func attemptStart() {
+    func start() {
         if fileHelper.hasCompletedInitalSetup {
             print("Device has GTFS")
             loadData()
@@ -169,7 +170,6 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
         print("--- Finished Loading Stops Into Routes ---")
         }
         */
-        
         stops.sortInPlace({$0.name < $1.name})
         locationController.refreshLocation()
         realtimeShuttlesGetter.update()
@@ -201,7 +201,7 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
         NSNotificationCenter.defaultCenter().postNotificationName(UpdatedShuttlesNotification, object: nil)
         updatingShuttles = false
-        updateTimer = NSTimer.scheduledTimerWithTimeInterval(10.0, target: self, selector: "updateRealtimeLocations", userInfo: nil, repeats: false)
+        updateTimer = NSTimer.scheduledTimerWithTimeInterval(15.0, target: self, selector: "updateRealtimeLocations", userInfo: nil, repeats: false)
     }
     
     func busUpdateDidFail(error: NSError) {
@@ -316,11 +316,11 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
         favoriteStops = []
         if let favs = DefaultsHelper.getObjectForKey(FavoriteStopsIDKey) as? [Int] {
             favoriteStopIDs = favs
-            for stopID in favoriteStopIDs {
-                if let stop = shuttleStopWithID(stopID.description) {
+            favoriteStopIDs.forEach({
+                if let stop = shuttleStopWithID($0.description) {
                     favoriteStops.append(stop)
                 }
-            }
+            })
             favoriteStops.sortInPlace({$0.name < $1.name})
         } else {
             favoriteStopIDs = []

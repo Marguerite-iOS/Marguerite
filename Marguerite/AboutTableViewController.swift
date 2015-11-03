@@ -7,9 +7,12 @@
 //
 
 import UIKit
-import Crashlytics
+import SafariServices
 
-class AboutTableViewController: UITableViewController {
+class AboutTableViewController: UITableViewController, SFSafariViewControllerDelegate {
+    
+    private var seperatorColor: UIColor!
+    private var tableViewBackgroundColor: UIColor!
     
     // MARK: - Strings
     
@@ -32,12 +35,32 @@ class AboutTableViewController: UITableViewController {
     // MARK: - View Transitions
     
     override func viewDidLoad() {
+        tableViewBackgroundColor = tableView.backgroundColor
+        seperatorColor = tableView.separatorColor
+        updateTheme()
         if let date = DefaultsHelper.getObjectForKey("GTFS Date") as? NSDate {
             let formatter = NSDateFormatter()
             formatter.dateFormat = "MMMM dd, yyyy"
             lastUpdateString =  "GTFS data last updated " + formatter.stringFromDate(date)
         }
+        tableView.cellLayoutMarginsFollowReadableWidth = true
     }
+    
+    // MARK: - Night Mode
+    
+    /**
+    Updates the UI colors
+    */
+    func updateTheme() {
+        if ShuttleSystem.sharedInstance.nightModeEnabled {
+            tableView.backgroundColor = UIColor.darkModeTableViewColor()
+            tableView.separatorColor = UIColor.darkModeSeperatorColor()
+        } else {
+            tableView.backgroundColor = tableViewBackgroundColor
+            tableView.separatorColor = seperatorColor
+        }
+    }
+    
     // MARK: - Actions
     
     @IBAction private func done(sender: AnyObject) {
@@ -66,25 +89,20 @@ class AboutTableViewController: UITableViewController {
         case 2:
             switch indexPath.row {
             case 0:
-                Answers.logCustomEventWithName("Called Main Office", customAttributes: [:])
                 callPhoneNumber(officePhoneNumber)
             case 1:
-                Answers.logCustomEventWithName("Called Lost & Found", customAttributes: [:])
                 callPhoneNumber(lostAndFoundPhoneNumber)
             case 2:
-                Answers.logCustomEventWithName("Opened Main Website", customAttributes: [:])
-                openURL(websiteURL)
+                openSafariController(websiteURL)
             case 3:
-                Answers.logCustomEventWithName("Opened Service Feedback", customAttributes: [:])
-                openURL(websiteServiceURL)
+                openSafariController(websiteServiceURL)
             default:
                 break
             }
         case 3:
             switch indexPath.row {
             case 0:
-                Answers.logCustomEventWithName("Opened GitHub", customAttributes: [:])
-                openURL(gitHubURL)
+                openSafariController(gitHubURL)
             default:
                 break
             }
@@ -108,16 +126,31 @@ class AboutTableViewController: UITableViewController {
     // MARK: - URL Convenience Methods
     
     private func createEmail(emailAddress: String) {
-        openURL("mailto:\(emailAddress)")
+        openPhoneNumber("mailto:\(emailAddress)")
     }
     
     private func callPhoneNumber(telephoneUrl: String) {
-        openURL("tel://\(telephoneUrl)")
+        openPhoneNumber("tel://\(telephoneUrl)")
     }
     
-    private func openURL(urlString: String) {
+    private func openPhoneNumber(urlString: String) {
         if let url = NSURL(string: urlString) {
             UIApplication.sharedApplication().openURL(url)
         }
+    }
+    
+    private func openSafariController(urlString: String) {
+        if let url = NSURL(string: urlString) {
+            UIApplication.sharedApplication().statusBarStyle = .Default
+            UIBarButtonItem.appearance().tintColor = UIColor.cardinalColor()
+            let controller = SFSafariViewController(URL: url)
+            controller.delegate = self
+            presentViewController(controller, animated: true, completion: nil)
+        }
+    }
+    
+    func safariViewControllerDidFinish(controller: SFSafariViewController) {
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
+        UIBarButtonItem.appearance().tintColor = UIColor.whiteColor()
     }
 }

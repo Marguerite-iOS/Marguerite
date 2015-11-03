@@ -11,8 +11,9 @@ import WebKit
 
 let showRouteInfoSegueIdentifier = "showRouteInfo"
 
-class WebViewController: UIViewController, UIToolbarDelegate, WKNavigationDelegate {
+class WebViewController: UIViewController, WKNavigationDelegate {
 
+    private let progressView = UIProgressView(progressViewStyle: .Bar)
     private let webView = WKWebView()
     @IBOutlet private weak var segmentedControl: UISegmentedControl! {
         didSet {
@@ -30,37 +31,18 @@ class WebViewController: UIViewController, UIToolbarDelegate, WKNavigationDelega
     
     override func viewDidLoad() {
         findHairlineImageViewUnder(navigationController?.navigationBar)?.hidden = true
-        
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            segmentedControl.frame = CGRectMake(0, 0, view.frame.width - 30, segmentedControl.frame.height)
-        }
-        else {
-            segmentedControl.frame = CGRectMake(0, 0, view.frame.width / 2 - 30, segmentedControl.frame.height)
-        }
-        
-        
-        
+    
         webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.backgroundColor = UIColor(red: 128.0/255.0, green: 128.0/255.0, blue: 128.0/255.0, alpha: 1.0)
         webView.navigationDelegate = self
+        webView.alpha = 0.0
         
         view.addSubview(webView)
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[web]|", options: [], metrics: nil, views: ["web":webView]))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-(44.0)-[web]|", options: [], metrics: nil, views: ["web":webView]))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[web]|", options: [], metrics: nil, views: ["web":webView]))
         view.sendSubviewToBack(webView)
         view.backgroundColor = UIColor(red: 128.0/255.0, green: 128.0/255.0, blue: 128.0/255.0, alpha: 1.0)
-    }
-    
-    func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
-        return .Top
-    }
-    
-    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-    }
-    
-    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+        
+        createProgressView()
     }
     
     //From http://stackoverflow.com/questions/25392469/how-to-hide-uinavigationbar-hairline-with-swift
@@ -84,6 +66,64 @@ class WebViewController: UIViewController, UIToolbarDelegate, WKNavigationDelega
         }
         
         return nil
+    }
+    
+    // MARK: - Web View
+    
+    func webView(webView: WKWebView, didCommitNavigation navigation: WKNavigation!) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        showProgressView()
+    }
+    
+    func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+        if webView.alpha != 1.0 {
+            webView.alpha = 1.0
+        }
+        hideProgressView()
+    }
+    
+    // MARK: - Progress View
+    
+    func createProgressView() {
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.progressTintColor = UIColor.whiteColor()
+        view.addSubview(progressView)
+        let widthConstraint = NSLayoutConstraint.constraintsWithVisualFormat("H:|[progressView]|", options : NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["progressView": progressView])
+        let heightConstraint = NSLayoutConstraint.constraintsWithVisualFormat("V:|[topLayoutGuide][progressView]", options : NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: ["progressView": progressView, "topLayoutGuide" : topLayoutGuide])
+        view.addConstraints(heightConstraint)
+        view.addConstraints(widthConstraint)
+        webView.addObserver(self, forKeyPath: "estimatedProgress", options: NSKeyValueObservingOptions.New, context: nil)
+    }
+    
+    func progess(progress: Float) {
+        dispatch_async(dispatch_get_main_queue(), {
+            self.progressView.setProgress(max(progress*(19.0/20.0) + 0.05, self.progressView.progress), animated: true)
+        })
+    }
+    
+    func showProgressView() {
+        progressView.setProgress(max(0.05, self.progressView.progress), animated: false)
+        progressView.hidden = false
+    }
+    
+    func hideProgressView() {
+        UIView.animateWithDuration(0.4, delay: 0.75, options: [], animations: {
+            self.progressView.alpha = 0.0
+            }, completion: { finished in
+                self.progressView.hidden = true
+                self.progressView.alpha = 1.0
+                self.progressView.progress = 0.0
+        })
+    }
+    
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if keyPath == "estimatedProgress" {
+            progess(Float((object as! WKWebView).estimatedProgress))
+        }
+        else {
+            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+        }
     }
     
     // MARK: - Route URLs
@@ -138,6 +178,16 @@ class WebViewController: UIViewController, UIToolbarDelegate, WKNavigationDelega
             return true
         }
         return false
+    }
+    
+    // MARK: - Actions
+    
+    /**
+    Called when the user taps the close button
+    */
+    @IBAction func dismiss(sender: AnyObject) {
+        webView.removeObserver(self, forKeyPath: "estimatedProgress")
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     /**

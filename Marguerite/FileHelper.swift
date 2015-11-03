@@ -49,7 +49,7 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
                     self.movedNewZipToTempFolder()
                 }
             })
-            task.resume()
+          //  task.resume()
         }
     }
     

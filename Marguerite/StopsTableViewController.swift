@@ -79,14 +79,12 @@ class StopsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch segmentedControl.selectedSegmentIndex {
-        case 0:
-            return ShuttleSystem.sharedInstance.stops.count
         case 1:
             return ShuttleSystem.sharedInstance.favoriteStops.count
         case 2:
             return ShuttleSystem.sharedInstance.closestStops.count
         default:
-            return 0
+            return ShuttleSystem.sharedInstance.stops.count
         }
     }
     
@@ -99,7 +97,7 @@ class StopsTableViewController: UITableViewController {
     
     // Uses the image of the routes to determine the height of the cell
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if let height = stopForIndexPath(indexPath).routeBubblesImage?.size.height where height > 10.0 {
+        if let height = stopForIndexPath(indexPath).getRouteBubblesImage(view.frame.width)?.size.height where height > 10.0 {
             return 44 + height
         }
         return 44
@@ -129,9 +127,13 @@ class StopsTableViewController: UITableViewController {
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if let indexPath = tableView.indexPathForSelectedRow, controller = segue.destinationViewController as? StopInfoTableViewController  {
-            let stop = stopForIndexPath(indexPath)
-            controller.stop = stop
+        if segue.identifier == "showDetail" {
+            if let indexPath = self.tableView.indexPathForSelectedRow {
+                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! StopInfoTableViewController
+                controller.stop = stopForIndexPath(indexPath)
+                controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+                controller.navigationItem.leftItemsSupplementBackButton = true
+            }
         }
     }
     
@@ -144,48 +146,53 @@ class StopsTableViewController: UITableViewController {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+        configureTableViewProperties()
+        configureInterface()
+        addNotificationObservers()
+        NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: "registerForPreviewing", userInfo: nil, repeats: false)
+    }
+    
+    func configureInterface() {
         title = NSLocalizedString("Stops Title", comment: "")
-        
         setFilledTabBarItemImage("BusFilled")
-        seperatorColor = tableView.separatorColor
         updateTheme()
-        
+        let item = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FixedSpace, target: nil, action: nil)
+        item.width = 24.0
+        navigationItem.rightBarButtonItems = [navigationItem.rightBarButtonItem!, item]
+    }
+    
+    func configureTableViewProperties() {
+        seperatorColor = tableView.separatorColor
         if let height =  navigationController?.navigationBar.frame.height {
             for var index = 0; index < 3; index++ {
                 lastTableViewOffset.append(-height - 20)
             }
         }
-        
-        let item = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.FixedSpace, target: nil, action: nil)
-        item.width = 24.0
-        navigationItem.rightBarButtonItems = [navigationItem.rightBarButtonItem!, item]
-        
+        tableView.cellLayoutMarginsFollowReadableWidth = true
+    }
+    
+    func addNotificationObservers() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTheme", name: UpdatedThemeNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideNearbyStops", name: LocationUnavailableNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showNearbyStops", name: LocationAvailableNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "addStopToFavorites:", name: AddStopToFavoritesNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "removeStopFromFavorites:", name: RemoveStopFromFavoritesNotification, object: nil)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: UIDeviceOrientationDidChangeNotification, object: nil)
     }
     
-    func removeStopFromFavorites(notification: NSNotification) {
-        guard let stop = notification.object as? ShuttleStop, let index = ShuttleSystem.sharedInstance.favoriteStops.indexOf(stop) else {
-            return
-        }
-        
-        ShuttleSystem.sharedInstance.removeStopFromFavorites(stop)
-        
-        if segmentedControl.selectedSegmentIndex == 1 {
-            tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
-        }
-    }
-    
-    override func viewDidAppear(animated: Bool) {
+    func registerForPreviewing() {
         if traitCollection.forceTouchCapability == .Available {
             registerForPreviewingWithDelegate(self, sourceView: view)
         }
     }
     
+    
+    
+    @IBAction func aboutButtonPressed(sender: AnyObject) {
+        let aboutViewNavigationController = UIStoryboard(name: "AboutView", bundle: nil).instantiateInitialViewController() as! UINavigationController
+        aboutViewNavigationController.modalPresentationStyle = .FormSheet
+        presentViewController(aboutViewNavigationController, animated: true, completion: nil)
+    }
     /**
     Gets the stop at index path based on the selected segemented control index
     
@@ -200,8 +207,47 @@ class StopsTableViewController: UITableViewController {
         case 2:
             return ShuttleSystem.sharedInstance.closestStops[indexPath.row]
         default:
-            break
+            return ShuttleSystem.sharedInstance.stops[indexPath.row]
         }
-        return ShuttleSystem.sharedInstance.stops[indexPath.row]
+    }
+    
+    // MARK: - Favorites
+    
+    func addStopToFavorites(notification: NSNotification) {
+        guard let stop = notification.object as? ShuttleStop where ShuttleSystem.sharedInstance.favoriteStops.indexOf(stop) == nil else {
+            return
+        }
+        
+        ShuttleSystem.sharedInstance.addStopToFavorites(stop)
+        if segmentedControl.selectedSegmentIndex == 1, let index = ShuttleSystem.sharedInstance.favoriteStops.indexOf(stop)
+        {
+            tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
+        }
+    }
+    
+    func removeStopFromFavorites(notification: NSNotification) {
+        guard let stop = notification.object as? ShuttleStop, let index = ShuttleSystem.sharedInstance.favoriteStops.indexOf(stop) else {
+            return
+        }
+        
+        ShuttleSystem.sharedInstance.removeStopFromFavorites(stop)
+        
+        if segmentedControl.selectedSegmentIndex == 1 {
+            tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
+        }
+    }
+    
+    // MARK: - Size Changes
+    
+    func orientationChanged() {
+        let selectedIndexes = tableView.indexPathsForSelectedRows
+        tableView.reloadData()
+        if let indexPath = selectedIndexes?[0] {
+            tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: UITableViewScrollPosition.None)
+        }
+    }
+
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        tableView.reloadData()
     }
 }

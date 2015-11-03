@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="tN7-mH-iLd">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+    </dependencies>
+    <scenes>
+        <!--Web View Controller-->
+        <scene sceneID="5PR-xJ-4tB">
+            <objects>
+                <viewController storyboardIdentifier="WebViewController" id="7DT-ga-tcy" customClass="WebViewController" customModule="Marguerite" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="lok-YC-0Rk"/>
+                        <viewControllerLayoutGuide type="bottom" id="Bqy-AD-tTE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="icZ-3d-MtC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" red="0.50196078430000002" green="0.50196078430000002" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="xXn-q9-i5c">
+                        <nil key="title"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="action" id="qQp-1B-nRx">
+                            <connections>
+                                <action selector="shareURL:" destination="7DT-ga-tcy" id="yup-zd-vzL"/>
+                            </connections>
+                        </barButtonItem>
+                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="wf1-yx-2lo">
+                            <rect key="frame" x="200" y="6.5" width="200" height="31"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <animations/>
+                            <segments>
+                                <segment title="Map"/>
+                                <segment title="Schedule"/>
+                            </segments>
+                            <connections>
+                                <action selector="didChangeView:" destination="7DT-ga-tcy" eventType="valueChanged" id="MDU-G9-itd"/>
+                            </connections>
+                        </segmentedControl>
+                        <barButtonItem key="rightBarButtonItem" systemItem="stop" id="vgs-wV-plG">
+                            <connections>
+                                <action selector="dismiss:" destination="7DT-ga-tcy" id="Ymz-ba-1Xb"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="segmentedControl" destination="wf1-yx-2lo" id="mNz-gm-a1k"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="w7m-xm-TL1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2088" y="-76"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="YkL-yv-drQ">
+            <objects>
+                <navigationController id="tN7-mH-iLd" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="vCO-oN-rtE">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="7DT-ga-tcy" kind="relationship" relationship="rootViewController" id="2Vk-zG-Ige"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H9w-iQ-kpN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1390" y="-76"/>
+        </scene>
+    </scenes>
+</document>

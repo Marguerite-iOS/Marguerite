@@ -20,11 +20,11 @@ class ShuttleStop: NSObject {
     // Upcoming stop times
     var stopTimes: [ShuttleStopTime]!
     // Routes the stop here
-    private var routes: [ShuttleRoute]!
+    private var routes = [ShuttleRoute]()
     // Route string for database purposes
     private var routesString = ""
-    // Image of all the routes the stop here
-    var routeBubblesImage: UIImage?
+    // Images of all the routes the stop here
+    var routeBubbleImages = [CGFloat:UIImage]()
     
     // MARK: - Loading Data
     
@@ -47,7 +47,7 @@ class ShuttleStop: NSObject {
         if !liveMapModeOnly {
             createRoutes(dictionary)
             stopTimes = getShuttleStopTimes()
-            routeBubblesImage = getRouteBubblesImage()
+
         }
     }
     
@@ -57,7 +57,6 @@ class ShuttleStop: NSObject {
     - parameter dictionary: The routes infomation.
     */
     private func createRoutes(dictionary: [String:AnyObject]) {
-        routes = []
         if let dicRoutes = dictionary["routes"] as? String {
             for (index, dicRouteName) in dicRoutes.componentsSeparatedByString(",").enumerate()  {
                 if let route = ShuttleSystem.sharedInstance.shuttleRouteWithName(dicRouteName) {
@@ -136,14 +135,19 @@ class ShuttleStop: NSObject {
     
     - returns: The image.
     */
-    private func getRouteBubblesImage() -> UIImage? {
+    func getRouteBubblesImage(cellSize: CGFloat) -> UIImage? {
+        
+        if let image = routeBubbleImages[cellSize] {
+            return image
+        }
+        
         var images: [UIImage] = []
         routes.forEach({images.append($0.image)})
         if images.count == 0 {
             return nil
         }
-        
-        let finalImageWidth =  UIScreen.mainScreen().bounds.width
+
+        let finalImageWidth =  cellSize
         let finalImageHeight = expectedHeightForImages(images, finalWidth: finalImageWidth)
         
         let size = CGSizeMake(finalImageWidth, finalImageHeight)
@@ -165,6 +169,7 @@ class ShuttleStop: NSObject {
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
+        routeBubbleImages[cellSize] = image
         return image
     }
     

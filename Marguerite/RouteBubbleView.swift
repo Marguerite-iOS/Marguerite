@@ -30,6 +30,7 @@ class RouteBubbleView: UIView {
         backgroundColor = route.routeColor
         layer.cornerRadius = 10.25
         clipsToBounds = true
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

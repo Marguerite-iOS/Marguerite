@@ -48,8 +48,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatingShuttles", name: UpdatingShuttlesNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didUpdateShuttles", name: UpdatedShuttlesNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "didFailToUpdateShuttles:", name: FailedToUpdateShuttlesNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "tappedRoute:", name: RouteAnnotationTappedNotification, object: nil)
-
+        
         loadingBarButton = createLoadingBarButtonItem()
         reloadBarButton = navigationItem.leftBarButtonItem!
     }
@@ -63,13 +62,6 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
         activityView.sizeToFit()
         activityView.startAnimating()
         return UIBarButtonItem(customView: activityView)
-    }
-    
-    /**
-    Used for when the shuttle annotation is tapped
-    */
-    func tappedRoute(notification: NSNotification) {
-        performSegueWithIdentifier(showRouteInfoSegueIdentifier, sender: notification.object)
     }
     
     /**
@@ -232,15 +224,40 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     
     // segues to detail controller for data type
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        if let stop = (view.annotation as? ShuttleSystemAnnotation)?.object as? ShuttleStop {
-            performSegueWithIdentifier(showStopInfoSegueIdentifier, sender: stop)
+        guard let annotation = view.annotation as? ShuttleSystemAnnotation else {
+            return
         }
+        if let stop = annotation.object as? ShuttleStop {
+            let stopInfoNavigationController = self.storyboard?.instantiateViewControllerWithIdentifier("StopInfoNavigationController") as! UINavigationController
+            stopInfoNavigationController.modalPresentationStyle = .FormSheet
+            let stopInfoTableViewController = stopInfoNavigationController.topViewController as! StopInfoTableViewController
+            stopInfoTableViewController.stop = stop
+            stopInfoTableViewController.navigationItem.leftBarButtonItem = stopInfoTableViewController.navigationItem.rightBarButtonItem
+            stopInfoTableViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Stop, target: self, action: "dismiss")
+            presentViewController(stopInfoNavigationController, animated: true, completion: nil)
+        }
+    }
+    
+    func dismiss() {
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     // moves annotation to front when tapped
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        if let annotation = view.annotation as? ShuttleSystemAnnotation where annotation.type == .Stop {
+        
+        guard let annotation = view.annotation as? ShuttleSystemAnnotation else {
+            return
+        }
+        
+        if annotation.type == .Stop {
             view.layer.zPosition = 0
+        }
+        else if annotation.type == .Shuttle {
+            let webViewNavigationController = UIStoryboard(name: "WebView", bundle: nil).instantiateInitialViewController() as! UINavigationController
+            webViewNavigationController.modalPresentationStyle = .FormSheet
+            (webViewNavigationController.topViewController as! WebViewController).route = (annotation.object as! Shuttle).route
+            presentViewController(webViewNavigationController, animated: true, completion: nil)
+            mapView.deselectAnnotation(annotation, animated: false)
         }
     }
     
@@ -250,19 +267,14 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
             view.layer.zPosition = -1
         }
     }
-    
-    // MARK: - Navigation
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == showStopInfoSegueIdentifier, let stop = sender as? ShuttleStop, controller = segue.destinationViewController as? StopInfoTableViewController {
-            controller.stop = stop
-        }
-        else if segue.identifier == showRouteInfoSegueIdentifier, let route = sender as? ShuttleRoute, controller = segue.destinationViewController as? WebViewController {
-            controller.route = route
-        }
-    }
-    
+   
     // MARK: - Other
+    
+    @IBAction func aboutButtonPressed(sender: AnyObject) {
+        let aboutViewNavigationController = UIStoryboard(name: "AboutView", bundle: nil).instantiateInitialViewController() as! UINavigationController
+        aboutViewNavigationController.modalPresentationStyle = .FormSheet
+        presentViewController(aboutViewNavigationController, animated: true, completion: nil)
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

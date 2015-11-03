@@ -19,10 +19,10 @@ class StopInfoTableViewController: UITableViewController {
     private let favFilledImage = UIImage(named: "FavFilled")
     private let favEmptyImage = UIImage(named: "FavEmpty")
     
-    var stop: ShuttleStop! {
+    var stop: ShuttleStop? {
         didSet {
             updateFavoriteBarButtonItem()
-            title = stop.name
+            title = stop?.name
         }
     }
     
@@ -34,12 +34,9 @@ class StopInfoTableViewController: UITableViewController {
         seperatorColor = tableView.separatorColor
         tableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, tableView.bounds.width, 0.1))
         updateTheme()
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        if traitCollection.forceTouchCapability == .Available {
-            registerForPreviewingWithDelegate(self, sourceView: view)
-        }
+        updateFavoriteBarButtonItem()
+        tableView.cellLayoutMarginsFollowReadableWidth = true
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTheme", name: UpdatedThemeNotification, object: nil)
     }
     
     // MARK: - Night Mode
@@ -47,7 +44,7 @@ class StopInfoTableViewController: UITableViewController {
     /**
     Updates the UI colors
     */
-    private func updateTheme() {
+    func updateTheme() {
         if ShuttleSystem.sharedInstance.nightModeEnabled {
             tableView.backgroundColor = UIColor.darkModeTableViewColor()
             tableView.separatorColor = UIColor.darkModeSeperatorColor()
@@ -63,6 +60,11 @@ class StopInfoTableViewController: UITableViewController {
     Updates the favorite bar button item image based on if the stop is in the user's favorites
     */
     private func updateFavoriteBarButtonItem() {
+        guard let stop = stop else {
+            favoriteBarButtonItem.image = favEmptyImage
+            favoriteBarButtonItem.enabled = false
+            return
+        }
         favoriteBarButtonItem.image = ShuttleSystem.sharedInstance.isStopFavorited(stop) ? favFilledImage : favEmptyImage
     }
     
@@ -75,20 +77,29 @@ class StopInfoTableViewController: UITableViewController {
     }
     
     func toggleFavoriteStatus () {
+        guard let stop = stop else {
+            return
+        }
         if ShuttleSystem.sharedInstance.isStopFavorited(stop) {
-            ShuttleSystem.sharedInstance.removeStopFromFavorites(stop)
+            NSNotificationCenter.defaultCenter().postNotificationName(RemoveStopFromFavoritesNotification, object: self.stop)
         } else {
-            ShuttleSystem.sharedInstance.addStopToFavorites(stop)
+            NSNotificationCenter.defaultCenter().postNotificationName(AddStopToFavoritesNotification, object: self.stop)
         }
     }
     
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        guard let _ = stop else {
+            return 0
+        }
         return 2
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let stop = stop else {
+            return 1
+        }
         if section == 1 {
             return stop.stopTimes.count
         }
@@ -103,6 +114,9 @@ class StopInfoTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        guard let stop = stop else {
+            return nil
+        }
         if section == 1 && stop.stopTimes.count == 0 {
             return NSLocalizedString("No Upcoming Shuttles Footer", comment: "")
         }
@@ -110,6 +124,9 @@ class StopInfoTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        guard let stop = stop else {
+            return UITableViewCell()
+        }
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier("MapCell", forIndexPath: indexPath) as! MapTableViewCell
@@ -136,17 +153,15 @@ class StopInfoTableViewController: UITableViewController {
     // MARK: - Table view delegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        guard let stop = stop else {
+            return
+        }
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         if indexPath.section == 1 {
-            performSegueWithIdentifier(showRouteInfoSegueIdentifier, sender: stop.stopTimes[indexPath.row].route)
-        }
-    }
-    
-    // MARK: - Navigation
-
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == showRouteInfoSegueIdentifier, let route = sender as? ShuttleRoute, controller = segue.destinationViewController as? WebViewController {
-            controller.route = route
+            let webViewNavigationController = UIStoryboard(name: "WebView", bundle: nil).instantiateInitialViewController() as! UINavigationController
+            webViewNavigationController.modalPresentationStyle = .FormSheet
+            (webViewNavigationController.topViewController as! WebViewController).route = stop.stopTimes[indexPath.row].route
+            presentViewController(webViewNavigationController, animated: true, completion: nil)
         }
     }
     
@@ -158,18 +173,19 @@ class StopInfoTableViewController: UITableViewController {
     }
     
     override func previewActionItems() -> [UIPreviewActionItem] {
+        guard let stop = stop else {
+            return []
+        }
         var previewAction: UIPreviewAction!
-        
         if ShuttleSystem.sharedInstance.isStopFavorited(stop) {
-            previewAction = UIPreviewAction(title: "Remove From Favorites", style: .Destructive) { (previewAction: UIPreviewAction, viewController: UIViewController) -> Void in
+            previewAction = UIPreviewAction(title: "Remove from Favorites", style: .Destructive) { (previewAction: UIPreviewAction, viewController: UIViewController) -> Void in
                 NSNotificationCenter.defaultCenter().postNotificationName(RemoveStopFromFavoritesNotification, object: self.stop)
             }
         } else {
-            previewAction = UIPreviewAction(title: "Favorite", style: .Default) { (previewAction: UIPreviewAction, viewController: UIViewController) -> Void in
-                self.toggleFavoriteStatus()
+            previewAction = UIPreviewAction(title: "Add to Favorites", style: .Default) { (previewAction: UIPreviewAction, viewController: UIViewController) -> Void in
+                NSNotificationCenter.defaultCenter().postNotificationName(AddStopToFavoritesNotification, object: self.stop)
             }
         }
-        
         return [previewAction]
     }
 }
