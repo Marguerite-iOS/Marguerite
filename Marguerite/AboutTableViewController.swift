@@ -91,10 +91,7 @@ class AboutTableViewController: UITableViewController, SFSafariViewControllerDel
         case 2:
             openSafariController(gitHubURL)
         case 3:
-            let laundryURL = NSURL(string: "StanfordLaundry://")!
-            let storeURL = NSURL(string: "http://itunes.apple.com/app/id1034145975")!
-            let url = UIApplication.sharedApplication().canOpenURL(laundryURL) ? laundryURL : storeURL
-            UIApplication.sharedApplication().openURL(url)
+            openSafariController("http://atfinkeproductions.com/Laundry")
         default:
             break
         }
