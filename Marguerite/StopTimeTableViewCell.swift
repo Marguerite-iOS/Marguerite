@@ -47,9 +47,9 @@ class StopTimeTableViewCell: UITableViewCell {
             backgroundColor = UIColor.darkModeCellColor()
             selectedBackgroundView?.backgroundColor = UIColor.darkModeCellSelectionColor()
         } else {
-            departureTimeLabel.textColor = UIColor(red: 142.0/255.0, green: 142.0/255.0, blue: 147.0/255.0, alpha: 1.0)
+            departureTimeLabel.textColor = UIColor.cellDetailTextColor()
             backgroundColor = UIColor.whiteColor()
-            selectedBackgroundView?.backgroundColor = UIColor(red: 216.75/255.0, green: 216.75/255.0, blue: 216.75/255.0, alpha: 1.0)
+            selectedBackgroundView?.backgroundColor = UIColor.cellSelectionColor()
         }
     }
 }

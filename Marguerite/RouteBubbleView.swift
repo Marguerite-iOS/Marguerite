@@ -30,7 +30,6 @@ class RouteBubbleView: UIView {
         backgroundColor = route.routeColor
         layer.cornerRadius = 10.25
         clipsToBounds = true
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,7 +43,7 @@ class RouteBubbleView: UIView {
     
     - parameter route: The shuttle route to save the image of.
     */
-    class func saveBubbleForRoute(route: ShuttleRoute) -> UIImage {
+    class func bubbleForRoute(route: ShuttleRoute) -> UIImage {
         let bubble = RouteBubbleView(route: route)
         UIGraphicsBeginImageContextWithOptions(bubble.bounds.size, false, 0.0)
         let _ = UIGraphicsGetCurrentContext()

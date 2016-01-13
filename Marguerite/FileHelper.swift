@@ -13,20 +13,17 @@ let MovedGTFSBundleKey = "Moved GTFS From Bundle"
 
 class FileHelper: NSObject, SSZipArchiveDelegate {
     
-    // The names of the files from the GTFS zip needed
-    private static let gtfsFileNames = ["agency", "calendar_dates", "routes", "stop_times", "stops", "trips"]
-    
     private let fileManager = NSFileManager.defaultManager()
     
-    // Path to latest zipped gtfs data
-    class var tempZipPath: String {
-        return tempFolderPath.stringByAppendingString("/temp.zip")
-    }
+    // The names of the files from the GTFS zip needed
+    private static let gtfsFileNames = ["agency", "calendar_dates", "routes", "stop_times", "stops", "trips"]
+    private static let documentsPath =  NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
     
     // Path to the folder where the downloaded gtfs zip is stored and unzipped
-    class var tempFolderPath: String {
-        return FileHelper.documentsPath.stringByAppendingString("/TempGTFSFiles")
-    }
+    private static let tempFolderPath = documentsPath.stringByAppendingString("/TempGTFSFiles")
+    
+    // Path to latest zipped gtfs data
+    private static let tempZipPath: String  = tempFolderPath.stringByAppendingString("/temp.zip")
     
     /**
     Detects if the neccessary gtfs files are in place
@@ -49,7 +46,7 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
                     self.movedNewZipToTempFolder()
                 }
             })
-          //  task.resume()
+            task.resume()
         }
     }
     
@@ -85,8 +82,8 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
             let latestFileInTemp = self.getLatestFileInFolder(tempFolder)
             let latestFileInCurrent = self.getLatestFileInFolder(Util.getTransitFilesBasepath())
             print("--- New GTFS Data ---")
-            print(latestFileInTemp)
-            print(latestFileInCurrent)
+            print("Downloaded: " + latestFileInTemp.description)
+            print("Current: " + latestFileInCurrent.description)
             print("Unzipped new data")
             if latestFileInTemp.timeIntervalSinceDate(latestFileInCurrent) > 0 {
                 print("Replacing older data")
@@ -101,9 +98,7 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
                 for fileName in contents {
                     do {
                         try self.fileManager.removeItemAtPath(tempFolder.stringByAppendingString("/" + fileName))
-                    }
-                    catch {
-                        
+                    } catch {
                     }
                 }
             }
@@ -139,6 +134,7 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
             do {
                 try NSFileManager.defaultManager().copyItemAtPath(path, toPath: tempFolderPath.stringByAppendingString("/temp.zip"))
             } catch {
+                print(error)
             }
         }
         ShuttleSystem.sharedInstance.fileHelper.movedNewZipToTempFolder()
@@ -158,7 +154,7 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
     private class func checkFolder(folderName: String) {
         let path = (documentsPath as NSString).stringByAppendingPathComponent(folderName)
         let fileManager = NSFileManager.defaultManager()
-        var isDir : ObjCBool = false
+        var isDir: ObjCBool = false
         if !fileManager.fileExistsAtPath(path, isDirectory:&isDir) {
             var error: NSError?
             do {
@@ -169,9 +165,4 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
             print(error)
         }
     }
-    
-    class var documentsPath: String {
-        return NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] 
-    }
-    
 }

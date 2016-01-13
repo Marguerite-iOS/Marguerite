@@ -32,8 +32,6 @@
 "Schedule Title" = "Schedule";
 
 "About Title" = "About Marguerite App";
-"Features Header" = "More features coming soon";
-"Features Footer" = "Detailed stop and route information will be released when the Marguerite system upgrade is complete.";
 
 "Credits Header" = "Credits";
 "Updated Version Title" = "Updated Version";
@@ -45,8 +43,11 @@
 "Main Office Title" = "Main Office";
 "Lost and Found Title" = "Lost and Found";
 "Website Title" = "Website";
-"Service Feedback Title" = "Service Feedback";
 
 "Open-source Header" = "Open-source";
+"Other Apps Header" = "Other Apps";
 "GitHub Title" = "On GitHub";
 "Open-source Footer" = "This app is open-source. All of the code is available on GitHub, and anyone can contribute to improving the app. Using SSZipArchive, GTFS Importer, and FMDB.";
+
+"Show Stops Shortcut" = "Show Stops";
+"Show Map Shortcut" = "Show Live Map";

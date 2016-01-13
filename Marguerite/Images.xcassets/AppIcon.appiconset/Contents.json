@@ -63,6 +63,12 @@
       "idiom" : "ipad",
       "filename" : "Icon@3x 7-4.png",
       "scale" : "2x"
+    },
+    {
+      "size" : "83.5x83.5",
+      "idiom" : "ipad",
+      "filename" : "1024.png",
+      "scale" : "2x"
     }
   ],
   "info" : {

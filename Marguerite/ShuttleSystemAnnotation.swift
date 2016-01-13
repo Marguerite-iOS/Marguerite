@@ -24,7 +24,7 @@ class ShuttleSystemAnnotation: MKPointAnnotation {
     
     lazy var type: ShuttleSystemAnnotationType = .None
     // Used to store the system object, such as a ShuttleStop object
-    var object: AnyObject?
+    var object: Any?
     var hasUpdatedLocation = false
     
     /**
@@ -35,7 +35,7 @@ class ShuttleSystemAnnotation: MKPointAnnotation {
     - parameter annotationType: The type of shuttle system object.
     - parameter annotationCoordinate: The coordniates of the annotation.
     */
-    init(title: String, object: AnyObject?, type: ShuttleSystemAnnotationType, coordinate: CLLocationCoordinate2D) {
+    init(title: String, object: Any?, type: ShuttleSystemAnnotationType, coordinate: CLLocationCoordinate2D) {
         super.init()
         self.title = title
         self.coordinate = coordinate

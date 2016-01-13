@@ -120,8 +120,7 @@ class WebViewController: UIViewController, WKNavigationDelegate {
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if keyPath == "estimatedProgress" {
             progess(Float((object as! WKWebView).estimatedProgress))
-        }
-        else {
+        } else {
             super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
         }
     }
@@ -142,7 +141,7 @@ class WebViewController: UIViewController, WKNavigationDelegate {
         case "mc-hol":
             return NSURL(string: "http://transportation.stanford.edu/marguerite/mch/map.pdf")!
         default:
-            return route!.routeURL.URLByAppendingPathComponent("/map.pdf")
+            return route!.routeURL.URLByAppendingPathComponent("map.pdf")
         }
     }
 
@@ -164,9 +163,9 @@ class WebViewController: UIViewController, WKNavigationDelegate {
         case "h-dir":
             return NSURL(string: "http://transportation.stanford.edu/marguerite/hd/hd.pdf")!
         case "se":
-            return isSESpecial() ? NSURL(string: "http://transportation.stanford.edu/marguerite/sesp/sesp.pdf")! : route.routeURL.URLByAppendingPathComponent("/" + route.shortName.lowercaseString + ".pdf")
+            return isSESpecial() ? NSURL(string: "http://transportation.stanford.edu/marguerite/sesp/sesp.pdf")! : route.routeURL.URLByAppendingPathComponent(route.shortName.lowercaseString + ".pdf")
         default:
-            return route.routeURL.URLByAppendingPathComponent("/" + route.shortName.lowercaseString + ".pdf")
+            return route.routeURL.URLByAppendingPathComponent(route.shortName.lowercaseString + ".pdf")
         }
     }
     
@@ -186,6 +185,8 @@ class WebViewController: UIViewController, WKNavigationDelegate {
     Called when the user taps the close button
     */
     @IBAction func dismiss(sender: AnyObject) {
+        (sender as! UIBarButtonItem).enabled = false
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
         webView.removeObserver(self, forKeyPath: "estimatedProgress")
         dismissViewControllerAnimated(true, completion: nil)
     }

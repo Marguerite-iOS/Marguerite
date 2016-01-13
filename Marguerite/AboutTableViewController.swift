@@ -16,21 +16,16 @@ class AboutTableViewController: UITableViewController, SFSafariViewControllerDel
     
     // MARK: - Strings
     
-    private var lastUpdateString: String?
-    
-    private let headers: [String?] = [NSLocalizedString("Features Header", comment: ""), NSLocalizedString("Credits Header", comment: ""), NSLocalizedString("Contact Marguerite Header", comment: ""), NSLocalizedString("Open-source Header", comment: ""), nil]
-    private let footers: [String?] = [NSLocalizedString("Features Footer", comment: ""), nil, nil, NSLocalizedString("Open-source Footer", comment: ""), nil]
+    private let headers: [String?] = [NSLocalizedString("Credits Header", comment: ""), NSLocalizedString("Contact Marguerite Header", comment: ""), NSLocalizedString("Open-source Header", comment: ""), NSLocalizedString("Other Apps Header", comment: ""), nil]
     private let creditsStrings: [String] = [NSLocalizedString("Updated Version Title", comment: ""), NSLocalizedString("Original App Title", comment: ""), NSLocalizedString("Branding Title", comment: ""), NSLocalizedString("Misc. Images Title", comment: "")]
-    private let contactStrings: [String] = [NSLocalizedString("Main Office Title", comment: ""), NSLocalizedString("Lost and Found Title", comment: ""),NSLocalizedString("Website Title", comment: ""), NSLocalizedString("Service Feedback Title", comment: "")]
-    private let openSourceStrings: [String] = [NSLocalizedString("GitHub Title", comment: "")]
+    private let contactStrings: [String] = [NSLocalizedString("Main Office Title", comment: ""), NSLocalizedString("Lost and Found Title", comment: ""), NSLocalizedString("Website Title", comment: ""), NSLocalizedString("Website Map Title", comment: "")]
 
     // MARK: - Links
     
     private let officePhoneNumber = "650-724-9339"
     private let lostAndFoundPhoneNumber = "650-724-4309"
     private let websiteURL = "http://transportation.stanford.edu/marguerite"
-    private let websiteServiceURL = "http://transportation.stanford.edu/margueritecomments/"
-    private let gitHubURL = "https://github.com/Marguerite-iOS/Marguerite"
+    private let gitHubURL = "http://atfinkeproductions.com/Marguerite"
     
     // MARK: - View Transitions
     
@@ -38,12 +33,6 @@ class AboutTableViewController: UITableViewController, SFSafariViewControllerDel
         tableViewBackgroundColor = tableView.backgroundColor
         seperatorColor = tableView.separatorColor
         updateTheme()
-        if let date = DefaultsHelper.getObjectForKey("GTFS Date") as? NSDate {
-            let formatter = NSDateFormatter()
-            formatter.dateFormat = "MMMM dd, yyyy"
-            lastUpdateString =  "GTFS data last updated " + formatter.stringFromDate(date)
-        }
-        tableView.cellLayoutMarginsFollowReadableWidth = true
     }
     
     // MARK: - Night Mode
@@ -72,12 +61,14 @@ class AboutTableViewController: UITableViewController, SFSafariViewControllerDel
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
         switch indexPath.section {
-        case 1:
+        case 0:
             cell.textLabel?.text = creditsStrings[indexPath.row]
-        case 2:
+        case 1:
             cell.textLabel?.text = contactStrings[indexPath.row]
+        case 2:
+            cell.textLabel?.text = NSLocalizedString("GitHub Title", comment: "")
         case 3:
-            cell.textLabel?.text = openSourceStrings[indexPath.row]
+            cell.textLabel?.text = "Stanford Laundry Rooms"
         default:
             break
         }
@@ -86,7 +77,7 @@ class AboutTableViewController: UITableViewController, SFSafariViewControllerDel
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch indexPath.section {
-        case 2:
+        case 1:
             switch indexPath.row {
             case 0:
                 callPhoneNumber(officePhoneNumber)
@@ -94,18 +85,16 @@ class AboutTableViewController: UITableViewController, SFSafariViewControllerDel
                 callPhoneNumber(lostAndFoundPhoneNumber)
             case 2:
                 openSafariController(websiteURL)
-            case 3:
-                openSafariController(websiteServiceURL)
             default:
                 break
             }
+        case 2:
+            openSafariController(gitHubURL)
         case 3:
-            switch indexPath.row {
-            case 0:
-                openSafariController(gitHubURL)
-            default:
-                break
-            }
+            let laundryURL = NSURL(string: "StanfordLaundry://")!
+            let storeURL = NSURL(string: "http://itunes.apple.com/app/id1034145975")!
+            let url = UIApplication.sharedApplication().canOpenURL(laundryURL) ? laundryURL : storeURL
+            UIApplication.sharedApplication().openURL(url)
         default:
             break
         }
@@ -117,40 +106,48 @@ class AboutTableViewController: UITableViewController, SFSafariViewControllerDel
     }
     
     override func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if section == 4 {
-            return lastUpdateString
+        if section == 2 {
+            return NSLocalizedString("Open-source Footer", comment: "")
         }
-        return footers[section]
+        return nil
     }
     
     // MARK: - URL Convenience Methods
     
-    private func createEmail(emailAddress: String) {
-        openPhoneNumber("mailto:\(emailAddress)")
-    }
-    
-    private func callPhoneNumber(telephoneUrl: String) {
-        openPhoneNumber("tel://\(telephoneUrl)")
-    }
-    
-    private func openPhoneNumber(urlString: String) {
-        if let url = NSURL(string: urlString) {
+    private func callPhoneNumber(telephoneNumberString: String) {
+        if let url = NSURL(string: "tel://\(telephoneNumberString)") {
             UIApplication.sharedApplication().openURL(url)
         }
     }
     
     private func openSafariController(urlString: String) {
         if let url = NSURL(string: urlString) {
-            UIApplication.sharedApplication().statusBarStyle = .Default
-            UIBarButtonItem.appearance().tintColor = UIColor.cardinalColor()
-            let controller = SFSafariViewController(URL: url)
-            controller.delegate = self
-            presentViewController(controller, animated: true, completion: nil)
+            if #available(iOS 9.0, *) {
+                UIApplication.sharedApplication().statusBarStyle = .Default
+                UIBarButtonItem.appearance().tintColor = UIColor.cardinalColor()
+                let controller = SFSafariViewController(URL: url)
+                controller.delegate = self
+                presentViewController(controller, animated: true, completion: nil)
+            } else {
+                UIApplication.sharedApplication().openURL(url)
+            }
+            
         }
     }
     
+    @available(iOS 9.0, *)
     func safariViewControllerDidFinish(controller: SFSafariViewController) {
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         UIBarButtonItem.appearance().tintColor = UIColor.whiteColor()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        UIBarButtonItem.appearance().tintColor = UIColor.whiteColor()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
     }
 }

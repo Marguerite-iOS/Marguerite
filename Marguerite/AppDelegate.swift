@@ -10,12 +10,6 @@ import UIKit
 import Fabric
 import Crashlytics
 
-/*
-So this is a thing... The Marguerite department is in the middle of an upgrade. For the time being, this means none of the GTFS data is being updated. Until the upgrade is complete and the correct GTFS posted, the app will be in a live map only mode. The live map will continue to work as it is revered engineered off their website, though only with routes from the GTFS data updated in January.
-*/
-var liveMapModeOnly = true
-let LiveMapModeOnlyKey = "Live Map Mode Only"
-
 enum ShortcutIdentifier: String {
     case OpenStops
     case OpenLiveMap
@@ -39,32 +33,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         return true
     }
     
+    @available(iOS 9.0, *)
     func application(application: UIApplication, performActionForShortcutItem shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
         guard let shortcutIdentifier = ShortcutIdentifier(rawValue: shortcutItem.type) else {
             return completionHandler(false)
         }
-        (window!.rootViewController as! UITabBarController).selectedIndex = shortcutIdentifier == ShortcutIdentifier.OpenStops ? 0 : 1
+        (window!.rootViewController as! UITabBarController).selectedIndex = (shortcutIdentifier == ShortcutIdentifier.OpenStops ? 0 : 1)
         return completionHandler(true)
-    }
-    
-    /**
-    Used to toggle between just the live map mode and all modes
-    */
-    func toggleMapOnlyMode() {
-        DefaultsHelper.keyIs(true, key: NeedsDatabaseUpdateKey)
-        liveMapModeOnly = !liveMapModeOnly
-        DefaultsHelper.keyIs(liveMapModeOnly, key: LiveMapModeOnlyKey)
-        let alertController = UIAlertController(title: "Full Release Mode: " + (!liveMapModeOnly).description.capitalizedString, message: "Toggled developer mode", preferredStyle: .Alert)
-        let action = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
-            DefaultsHelper.keyIs(false, key: NeedsDatabaseUpdateKey)
-            liveMapModeOnly = !liveMapModeOnly
-            DefaultsHelper.keyIs(liveMapModeOnly, key: LiveMapModeOnlyKey)
-        }
-        alertController.addAction(action)
-        if let rootViewController = window?.rootViewController {
-            rootViewController.presentViewController(alertController, animated: true, completion: nil)
-            Answers.logCustomEventWithName("Only Map Mode Toggled", customAttributes: ["Enabled": liveMapModeOnly.description.capitalizedString])
-        }
     }
     
     /**
@@ -78,6 +53,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         UITabBar.appearance().barTintColor = UIColor.cardinalColor()
     }
     
+    /**
+     Loads the controllers and shortcuts
+     */
     func loadInterface() {
         let tabBarController = window!.rootViewController as! UITabBarController
         let splitViewController = tabBarController.viewControllers![0] as! UISplitViewController
@@ -87,28 +65,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         splitViewController.preferredPrimaryColumnWidthFraction = 0.5
         splitViewController.delegate = self
         
-        // Only show the map view controller in the tab bar
-        if liveMapModeOnly {
-            tabBarController.viewControllers = [tabBarController.viewControllers![1]]
-        }
-        else {
-            let stops = UIApplicationShortcutItem(type: ShortcutIdentifier.OpenStops.rawValue, localizedTitle: "Show Stops", localizedSubtitle: nil, icon: UIApplicationShortcutIcon(templateImageName: "BusEmpty")
-                , userInfo: nil)
-            let map = UIApplicationShortcutItem(type: ShortcutIdentifier.OpenLiveMap.rawValue, localizedTitle: "Show Live Map", localizedSubtitle: nil, icon: UIApplicationShortcutIcon(templateImageName: "MapEmpty")
-                , userInfo: nil)
+        if #available(iOS 9.0, *) {
+            let map = UIApplicationShortcutItem(type: ShortcutIdentifier.OpenLiveMap.rawValue, localizedTitle: NSLocalizedString("Show Map Shortcut", comment: ""), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(templateImageName: "MapEmpty"), userInfo: nil)
+            let stops = UIApplicationShortcutItem(type: ShortcutIdentifier.OpenStops.rawValue, localizedTitle: NSLocalizedString("Show Stops Shortcut", comment: ""), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(templateImageName: "BusEmpty"), userInfo: nil)
             UIApplication.sharedApplication().shortcutItems = [stops, map]
         }
+        
         UIApplication.sharedApplication().statusBarHidden = false
     }
     
+    /**
+     Make sure the GTFS files have been moved to the right place
+     */
     func checkIntegrity() {
         FileHelper.ensureFolderExistance()
         if !DefaultsHelper.key(MovedGTFSBundleKey) {
             FileHelper.moveBundleToTempFolder()
             DefaultsHelper.keyIs(true, key: MovedGTFSBundleKey)
-            DefaultsHelper.keyIs(true, key: LiveMapModeOnlyKey)
         }
-        liveMapModeOnly = DefaultsHelper.key(LiveMapModeOnlyKey)
+        if !DefaultsHelper.key("VERSION>3.0") {
+            DefaultsHelper.keyIs(true, key: "VERSION>3.0")
+            DefaultsHelper.keyIs(true, key: NeedsDatabaseUpdateKey)
+        }
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -135,7 +113,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     
     // MARK: - Split view
     
-    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController:UIViewController, ontoPrimaryViewController primaryViewController:UIViewController) -> Bool {
+    func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController: UIViewController, ontoPrimaryViewController primaryViewController: UIViewController) -> Bool {
         guard let secondaryAsNavController = secondaryViewController as? UINavigationController else { return false }
         guard let topAsDetailController = secondaryAsNavController.topViewController as? StopInfoTableViewController else { return false }
         if topAsDetailController.stop == nil {
@@ -145,4 +123,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         return false
     }
 }
-

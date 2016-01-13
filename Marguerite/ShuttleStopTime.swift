@@ -8,16 +8,15 @@
 
 import UIKit
 
-class ShuttleStopTime: NSObject {
-    var route: ShuttleRoute!
-    var tripID: String!
+struct ShuttleStopTime {
+    let route: ShuttleRoute!
+    let tripID: String!
     
-    var departureTime: NSDate!
+    let departureTime: NSDate!
     // Formatted departure time for display purposes
-    var formattedTime: String!
+    let formattedTime: String!
     
     init(route: ShuttleRoute, tripID: String, departureTime: NSDate) {
-        super.init()
         self.route = route
         self.tripID = tripID
         self.departureTime = departureTime

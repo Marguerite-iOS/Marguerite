@@ -43,12 +43,8 @@ class ShuttleStop: NSObject {
         name = dictionaryStopName
         stopID = Int(dictionaryStopID)
         location = CLLocation(latitude: dictionaryLat, longitude: dictionaryLon)
-        
-        if !liveMapModeOnly {
-            createRoutes(dictionary)
-            stopTimes = getShuttleStopTimes()
-
-        }
+        createRoutes(dictionary)
+        stopTimes = getShuttleStopTimes()
     }
     
     /**
@@ -58,7 +54,7 @@ class ShuttleStop: NSObject {
     */
     private func createRoutes(dictionary: [String:AnyObject]) {
         if let dicRoutes = dictionary["routes"] as? String {
-            for (index, dicRouteName) in dicRoutes.componentsSeparatedByString(",").enumerate()  {
+            for (index, dicRouteName) in dicRoutes.componentsSeparatedByString(",").enumerate() {
                 if let route = ShuttleSystem.sharedInstance.shuttleRouteWithName(dicRouteName) {
                     routes.append(route)
                     if index != 0 {

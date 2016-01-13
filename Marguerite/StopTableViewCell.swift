@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StopTableViewCell: UITableViewCell  {
+class StopTableViewCell: UITableViewCell {
     
     /*
     Cell used in main stops table view for displaying stop name and all route images
@@ -48,7 +48,7 @@ class StopTableViewCell: UITableViewCell  {
         } else {
             backgroundColor = UIColor.whiteColor()
             stopNameLabel.textColor = UIColor.blackColor()
-            selectedBackgroundView?.backgroundColor = UIColor(red: 216.75/255.0, green: 216.75/255.0, blue: 216.75/255.0, alpha: 1.0)
+            selectedBackgroundView?.backgroundColor = UIColor.cellSelectionColor()
         }
     }
 }

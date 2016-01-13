@@ -6,6 +6,8 @@
 //  Copyright © 2015 Andrew Finke. All rights reserved.
 //
 
+
+
 import UIKit
 
 let showStopInfoSegueIdentifier = "showStopInfo"
@@ -35,7 +37,6 @@ class StopInfoTableViewController: UITableViewController {
         tableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, tableView.bounds.width, 0.1))
         updateTheme()
         updateFavoriteBarButtonItem()
-        tableView.cellLayoutMarginsFollowReadableWidth = true
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTheme", name: UpdatedThemeNotification, object: nil)
     }
     
@@ -172,6 +173,7 @@ class StopInfoTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @available(iOS 9.0, *)
     override func previewActionItems() -> [UIPreviewActionItem] {
         guard let stop = stop else {
             return []

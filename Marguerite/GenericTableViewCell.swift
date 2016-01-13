@@ -32,9 +32,9 @@ class GenericTableViewCell: UITableViewCell {
             selectedBackgroundView?.backgroundColor = UIColor.darkModeCellSelectionColor()
         } else {
             textLabel?.textColor = UIColor.blackColor()
-            detailTextLabel?.textColor = UIColor(red: 142.0/255.0, green: 142.0/255.0, blue: 147.0/255.0, alpha: 1.0)
+            detailTextLabel?.textColor = UIColor.cellDetailTextColor()
             backgroundColor = UIColor.whiteColor()
-            selectedBackgroundView?.backgroundColor = UIColor(red: 216.75/255.0, green: 216.75/255.0, blue: 216.75/255.0, alpha: 1.0)
+            selectedBackgroundView?.backgroundColor = UIColor.cellSelectionColor()
         }
     }
 

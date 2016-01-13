@@ -14,7 +14,9 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet private weak var mapView: MKMapView! {
         didSet {
             mapView.region = ShuttleSystem.sharedInstance.region
-            mapView.showsTraffic = true
+            if #available(iOS 9.0, *) {
+                mapView.showsTraffic = true
+            }
         }
     }
     @IBOutlet private weak var segmentedControl: UISegmentedControl! {
@@ -53,6 +55,15 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
         reloadBarButton = navigationItem.leftBarButtonItem!
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        ShuttleSystem.sharedInstance.viewingLiveMap = true
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        ShuttleSystem.sharedInstance.viewingLiveMap = false
+    }
     
     /**
     Creates the loading bar button item for refreshes
@@ -68,7 +79,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     Called when updating begins
     */
     func updatingShuttles() {
-        dispatch_async(dispatch_get_main_queue(),{
+        dispatch_async(dispatch_get_main_queue(), {
             self.navigationItem.leftBarButtonItem = self.loadingBarButton
         })
     }
@@ -77,7 +88,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     Called when the latest shuttle data is downloaded
     */
     func didUpdateShuttles() {
-        dispatch_async(dispatch_get_main_queue(),{
+        dispatch_async(dispatch_get_main_queue(), {
             self.shuttleAnnontations.forEach({$0.hasUpdatedLocation = false})
             for shuttle in ShuttleSystem.sharedInstance.shuttles {
                 var didFindShuttle = false
@@ -112,13 +123,13 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func didFailToUpdateShuttles(notification: NSNotification) {
-        dispatch_async(dispatch_get_main_queue(),{
+        dispatch_async(dispatch_get_main_queue(), {
             self.navigationItem.leftBarButtonItem = self.reloadBarButton
-            guard self.navigationController?.visibleViewController == self else {
+            guard self.navigationController?.visibleViewController == self, let message = notification.object as? String else {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 return
             }
-            let alertController = UIAlertController(title: NSLocalizedString("Updating Shuttles Error Title", comment: ""), message: (notification.object as! String) + NSLocalizedString("Try Again Error Message End", comment: ""), preferredStyle: .Alert)
+            let alertController = UIAlertController(title: NSLocalizedString("Updating Shuttles Error Title", comment: ""), message: message + NSLocalizedString("Try Again Error Message End", comment: ""), preferredStyle: .Alert)
             alertController.addAction(UIAlertAction(title: NSLocalizedString("Dismiss Button", comment: ""), style: .Cancel, handler: nil))
             let action = UIAlertAction(title: NSLocalizedString("Try Again Button", comment: ""), style: .Default) { (action) in
                 ShuttleSystem.sharedInstance.updateRealtimeLocations()
@@ -198,11 +209,9 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
             switch annotation.type {
             case .Stop:
                 let pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "Stop")
-                pinView.pinTintColor = UIColor.redColor()
+                pinView.pinColor = .Red
                 pinView.canShowCallout = true
-                if !liveMapModeOnly {
-                    pinView.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
-                }
+                pinView.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
                 return pinView
             case .Shuttle:
                 return ShuttleSystemShuttleAnnotationView(annotation: annotation)
@@ -216,7 +225,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     // moves stop annotations behind shuttle ones
     func mapView(mapView: MKMapView, didAddAnnotationViews views: [MKAnnotationView]) {
         for annotationView in views {
-            if let annotationView = annotationView as? ShuttleSystemShuttleAnnotationView, let annotation = annotationView.annotation as? ShuttleSystemAnnotation where annotation.type == .Stop {
+            if let annotationView = annotationView as? ShuttleSystemShuttleAnnotationView, annotation = annotationView.annotation as? ShuttleSystemAnnotation where annotation.type == .Stop {
                 annotationView.layer.zPosition = -1
             }
         }
@@ -244,15 +253,12 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     
     // moves annotation to front when tapped
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        
         guard let annotation = view.annotation as? ShuttleSystemAnnotation else {
             return
         }
-        
         if annotation.type == .Stop {
             view.layer.zPosition = 0
-        }
-        else if annotation.type == .Shuttle {
+        } else if annotation.type == .Shuttle {
             let webViewNavigationController = UIStoryboard(name: "WebView", bundle: nil).instantiateInitialViewController() as! UINavigationController
             webViewNavigationController.modalPresentationStyle = .FormSheet
             (webViewNavigationController.topViewController as! WebViewController).route = (annotation.object as! Shuttle).route

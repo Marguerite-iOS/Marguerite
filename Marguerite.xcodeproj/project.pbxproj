@@ -7,11 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		140722CE1BDD46E1001014D9 /* StopsTableViewController+UIViewControllerPreviewing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140722CD1BDD46E1001014D9 /* StopsTableViewController+UIViewControllerPreviewing.swift */; };
 		140722F21BDD5221001014D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 140722F11BDD5221001014D9 /* LaunchScreen.storyboard */; };
 		140782711B5C9EE7009070AF /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1407826F1B5C9EE7009070AF /* Fabric.framework */; };
 		140782721B5C9EE7009070AF /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 140782701B5C9EE7009070AF /* Crashlytics.framework */; };
-		141D513F1B5C6D6B0000FDF1 /* TabBarControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 141D513E1B5C6D6B0000FDF1 /* TabBarControllerDelegate.swift */; };
 		1425EBC51B311B2B00EE7EEC /* Shuttle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1425EBC41B311B2B00EE7EEC /* Shuttle.swift */; };
 		1425EBC71B311B3300EE7EEC /* ShuttleStop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1425EBC61B311B3300EE7EEC /* ShuttleStop.swift */; };
 		1425EBC91B311B4B00EE7EEC /* ShuttleRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1425EBC81B311B4B00EE7EEC /* ShuttleRoute.swift */; };
@@ -22,6 +20,7 @@
 		14491E991B5C993100A65C87 /* ExtraColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14491E981B5C993100A65C87 /* ExtraColors.swift */; };
 		144DBD661B310ACC00D31AB1 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 144DBD651B310ACC00D31AB1 /* MapKit.framework */; };
 		1457CB001B5EF69E004DBF3D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1457CAFF1B5EF69E004DBF3D /* Localizable.strings */; };
+		146BDA5B1BE8401A00EA28CE /* BundledGTFS.zip in Resources */ = {isa = PBXBuildFile; fileRef = 146BDA5A1BE8401A00EA28CE /* BundledGTFS.zip */; };
 		14757DD11BE2DF790047D87F /* WebView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14757DD01BE2DF790047D87F /* WebView.storyboard */; };
 		14757DD31BE2DF820047D87F /* AboutView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14757DD21BE2DF820047D87F /* AboutView.storyboard */; };
 		147EC3AB1B311063006A4607 /* LiveMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147EC3AA1B311063006A4607 /* LiveMapViewController.swift */; };
@@ -49,13 +48,12 @@
 		149AC3451B40C28300E0C5B7 /* Trip.m in Sources */ = {isa = PBXBuildFile; fileRef = 149AC3331B40C28300E0C5B7 /* Trip.m */; };
 		149AC3481B40C28B00E0C5B7 /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 149AC3471B40C28B00E0C5B7 /* Util.m */; };
 		149FABC71B40A17F000DA552 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 149FABC61B40A17F000DA552 /* libz.dylib */; };
-		14BB23C71B4F567D004098DC /* BundledGTFS.zip in Resources */ = {isa = PBXBuildFile; fileRef = 14BB23C61B4F567D004098DC /* BundledGTFS.zip */; };
 		14BF62481B312151000F8BBE /* ShuttleSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14BF62471B312151000F8BBE /* ShuttleSystem.swift */; };
 		14CE0C871B30E53F00AF27DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE0C861B30E53F00AF27DC /* AppDelegate.swift */; };
 		14CE0C8C1B30E53F00AF27DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14CE0C8A1B30E53F00AF27DC /* Main.storyboard */; };
 		14CE0C8E1B30E53F00AF27DC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14CE0C8D1B30E53F00AF27DC /* Images.xcassets */; };
 		14DC0A251B5F14720041C979 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DC0A241B5F14720041C979 /* Secrets.swift */; };
-		14E63CE71B424FE3009ECC37 /* RealtimeShuttlesGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E63CE61B424FE3009ECC37 /* RealtimeShuttlesGetter.swift */; };
+		14E63CE71B424FE3009ECC37 /* ShuttleGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E63CE61B424FE3009ECC37 /* ShuttleGetter.swift */; };
 		14F4A2811B43BE6900F5D1D6 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F4A2801B43BE6900F5D1D6 /* WebViewController.swift */; };
 		14F910CE1B4EFF9900D9B83E /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 14F910C41B4EFF9900D9B83E /* ioapi.c */; };
 		14F910CF1B4EFF9900D9B83E /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 14F910C61B4EFF9900D9B83E /* mztools.c */; };
@@ -72,11 +70,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		140722CD1BDD46E1001014D9 /* StopsTableViewController+UIViewControllerPreviewing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "StopsTableViewController+UIViewControllerPreviewing.swift"; sourceTree = "<group>"; };
 		140722F11BDD5221001014D9 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1407826F1B5C9EE7009070AF /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = SOURCE_ROOT; };
 		140782701B5C9EE7009070AF /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = SOURCE_ROOT; };
-		141D513E1B5C6D6B0000FDF1 /* TabBarControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarControllerDelegate.swift; sourceTree = "<group>"; };
 		1425EBC41B311B2B00EE7EEC /* Shuttle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shuttle.swift; sourceTree = "<group>"; };
 		1425EBC61B311B3300EE7EEC /* ShuttleStop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShuttleStop.swift; sourceTree = "<group>"; };
 		1425EBC81B311B4B00EE7EEC /* ShuttleRoute.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShuttleRoute.swift; sourceTree = "<group>"; };
@@ -89,6 +85,7 @@
 		14491E981B5C993100A65C87 /* ExtraColors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtraColors.swift; sourceTree = "<group>"; };
 		144DBD651B310ACC00D31AB1 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		1457CAFF1B5EF69E004DBF3D /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		146BDA5A1BE8401A00EA28CE /* BundledGTFS.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = BundledGTFS.zip; sourceTree = "<group>"; };
 		14757DD01BE2DF790047D87F /* WebView.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = WebView.storyboard; sourceTree = "<group>"; };
 		14757DD21BE2DF820047D87F /* AboutView.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AboutView.storyboard; sourceTree = "<group>"; };
 		1477D1F31B62EAAC00AB61E1 /* Marguerite.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Marguerite.entitlements; sourceTree = "<group>"; };
@@ -140,7 +137,6 @@
 		149AC3471B40C28B00E0C5B7 /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Util.m; path = ../Util.m; sourceTree = "<group>"; };
 		149FABC61B40A17F000DA552 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		14AAE8011B43B6EB00BFF12E /* StopTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopTableViewCell.swift; sourceTree = "<group>"; };
-		14BB23C61B4F567D004098DC /* BundledGTFS.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = BundledGTFS.zip; sourceTree = "<group>"; };
 		14BF62471B312151000F8BBE /* ShuttleSystem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShuttleSystem.swift; sourceTree = "<group>"; };
 		14C495211B43B58E00BF5FE0 /* RouteBubbleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteBubbleView.swift; sourceTree = "<group>"; };
 		14C7E39B1B310D91007321C8 /* StopsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopsTableViewController.swift; sourceTree = "<group>"; };
@@ -150,7 +146,7 @@
 		14CE0C8B1B30E53F00AF27DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		14CE0C8D1B30E53F00AF27DC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		14DC0A241B5F14720041C979 /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
-		14E63CE61B424FE3009ECC37 /* RealtimeShuttlesGetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealtimeShuttlesGetter.swift; sourceTree = "<group>"; };
+		14E63CE61B424FE3009ECC37 /* ShuttleGetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShuttleGetter.swift; sourceTree = "<group>"; };
 		14F4A2801B43BE6900F5D1D6 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		14F910C31B4EFF9900D9B83E /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
 		14F910C41B4EFF9900D9B83E /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
@@ -262,8 +258,8 @@
 			isa = PBXGroup;
 			children = (
 				14CE0C8A1B30E53F00AF27DC /* Main.storyboard */,
-				14757DD21BE2DF820047D87F /* AboutView.storyboard */,
 				14757DD01BE2DF790047D87F /* WebView.storyboard */,
+				14757DD21BE2DF820047D87F /* AboutView.storyboard */,
 				140722F11BDD5221001014D9 /* LaunchScreen.storyboard */,
 			);
 			name = Storyboards;
@@ -330,7 +326,7 @@
 				14BE9D641B5C893C009D08B3 /* Frameworks */,
 				14CE0C8D1B30E53F00AF27DC /* Images.xcassets */,
 				14CE0C851B30E53F00AF27DC /* Info.plist */,
-				14BB23C61B4F567D004098DC /* BundledGTFS.zip */,
+				146BDA5A1BE8401A00EA28CE /* BundledGTFS.zip */,
 				1457CAFF1B5EF69E004DBF3D /* Localizable.strings */,
 				1477D1F31B62EAAC00AB61E1 /* Marguerite.entitlements */,
 				1490A1EA1B3F194D00172CA4 /* Marguerite-Bridging-Header.h */,
@@ -380,8 +376,8 @@
 				1425EBC81B311B4B00EE7EEC /* ShuttleRoute.swift */,
 				1425EBC61B311B3300EE7EEC /* ShuttleStop.swift */,
 				142C11771B41E15B001B5260 /* ShuttleStopTime.swift */,
+				14E63CE61B424FE3009ECC37 /* ShuttleGetter.swift */,
 				14BF62471B312151000F8BBE /* ShuttleSystem.swift */,
-				14E63CE61B424FE3009ECC37 /* RealtimeShuttlesGetter.swift */,
 			);
 			name = "Shuttle System";
 			sourceTree = "<group>";
@@ -399,7 +395,6 @@
 			isa = PBXGroup;
 			children = (
 				14C7E39B1B310D91007321C8 /* StopsTableViewController.swift */,
-				140722CD1BDD46E1001014D9 /* StopsTableViewController+UIViewControllerPreviewing.swift */,
 				147C66FE1B311979001A716F /* StopInfoTableViewController.swift */,
 				147EC3AA1B311063006A4607 /* LiveMapViewController.swift */,
 				14F4A2801B43BE6900F5D1D6 /* WebViewController.swift */,
@@ -422,10 +417,9 @@
 			children = (
 				14DC0A241B5F14720041C979 /* Secrets.swift */,
 				149984E11B4EF2FD00EF92C9 /* FileHelper.swift */,
+				14491E981B5C993100A65C87 /* ExtraColors.swift */,
 				149AC2BA1B40BF1F00E0C5B7 /* DefaultsHelper.swift */,
 				149AC2B61B40BDA700E0C5B7 /* CoreLocationController.swift */,
-				141D513E1B5C6D6B0000FDF1 /* TabBarControllerDelegate.swift */,
-				14491E981B5C993100A65C87 /* ExtraColors.swift */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -501,8 +495,8 @@
 				14CE0C8E1B30E53F00AF27DC /* Images.xcassets in Resources */,
 				140722F21BDD5221001014D9 /* LaunchScreen.storyboard in Resources */,
 				14757DD11BE2DF790047D87F /* WebView.storyboard in Resources */,
-				14BB23C71B4F567D004098DC /* BundledGTFS.zip in Resources */,
 				14757DD31BE2DF820047D87F /* AboutView.storyboard in Resources */,
+				146BDA5B1BE8401A00EA28CE /* BundledGTFS.zip in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,11 +527,9 @@
 				143723301BE468CF00B6DBF9 /* GenericTableViewCell.swift in Sources */,
 				14DC0A251B5F14720041C979 /* Secrets.swift in Sources */,
 				149AC3431B40C28300E0C5B7 /* StopTime.m in Sources */,
-				140722CE1BDD46E1001014D9 /* StopsTableViewController+UIViewControllerPreviewing.swift in Sources */,
 				149984E21B4EF2FD00EF92C9 /* FileHelper.swift in Sources */,
 				14FE60161B5B552900ABAD94 /* StopTableViewCell.swift in Sources */,
 				14F910D11B4EFF9900D9B83E /* zip.c in Sources */,
-				141D513F1B5C6D6B0000FDF1 /* TabBarControllerDelegate.swift in Sources */,
 				149AC33C1B40C28300E0C5B7 /* Calendar.m in Sources */,
 				149AC33D1B40C28300E0C5B7 /* CalendarDate.m in Sources */,
 				1425EBC51B311B2B00EE7EEC /* Shuttle.swift in Sources */,
@@ -566,7 +558,7 @@
 				143628711B313B2C006ACC86 /* ShuttleSystemAnnotation.swift in Sources */,
 				149AC3441B40C28300E0C5B7 /* Transformations.m in Sources */,
 				14BF62481B312151000F8BBE /* ShuttleSystem.swift in Sources */,
-				14E63CE71B424FE3009ECC37 /* RealtimeShuttlesGetter.swift in Sources */,
+				14E63CE71B424FE3009ECC37 /* ShuttleGetter.swift in Sources */,
 				149AC3391B40C28300E0C5B7 /* FMDatabaseQueue.m in Sources */,
 				1425EBC91B311B4B00EE7EEC /* ShuttleRoute.swift in Sources */,
 				14F910D01B4EFF9900D9B83E /* unzip.c in Sources */,
@@ -683,15 +675,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Marguerite/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.stanford.$(PRODUCT_NAME:rfc1034identifier)";
@@ -708,15 +700,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Marguerite/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "edu.stanford.$(PRODUCT_NAME:rfc1034identifier)";

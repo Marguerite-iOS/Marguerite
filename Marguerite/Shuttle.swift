@@ -20,40 +20,34 @@ struct ShuttleElement {
     static let time = "time"
 }
 
-class Shuttle: NSObject {
+struct Shuttle {
     
     // Neccesary
-    var name: Int!
-    var location: CLLocation!
-    private var tripID: Int!
-    private var routeID: Int!
+    let name: Int!
+    let location: CLLocation!
     
     // Traveling route
-    var route: ShuttleRoute!
+    let route: ShuttleRoute!
     
     /**
     Initilizes a shuttle object from the live feed data dictionary.
     
     - parameter dictionary: The shuttle attributes.
+    - parameter route: The shuttle route.
     */
-    init?(dictionary: [String:String]) {
-        super.init()
+    init?(dictionary: [String:String], route: ShuttleRoute) {
         
-        guard let dictionaryName = dictionary[ShuttleElement.name], dictionaryTripID = dictionary[ShuttleElement.tripId], dictionaryRouteID = dictionary[ShuttleElement.routeId], dictionaryLat = dictionary[ShuttleElement.latitude], dictionaryLong = dictionary[ShuttleElement.longitude] else {
+        guard let dictionaryName = dictionary[ShuttleElement.name], dictionaryLat = dictionary[ShuttleElement.latitude], dictionaryLong = dictionary[ShuttleElement.longitude], latitude =  Double(dictionaryLat), longitude =  Double(dictionaryLong) else {
             return nil
         }
         
-        let latitude = (dictionaryLat as NSString).doubleValue
-        let longitude = (dictionaryLong as NSString).doubleValue
-        
-        guard !ShuttleSystem.sharedInstance.coordinatesInParkingLot(latitude, longitude: longitude) else {
+        guard !ShuttleSystem.sharedInstance.coordinatesInParkingLot(latitude, longitude) else {
             return nil
         }
         
         name = Int(dictionaryName)
-        tripID = Int(dictionaryTripID)
-        routeID = Int(dictionaryRouteID)
         location = CLLocation(latitude: latitude, longitude: longitude)
+        self.route = route
     }
     
     /**
@@ -68,9 +62,4 @@ class Shuttle: NSObject {
     var annotationTitle: String {
         return route.shortName + ": " + name.description
     }
-    
-    override var description: String {
-        return route.shortName + ": " + name.description + ", Location: " + location.description
-    }
-    
 }

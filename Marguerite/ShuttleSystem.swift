@@ -23,11 +23,11 @@ let LocationUnavailableNotification = "LocationUnavailable"
 let AddStopToFavoritesNotification = "AddStopToFavorites"
 let RemoveStopFromFavoritesNotification = "RemoveStopFromFavorites"
 
-class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationControllerDelegate {
+class ShuttleSystem: NSObject, ShuttleGetterProtocol, CoreLocationControllerDelegate {
     
     static let sharedInstance = ShuttleSystem()
     
-    private let realtimeShuttlesGetter = RealtimeShuttlesGetter(urlString: MargueriteShuttlesLocationURL)
+    private let realtimeShuttlesGetter = ShuttleGetter(urlString: MargueriteShuttlesLocationURL)
     private let locationController = CoreLocationController()
     private let distanceFormatter = MKDistanceFormatter()
     
@@ -53,7 +53,13 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
         didSet {
             NSNotificationCenter.defaultCenter().postNotificationName(UpdatedThemeNotification, object: nil)
             DefaultsHelper.keyIs(nightModeEnabled, key: NightModeKey)
-            Answers.logCustomEventWithName("Night Mode Toggled", customAttributes: ["Enabled": nightModeEnabled.description.capitalizedString])
+            Answers.logCustomEventWithName("3.0: Night Mode Toggled", customAttributes: ["Enabled": nightModeEnabled.description.capitalizedString])
+        }
+    }
+    
+    var viewingLiveMap = false {
+        didSet {
+            toggleShuttleUpdating()
         }
     }
     
@@ -61,7 +67,7 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
     // The formatter for displaying departure time to the user
     var displayFormatter: NSDateFormatter {
         struct Static {
-            static let instance : NSDateFormatter = {
+            static let instance: NSDateFormatter = {
                 let formatter = NSDateFormatter()
                 formatter.dateFormat = "h:mm a"
                 return formatter
@@ -73,7 +79,7 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
     // The formatter for reading date from database
     var databaseDateFormatter: NSDateFormatter {
         struct Static {
-            static let instance : NSDateFormatter = {
+            static let instance: NSDateFormatter = {
                 let formatter = NSDateFormatter()
                 formatter.dateFormat = "yyyy-MM-dd"
                 return formatter
@@ -85,7 +91,7 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
     // The formatter for reading time from database
     var databaseTimeFormatter: NSDateFormatter {
         struct Static {
-            static let instance : NSDateFormatter = {
+            static let instance: NSDateFormatter = {
                 let formatter = NSDateFormatter()
                 formatter.dateFormat = "HH:mm:ss"
                 return formatter
@@ -133,12 +139,10 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
             importer.addAgency()
             importer.addRoute()
             importer.addStop()
-            if !liveMapModeOnly {
-                importer.addCalendarDate()
-                importer.addTrip()
-                importer.addStopTime()
-                importer.addStopRoutes()
-            }
+            importer.addCalendarDate()
+            importer.addTrip()
+            importer.addStopTime()
+            importer.addStopRoutes()
             importer.vacuum()
             importer.reindex()
             print("--- Finished Updating Database ---")
@@ -147,76 +151,70 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
         
         print("Loading ShuttleRoute Objects")
         
-        for dictionary in Route.getAllRoutes() {
-            if let dictionary = dictionary as? [String:AnyObject], newRoute = ShuttleRoute(dictionary: dictionary) {
+        Route.getAllRoutes().forEach({
+            if let dictionary = $0 as? [String:AnyObject], newRoute = ShuttleRoute(dictionary: dictionary) {
                 routes.append(newRoute)
             }
-        }
+        })
         
         print("Loading ShuttleStop Objects")
         
-        for dictionary in Stop.getAllStops() {
-            if let dictionary = dictionary as? [String:AnyObject], newStop = ShuttleStop(dictionary: dictionary) {
+        Stop.getAllStops().forEach({
+            if let dictionary = $0 as? [String:AnyObject], newStop = ShuttleStop(dictionary: dictionary) {
                 stops.append(newStop)
             }
-        }
+        })
         
-        /*
-        if !liveMapModeOnly {
-        print("--- Loading Stops Into Routes ---")
-        for route in routes {
-        route.loadStops()
-        }
-        print("--- Finished Loading Stops Into Routes ---")
-        }
-        */
-        stops.sortInPlace({$0.name < $1.name})
+        stops.sortInPlace( {$0.name < $1.name} )
         locationController.refreshLocation()
         realtimeShuttlesGetter.update()
         loadFavorites()
         
-        if !liveMapModeOnly {
-            ShuttleSystem.sharedInstance.fileHelper.getLatestGTFSData()
-        }
+        ShuttleSystem.sharedInstance.fileHelper.getLatestGTFSData()
         
         print("*** Finished Loading Shuttle System ***")
     }
     
     // MARK: - Realtime buses protocol
     
-    func didUpdateShuttles(shuttlesInfo: [[String : String]], mappingInfo: [String : String]) {
-        didFailLastUpdate = false
-        shuttles = []
-        for shuttle in shuttlesInfo {
-            if let shuttleName = shuttle["name"], mapping = mappingInfo[shuttleName], shuttle = Shuttle(dictionary: shuttle) {
-                if let route = shuttleRouteWithID(mapping) {
-                    shuttle.route = route
-                    shuttles.append(shuttle)
-                } else {
-                    print(shuttleName + ": bad route: " + mapping)
-                    Answers.logCustomEventWithName("Bad Shuttle Route", customAttributes: ["Shuttle": shuttleName, "RouteMapping": mapping])
-                }
-            }
-        }
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-        NSNotificationCenter.defaultCenter().postNotificationName(UpdatedShuttlesNotification, object: nil)
-        updatingShuttles = false
-        updateTimer = NSTimer.scheduledTimerWithTimeInterval(15.0, target: self, selector: "updateRealtimeLocations", userInfo: nil, repeats: false)
+    func toggleShuttleUpdating() {
+        updateRealtimeLocations()
     }
     
-    func busUpdateDidFail(error: NSError) {
+    func didUpdateShuttles(shuttlesInfo: [[String: String]], mappingInfo: [String: String]) {
+        didFailLastUpdate = false
+        shuttles = []
+        shuttlesInfo.forEach({
+            if let shuttleName = $0["name"], mapping = mappingInfo[shuttleName] {
+                if let route = shuttleRouteWithID(mapping) {
+                    if let shuttle = Shuttle(dictionary: $0, route: route) {
+                        shuttles.append(shuttle)
+                    }
+                } else {
+                    print(shuttleName + ": bad route: " + mapping)
+                    Answers.logCustomEventWithName("3.0: Bad Shuttle Route", customAttributes: ["Shuttle:RouteMapping": shuttleName + ":" + mapping])
+                }
+            }
+        })
+        dispatch_async(dispatch_get_main_queue(),{
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            NSNotificationCenter.defaultCenter().postNotificationName(UpdatedShuttlesNotification, object: nil)
+            self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(15.0, target: self, selector: "updateRealtimeLocations", userInfo: nil, repeats: false)
+        })
+        updatingShuttles = false
+        Answers.logCustomEventWithName("3.0: Live Map Updated", customAttributes: [:])
+    }
+    
+    func busUpdateDidFail(error: ShuttleGetterError) {
         var message = ""
         
-        switch error.code {
-        case 1:
+        if error.wasConnectingToServer() {
             message = NSLocalizedString("Server Connect Error Message", comment: "")
-            Answers.logCustomEventWithName("Server Connect Error", customAttributes: [:])
-        case 2:
+        } else {
             message = NSLocalizedString("Data Validation Error Message", comment: "")
-            Answers.logCustomEventWithName("Data Validation Error", customAttributes: [:])
-        default:
-            break
         }
+        
+        Answers.logCustomEventWithName("3.0: Live Map Error", customAttributes: ["Code":error.hashValue.description])
         
         updatingShuttles = false
         
@@ -225,16 +223,21 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
             updateRealtimeLocations()
             return
         }
-        NSNotificationCenter.defaultCenter().postNotificationName(FailedToUpdateShuttlesNotification, object: message)
+        Answers.logCustomEventWithName("3.0: Displayed Live Map Error", customAttributes: [:])
+        dispatch_async(dispatch_get_main_queue(),{
+            NSNotificationCenter.defaultCenter().postNotificationName(FailedToUpdateShuttlesNotification, object: message)
+        })
     }
     
     func updateRealtimeLocations() {
-        if !updatingShuttles {
-            NSNotificationCenter.defaultCenter().postNotificationName(UpdatingShuttlesNotification, object: nil)
-            updatingShuttles = true
-            updateTimer?.invalidate()
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-            realtimeShuttlesGetter.update()
+        if !updatingShuttles && viewingLiveMap {
+            dispatch_async(dispatch_get_main_queue(),{
+                self.updatingShuttles = true
+                self.updateTimer?.invalidate()
+                self.realtimeShuttlesGetter.update()
+                UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+                NSNotificationCenter.defaultCenter().postNotificationName(UpdatingShuttlesNotification, object: nil)
+            })
         }
     }
     
@@ -258,8 +261,7 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
         for (index, coordinate) in coordinates.enumerate() {
             if index == 0 {
                 CGPathMoveToPoint(mutablePath, nil, coordinate.latitude, coordinate.longitude)
-            }
-            else {
+            } else {
                 CGPathAddLineToPoint(mutablePath, nil, coordinate.latitude, coordinate.longitude)
             }
         }
@@ -269,7 +271,7 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
     /**
     If shuttle coordinates in the main parking lot, then the shuttle is inactive
     */
-    func coordinatesInParkingLot(latitude: Double, longitude: Double) -> Bool {
+    func coordinatesInParkingLot(latitude: Double, _ longitude: Double) -> Bool {
         return CGPathContainsPoint(parkingLotPath, nil, CGPointMake(CGFloat(latitude), CGFloat(longitude)), false)
     }
     
@@ -283,7 +285,7 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
     - returns: The route if it exists.
     */
     func shuttleRouteWithName(name: String) -> ShuttleRoute? {
-        return routes.filter{ $0.shortName == name }.first
+        return routes.filter { $0.shortName == name }.first
     }
     
     /**
@@ -295,7 +297,7 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
     */
     func shuttleRouteWithID(routeID: String) -> ShuttleRoute? {
         let routeIDVal = Int(routeID)
-        return routes.filter{ $0.routeID == routeIDVal }.first
+        return routes.filter { $0.routeID == routeIDVal }.first
     }
     
     /**
@@ -307,7 +309,25 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
     */
     func shuttleStopWithID(stopID: String) -> ShuttleStop? {
         let stopIDVal = Int(stopID)
-        return stops.filter{ $0.stopID == stopIDVal }.first
+        return stops.filter { $0.stopID == stopIDVal }.first
+    }
+    
+    /**
+     Gets the stop at index path based on the selected segemented control index
+     
+     - parameter indexPath: The index path
+     
+     - returns: The stop
+     */
+    func stopForIndexPath(indexPath: NSIndexPath, scope: Int) -> ShuttleStop {
+        switch scope {
+        case 1:
+            return favoriteStops[indexPath.row]
+        case 2:
+            return closestStops[indexPath.row]
+        default:
+            return stops[indexPath.row]
+        }
     }
     
     // MARK: - Favorite stops
@@ -336,7 +356,6 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
         favoriteStops.append(stop)
         favoriteStopIDs.append(stop.stopID)
         DefaultsHelper.saveDataForKey(favoriteStopIDs, key: FavoriteStopsIDKey)
-        Answers.logCustomEventWithName("Added Stop To Favorites", customAttributes: ["StopID": stop.stopID, "StopName": stop.name])
     }
     
     /**
@@ -370,17 +389,24 @@ class ShuttleSystem: NSObject, RealtimeShuttlesGetterProtocol, CoreLocationContr
             locationController.refreshLocation()
         }
         let notificationName = nowEnabled ? LocationAvailableNotification : LocationUnavailableNotification
-        NSNotificationCenter.defaultCenter().postNotificationName(notificationName, object: nil)
+        dispatch_async(dispatch_get_main_queue(),{
+            NSNotificationCenter.defaultCenter().postNotificationName(notificationName, object: nil)
+        })
     }
     
     func locationUpdate(location: CLLocation) {
         closestStops = getClosestStops(25, location: location)
-        NSNotificationCenter.defaultCenter().postNotificationName(LocationAvailableNotification, object: nil)
+        dispatch_async(dispatch_get_main_queue(),{
+            NSNotificationCenter.defaultCenter().postNotificationName(LocationAvailableNotification, object: nil)
+        })
     }
     
     func locationError(error: NSError) {
         print("GPS location error: \(error.localizedDescription)")
-        NSNotificationCenter.defaultCenter().postNotificationName(LocationUnavailableNotification, object: nil)
+        dispatch_async(dispatch_get_main_queue(),{
+            NSNotificationCenter.defaultCenter().postNotificationName(LocationUnavailableNotification, object: nil)
+        })
+        
     }
     
     /**

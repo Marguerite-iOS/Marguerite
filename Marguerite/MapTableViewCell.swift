@@ -39,7 +39,7 @@ class MapTableViewCell: UITableViewCell, MKMapViewDelegate {
             return nil
         }
         let pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "Stop")
-        pinView.pinTintColor = UIColor.redColor()
+        pinView.pinColor = .Red
         pinView.canShowCallout = false
         return pinView
     }

@@ -7,9 +7,8 @@ Marguerite is an iOS app that makes it easier for riders to use the free [Stanfo
 * View the real-time locations of all shuttles.
 
 ### Notices
-* The app is currently in live map only mode until the Marguerite department finishes their system upgrade. You can change this using the liveMapModeOnly bool in the app delegate to see the outdated GTFS.
 * You will need to modifiy the secrets file for some features to work. Email margueriteprojectmaintainer [at] gmail [dot] com for the keys.
-* Built with Xcode 7.0
+* Built with Xcode 7.2
 
 ## Attributions
 This app would not have been possible without the following open-source libraries:

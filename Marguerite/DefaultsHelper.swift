@@ -1,6 +1,6 @@
 //
 //  DefaultsHelper.swift
-//  Portfolio
+//  Marguerite
 //
 //  Created by Andrew Finke on 1/23/15.
 //  Copyright (c) 2015 ATFinke Productions. All rights reserved.
@@ -17,7 +17,7 @@ class DefaultsHelper: NSObject {
     
     - returns: The object
     */
-    class func getObjectForKey(key : String) -> AnyObject? {
+    class func getObjectForKey(key: String) -> AnyObject? {
         return appGroupDefaults?.objectForKey(key)
     }
     
@@ -27,7 +27,7 @@ class DefaultsHelper: NSObject {
     - parameter object: The bool value
     - parameter key: The NSUserDefaults key
     */
-    class func saveDataForKey(object : AnyObject, key : String) {
+    class func saveDataForKey(object: AnyObject, key: String) {
         appGroupDefaults?.setObject(object, forKey: key)
         appGroupDefaults?.synchronize()
     }
@@ -39,7 +39,7 @@ class DefaultsHelper: NSObject {
     
     - returns: value The bool value
     */
-    class func key(key : String) -> Bool {
+    class func key(key: String) -> Bool {
         if let defaults = appGroupDefaults {
             return defaults.boolForKey(key)
         }
@@ -52,7 +52,7 @@ class DefaultsHelper: NSObject {
     - parameter value: The bool value
     - parameter key: The NSUserDefaults key
     */
-    class func keyIs(value : Bool, key : String) {
+    class func keyIs(value: Bool, key: String) {
         appGroupDefaults?.setBool(value, forKey: key)
         appGroupDefaults?.synchronize()
     }
