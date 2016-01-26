@@ -88,7 +88,7 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
             if latestFileInTemp.timeIntervalSinceDate(latestFileInCurrent) > 0 {
                 print("Replacing older data")
                 self.moveTempFilesToTransitFolder()
-                DefaultsHelper.keyIs(true, key: NeedsDatabaseUpdateKey)
+                DefaultsHelper.keyIs(true, key: DataKey.NeedsDatabaseUpdate.rawValue)
                 DefaultsHelper.saveDataForKey(latestFileInTemp, key: "GTFS Date")
             } else {
                 print("Keeping current data")

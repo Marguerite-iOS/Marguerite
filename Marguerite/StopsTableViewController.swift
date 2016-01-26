@@ -9,9 +9,9 @@
 import UIKit
 import CoreLocation
 
-class StopsTableViewController: UITableViewController, UIViewControllerPreviewingDelegate {
+class StopsTableViewController: UITableViewController {
     
-    @IBOutlet private weak var segmentedControl: UISegmentedControl! {
+    @IBOutlet weak var segmentedControl: UISegmentedControl! {
         didSet {
             segmentedControl.setTitle(NSLocalizedString("All Title", comment: ""), forSegmentAtIndex: 0)
             segmentedControl.setTitle(NSLocalizedString("Favorites Title", comment: ""), forSegmentAtIndex: 1)
@@ -175,37 +175,7 @@ class StopsTableViewController: UITableViewController, UIViewControllerPreviewin
         tableView.reloadData()
     }
     
-    // MARK: - UIViewControllerPreviewingDelegate
     
-    /**
-    Create a previewing view controller to be shown at "Peek".
-    */
-    @available(iOS 9.0, *)
-    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        // Obtain the index path and the cell that was pressed.
-        guard let indexPath = tableView.indexPathForRowAtPoint(location),
-            cell = tableView.cellForRowAtIndexPath(indexPath) else { return nil }
-        
-        // Create a detail view controller and set its properties.
-        guard let stopInfoTableViewController = storyboard?.instantiateViewControllerWithIdentifier("StopInfoTableViewController") as? StopInfoTableViewController else { return nil }
-        
-        let stop = ShuttleSystem.sharedInstance.stopForIndexPath(indexPath, scope: segmentedControl.selectedSegmentIndex)
-        stopInfoTableViewController.stop = stop
-        previewingContext.sourceRect = cell.frame
-        if stop.stopTimes.count == 0 {
-            stopInfoTableViewController.preferredContentSize = CGSize(width: 0.0, height: stopInfoTableViewController.tableView.contentSize.height)
-        }
-        
-        return stopInfoTableViewController
-    }
-    
-    /**
-    Present the view controller for the "Pop" action.
-    */
-    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
-        // Reuse the "Peek" view controller for presentation.
-        showViewController(viewControllerToCommit, sender: self)
-    }
     
     // MARK: - Navigation
     
@@ -276,11 +246,11 @@ class StopsTableViewController: UITableViewController, UIViewControllerPreviewin
      Adds notification observers
      */
     func addNotificationObservers() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTheme", name: UpdatedThemeNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideNearbyStops", name: LocationUnavailableNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showNearbyStops", name: LocationAvailableNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "addStopToFavorites:", name: AddStopToFavoritesNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "removeStopFromFavorites:", name: RemoveStopFromFavoritesNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTheme", name: Notification.UpdatedTheme.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideNearbyStops", name: Notification.LocationUnavailable.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showNearbyStops", name: Notification.LocationAvailable.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "addStopToFavorites:", name: Notification.AddStopToFavorites.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "removeStopFromFavorites:", name: Notification.RemoveStopFromFavorites.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: UIDeviceOrientationDidChangeNotification, object: nil)
     }
 }

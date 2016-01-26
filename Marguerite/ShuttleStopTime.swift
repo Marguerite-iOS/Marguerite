@@ -6,8 +6,6 @@
 //  Copyright © 2015 Andrew Finke. All rights reserved.
 //
 
-import UIKit
-
 struct ShuttleStopTime {
     let route: ShuttleRoute!
     let tripID: String!

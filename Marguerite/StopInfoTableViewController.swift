@@ -37,7 +37,7 @@ class StopInfoTableViewController: UITableViewController {
         tableView.tableHeaderView = UIView(frame: CGRectMake(0, 0, tableView.bounds.width, 0.1))
         updateTheme()
         updateFavoriteBarButtonItem()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTheme", name: UpdatedThemeNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTheme", name: Notification.UpdatedTheme.rawValue, object: nil)
     }
     
     // MARK: - Night Mode
@@ -82,9 +82,9 @@ class StopInfoTableViewController: UITableViewController {
             return
         }
         if ShuttleSystem.sharedInstance.isStopFavorited(stop) {
-            NSNotificationCenter.defaultCenter().postNotificationName(RemoveStopFromFavoritesNotification, object: self.stop)
+            NSNotificationCenter.defaultCenter().postNotificationName(Notification.RemoveStopFromFavorites.rawValue, object: self.stop)
         } else {
-            NSNotificationCenter.defaultCenter().postNotificationName(AddStopToFavoritesNotification, object: self.stop)
+            NSNotificationCenter.defaultCenter().postNotificationName(Notification.AddStopToFavorites.rawValue, object: self.stop)
         }
     }
     
@@ -181,11 +181,11 @@ class StopInfoTableViewController: UITableViewController {
         var previewAction: UIPreviewAction!
         if ShuttleSystem.sharedInstance.isStopFavorited(stop) {
             previewAction = UIPreviewAction(title: "Remove from Favorites", style: .Destructive) { (previewAction: UIPreviewAction, viewController: UIViewController) -> Void in
-                NSNotificationCenter.defaultCenter().postNotificationName(RemoveStopFromFavoritesNotification, object: self.stop)
+                NSNotificationCenter.defaultCenter().postNotificationName(Notification.RemoveStopFromFavorites.rawValue, object: self.stop)
             }
         } else {
             previewAction = UIPreviewAction(title: "Add to Favorites", style: .Default) { (previewAction: UIPreviewAction, viewController: UIViewController) -> Void in
-                NSNotificationCenter.defaultCenter().postNotificationName(AddStopToFavoritesNotification, object: self.stop)
+                NSNotificationCenter.defaultCenter().postNotificationName(Notification.AddStopToFavorites.rawValue, object: self.stop)
             }
         }
         return [previewAction]

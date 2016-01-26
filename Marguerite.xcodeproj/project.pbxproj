@@ -52,6 +52,13 @@
 		14CE0C871B30E53F00AF27DC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE0C861B30E53F00AF27DC /* AppDelegate.swift */; };
 		14CE0C8C1B30E53F00AF27DC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14CE0C8A1B30E53F00AF27DC /* Main.storyboard */; };
 		14CE0C8E1B30E53F00AF27DC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14CE0C8D1B30E53F00AF27DC /* Images.xcassets */; };
+		14CE353E1C5808AB00FD480B /* StopsTableViewController+UIViewControllerPreviewing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE353D1C5808AB00FD480B /* StopsTableViewController+UIViewControllerPreviewing.swift */; };
+		14CE35401C580B6A00FD480B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE353F1C580B6A00FD480B /* Constants.swift */; };
+		14CE35421C580BAC00FD480B /* ShuttleSystem+Favorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE35411C580BAC00FD480B /* ShuttleSystem+Favorites.swift */; };
+		14CE35441C580C7B00FD480B /* ShuttleSystem+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE35431C580C7B00FD480B /* ShuttleSystem+Location.swift */; };
+		14CE35461C580DEC00FD480B /* ShuttleSystem+Matching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE35451C580DEC00FD480B /* ShuttleSystem+Matching.swift */; };
+		14CE35481C580E2D00FD480B /* ShuttleSystem+LiveShuttles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE35471C580E2D00FD480B /* ShuttleSystem+LiveShuttles.swift */; };
+		14CE354A1C580EB800FD480B /* ShuttleSystem+Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE35491C580EB800FD480B /* ShuttleSystem+Formatters.swift */; };
 		14DC0A251B5F14720041C979 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DC0A241B5F14720041C979 /* Secrets.swift */; };
 		14E63CE71B424FE3009ECC37 /* ShuttleGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E63CE61B424FE3009ECC37 /* ShuttleGetter.swift */; };
 		14F4A2811B43BE6900F5D1D6 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F4A2801B43BE6900F5D1D6 /* WebViewController.swift */; };
@@ -145,6 +152,13 @@
 		14CE0C861B30E53F00AF27DC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		14CE0C8B1B30E53F00AF27DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		14CE0C8D1B30E53F00AF27DC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		14CE353D1C5808AB00FD480B /* StopsTableViewController+UIViewControllerPreviewing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "StopsTableViewController+UIViewControllerPreviewing.swift"; sourceTree = "<group>"; };
+		14CE353F1C580B6A00FD480B /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		14CE35411C580BAC00FD480B /* ShuttleSystem+Favorites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ShuttleSystem+Favorites.swift"; sourceTree = "<group>"; };
+		14CE35431C580C7B00FD480B /* ShuttleSystem+Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ShuttleSystem+Location.swift"; sourceTree = "<group>"; };
+		14CE35451C580DEC00FD480B /* ShuttleSystem+Matching.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ShuttleSystem+Matching.swift"; sourceTree = "<group>"; };
+		14CE35471C580E2D00FD480B /* ShuttleSystem+LiveShuttles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ShuttleSystem+LiveShuttles.swift"; sourceTree = "<group>"; };
+		14CE35491C580EB800FD480B /* ShuttleSystem+Formatters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ShuttleSystem+Formatters.swift"; sourceTree = "<group>"; };
 		14DC0A241B5F14720041C979 /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		14E63CE61B424FE3009ECC37 /* ShuttleGetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShuttleGetter.swift; sourceTree = "<group>"; };
 		14F4A2801B43BE6900F5D1D6 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
@@ -334,6 +348,38 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		14CE354B1C580EF700FD480B /* ShuttleSystem */ = {
+			isa = PBXGroup;
+			children = (
+				14BF62471B312151000F8BBE /* ShuttleSystem.swift */,
+				14CE35491C580EB800FD480B /* ShuttleSystem+Formatters.swift */,
+				14CE35411C580BAC00FD480B /* ShuttleSystem+Favorites.swift */,
+				14CE35431C580C7B00FD480B /* ShuttleSystem+Location.swift */,
+				14CE35451C580DEC00FD480B /* ShuttleSystem+Matching.swift */,
+				14CE35471C580E2D00FD480B /* ShuttleSystem+LiveShuttles.swift */,
+			);
+			name = ShuttleSystem;
+			sourceTree = "<group>";
+		};
+		14CE354C1C580F4100FD480B /* Structs */ = {
+			isa = PBXGroup;
+			children = (
+				1425EBC41B311B2B00EE7EEC /* Shuttle.swift */,
+				1425EBC81B311B4B00EE7EEC /* ShuttleRoute.swift */,
+				142C11771B41E15B001B5260 /* ShuttleStopTime.swift */,
+			);
+			name = Structs;
+			sourceTree = "<group>";
+		};
+		14CE354D1C580F5900FD480B /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				1425EBC61B311B3300EE7EEC /* ShuttleStop.swift */,
+				14E63CE61B424FE3009ECC37 /* ShuttleGetter.swift */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
 		14F910C11B4EFF9900D9B83E /* SSZipArchive */ = {
 			isa = PBXGroup;
 			children = (
@@ -372,12 +418,9 @@
 		14FD8FA01B43C37D00C42F7F /* Shuttle System */ = {
 			isa = PBXGroup;
 			children = (
-				1425EBC41B311B2B00EE7EEC /* Shuttle.swift */,
-				1425EBC81B311B4B00EE7EEC /* ShuttleRoute.swift */,
-				1425EBC61B311B3300EE7EEC /* ShuttleStop.swift */,
-				142C11771B41E15B001B5260 /* ShuttleStopTime.swift */,
-				14E63CE61B424FE3009ECC37 /* ShuttleGetter.swift */,
-				14BF62471B312151000F8BBE /* ShuttleSystem.swift */,
+				14CE354C1C580F4100FD480B /* Structs */,
+				14CE354D1C580F5900FD480B /* Classes */,
+				14CE354B1C580EF700FD480B /* ShuttleSystem */,
 			);
 			name = "Shuttle System";
 			sourceTree = "<group>";
@@ -395,6 +438,7 @@
 			isa = PBXGroup;
 			children = (
 				14C7E39B1B310D91007321C8 /* StopsTableViewController.swift */,
+				14CE353D1C5808AB00FD480B /* StopsTableViewController+UIViewControllerPreviewing.swift */,
 				147C66FE1B311979001A716F /* StopInfoTableViewController.swift */,
 				147EC3AA1B311063006A4607 /* LiveMapViewController.swift */,
 				14F4A2801B43BE6900F5D1D6 /* WebViewController.swift */,
@@ -415,6 +459,7 @@
 		14FD8FA51B43C41B00C42F7F /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				14CE353F1C580B6A00FD480B /* Constants.swift */,
 				14DC0A241B5F14720041C979 /* Secrets.swift */,
 				149984E11B4EF2FD00EF92C9 /* FileHelper.swift */,
 				14491E981B5C993100A65C87 /* ExtraColors.swift */,
@@ -526,6 +571,7 @@
 				149AC33F1B40C28300E0C5B7 /* FareRules.m in Sources */,
 				143723301BE468CF00B6DBF9 /* GenericTableViewCell.swift in Sources */,
 				14DC0A251B5F14720041C979 /* Secrets.swift in Sources */,
+				14CE353E1C5808AB00FD480B /* StopsTableViewController+UIViewControllerPreviewing.swift in Sources */,
 				149AC3431B40C28300E0C5B7 /* StopTime.m in Sources */,
 				149984E21B4EF2FD00EF92C9 /* FileHelper.swift in Sources */,
 				14FE60161B5B552900ABAD94 /* StopTableViewCell.swift in Sources */,
@@ -535,7 +581,9 @@
 				1425EBC51B311B2B00EE7EEC /* Shuttle.swift in Sources */,
 				14F910CE1B4EFF9900D9B83E /* ioapi.c in Sources */,
 				1425EBC71B311B3300EE7EEC /* ShuttleStop.swift in Sources */,
+				14CE35421C580BAC00FD480B /* ShuttleSystem+Favorites.swift in Sources */,
 				14F4A2811B43BE6900F5D1D6 /* WebViewController.swift in Sources */,
+				14CE354A1C580EB800FD480B /* ShuttleSystem+Formatters.swift in Sources */,
 				149AC3361B40C28300E0C5B7 /* FMDatabase.m in Sources */,
 				149AC3421B40C28300E0C5B7 /* Stop.m in Sources */,
 				14F910CF1B4EFF9900D9B83E /* mztools.c in Sources */,
@@ -546,7 +594,9 @@
 				14FE60111B5AD38100ABAD94 /* ShuttleStopTime.swift in Sources */,
 				14FE60151B5B552900ABAD94 /* MapTableViewCell.swift in Sources */,
 				149AC3411B40C28300E0C5B7 /* Shape.m in Sources */,
+				14CE35461C580DEC00FD480B /* ShuttleSystem+Matching.swift in Sources */,
 				149AC33A1B40C28300E0C5B7 /* FMResultSet.m in Sources */,
+				14CE35401C580B6A00FD480B /* Constants.swift in Sources */,
 				149AC3371B40C28300E0C5B7 /* FMDatabaseAdditions.m in Sources */,
 				1435267D1B43376D00D8350B /* AboutTableViewController.swift in Sources */,
 				14F910D21B4EFF9900D9B83E /* SSZipArchive.m in Sources */,
@@ -559,12 +609,14 @@
 				149AC3441B40C28300E0C5B7 /* Transformations.m in Sources */,
 				14BF62481B312151000F8BBE /* ShuttleSystem.swift in Sources */,
 				14E63CE71B424FE3009ECC37 /* ShuttleGetter.swift in Sources */,
+				14CE35481C580E2D00FD480B /* ShuttleSystem+LiveShuttles.swift in Sources */,
 				149AC3391B40C28300E0C5B7 /* FMDatabaseQueue.m in Sources */,
 				1425EBC91B311B4B00EE7EEC /* ShuttleRoute.swift in Sources */,
 				14F910D01B4EFF9900D9B83E /* unzip.c in Sources */,
 				149AC33B1B40C28300E0C5B7 /* Agency.m in Sources */,
 				149AC3341B40C28300E0C5B7 /* CSVImporter.m in Sources */,
 				149AC3451B40C28300E0C5B7 /* Trip.m in Sources */,
+				14CE35441C580C7B00FD480B /* ShuttleSystem+Location.swift in Sources */,
 				149AC2B71B40BDA700E0C5B7 /* CoreLocationController.swift in Sources */,
 				14CE0C871B30E53F00AF27DC /* AppDelegate.swift in Sources */,
 				14FE60131B5B552100ABAD94 /* StopsTableViewController.swift in Sources */,

@@ -85,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         }
         if !DefaultsHelper.key("VERSION>3.0") {
             DefaultsHelper.keyIs(true, key: "VERSION>3.0")
-            DefaultsHelper.keyIs(true, key: NeedsDatabaseUpdateKey)
+            DefaultsHelper.keyIs(true, key: DataKey.NeedsDatabaseUpdate.rawValue)
         }
     }
 

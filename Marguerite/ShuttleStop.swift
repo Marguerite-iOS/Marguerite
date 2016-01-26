@@ -6,7 +6,6 @@
 //  Copyright © 2015 Andrew Finke. All rights reserved.
 //
 
-import UIKit
 import MapKit
 
 class ShuttleStop: NSObject {

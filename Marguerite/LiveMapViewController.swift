@@ -47,9 +47,9 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
         
         updateMapAnnotations()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatingShuttles", name: UpdatingShuttlesNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didUpdateShuttles", name: UpdatedShuttlesNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didFailToUpdateShuttles:", name: FailedToUpdateShuttlesNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatingShuttles", name: Notification.UpdatingShuttles.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didUpdateShuttles", name: Notification.UpdatedShuttles.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didFailToUpdateShuttles:", name: Notification.FailedToUpdateShuttles.rawValue, object: nil)
         
         loadingBarButton = createLoadingBarButtonItem()
         reloadBarButton = navigationItem.leftBarButtonItem!

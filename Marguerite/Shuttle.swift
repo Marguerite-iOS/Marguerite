@@ -6,8 +6,7 @@
 //  Copyright © 2015 Andrew Finke. All rights reserved.
 //
 
-import UIKit
-import MapKit
+import CoreLocation
 
 struct ShuttleElement {
     static let name = "name"
