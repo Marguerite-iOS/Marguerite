@@ -13,12 +13,5 @@ public enum DataKey: String {
 }
 
 public enum Notification: String {
-    case FailedToUpdateShuttles = "FailedToUpdateShuttlesNotification"
-    case UpdatingShuttles = "UpdatingShuttlesNotification"
-    case UpdatedShuttles = "UpdatedShuttlesNotification"
     case UpdatedTheme = "UpdatedThemeNotification"
-    case LocationAvailable = "LocationAvailableNotification"
-    case LocationUnavailable = "LocationUnavailableNotification"
-    case AddStopToFavorites = "AddStopToFavoritesNotification"
-    case RemoveStopFromFavorites = "RemoveStopFromFavoritesNotification"
 }

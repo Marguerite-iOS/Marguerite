@@ -56,6 +56,6 @@ extension ShuttleSystem {
      - returns: The Bool value.
      */
     func isStopFavorited(stop: ShuttleStop) -> Bool {
-        return favoriteStopIDs.indexOf(stop.stopID) != nil
+        return favoriteStopIDs.contains(stop.stopID)
     }
 }

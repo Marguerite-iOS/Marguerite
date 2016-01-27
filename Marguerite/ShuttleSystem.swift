@@ -6,12 +6,12 @@
 //  Copyright © 2015 Andrew Finke. All rights reserved.
 //
 
-import UIKit
-
-
 class ShuttleSystem: NSObject {
     
     static let sharedInstance = ShuttleSystem()
+    
+    var locationDelegate: ShuttleSystemLocationDelegate?
+    var liveShuttlesDelegate: ShuttleSystemLiveShuttlesDelegate?
     
     let fileHelper = FileHelper()
     let locationController = CoreLocationController()

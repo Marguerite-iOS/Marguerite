@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class StopsTableViewController: UITableViewController {
+class StopsTableViewController: UITableViewController, ShuttleSystemLocationDelegate, StopInfoTableViewControllerDelegate {
     
     @IBOutlet weak var segmentedControl: UISegmentedControl! {
         didSet {
@@ -112,7 +112,7 @@ class StopsTableViewController: UITableViewController {
     /**
     Hides the nearby stops segment when the user's location is unavailable
     */
-    func hideNearbyStops() {
+    func locationUnavailable() {
         if segmentedControl.numberOfSegments == 3 {
             segmentedControl.removeSegmentAtIndex(2, animated: false)
         }
@@ -121,7 +121,7 @@ class StopsTableViewController: UITableViewController {
     /**
      Shows the nearby stops segment when the user's location is available
      */
-    func showNearbyStops() {
+    func locationAvailable() {
         if segmentedControl.numberOfSegments == 2 {
             segmentedControl.insertSegmentWithTitle(NSLocalizedString("Nearby Title", comment: ""), atIndex: 2, animated: false)
         }
@@ -132,11 +132,10 @@ class StopsTableViewController: UITableViewController {
     /**
     Called when the user taps favorite button so that iPad & 3D touch users see adding animation while still looking at stop
     */
-    func addStopToFavorites(notification: NSNotification) {
-        guard let stop = notification.object as? ShuttleStop where ShuttleSystem.sharedInstance.favoriteStops.indexOf(stop) == nil else {
+    func addStopToFavorites(stop: ShuttleStop) {
+        if ShuttleSystem.sharedInstance.favoriteStops.contains(stop) {
             return
         }
-        
         ShuttleSystem.sharedInstance.addStopToFavorites(stop)
         if segmentedControl.selectedSegmentIndex == 1, let index = ShuttleSystem.sharedInstance.favoriteStops.indexOf(stop) {
             tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
@@ -146,13 +145,11 @@ class StopsTableViewController: UITableViewController {
     /**
      Called when the user taps favorite button so that iPad & 3D touch users see removing animation while still looking at stop
      */
-    func removeStopFromFavorites(notification: NSNotification) {
-        guard let stop = notification.object as? ShuttleStop, let index = ShuttleSystem.sharedInstance.favoriteStops.indexOf(stop) else {
+    func removeStopFromFavorites(stop: ShuttleStop) {
+        guard let index = ShuttleSystem.sharedInstance.favoriteStops.indexOf(stop) else {
             return
         }
-        
         ShuttleSystem.sharedInstance.removeStopFromFavorites(stop)
-        
         if segmentedControl.selectedSegmentIndex == 1 {
             tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
         }
@@ -186,6 +183,7 @@ class StopsTableViewController: UITableViewController {
             controller.stop = ShuttleSystem.sharedInstance.stopForIndexPath(indexPath, scope: segmentedControl.selectedSegmentIndex)
             controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
             controller.navigationItem.leftItemsSupplementBackButton = true
+            controller.delegate = self
         }
     }
     
@@ -228,6 +226,7 @@ class StopsTableViewController: UITableViewController {
         configureTableViewProperties()
         configureInterface()
         addNotificationObservers()
+        ShuttleSystem.sharedInstance.locationDelegate = self
         NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: "registerForPreviewing", userInfo: nil, repeats: false)
     }
     
@@ -247,10 +246,6 @@ class StopsTableViewController: UITableViewController {
      */
     func addNotificationObservers() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateTheme", name: Notification.UpdatedTheme.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideNearbyStops", name: Notification.LocationUnavailable.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showNearbyStops", name: Notification.LocationAvailable.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "addStopToFavorites:", name: Notification.AddStopToFavorites.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "removeStopFromFavorites:", name: Notification.RemoveStopFromFavorites.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged", name: UIDeviceOrientationDidChangeNotification, object: nil)
     }
 }

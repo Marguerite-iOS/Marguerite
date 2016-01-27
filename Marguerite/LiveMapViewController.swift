@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class LiveMapViewController: UIViewController, MKMapViewDelegate {
+class LiveMapViewController: UIViewController, MKMapViewDelegate, ShuttleSystemLiveShuttlesDelegate {
     
     @IBOutlet private weak var mapView: MKMapView! {
         didSet {
@@ -46,10 +46,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
         ShuttleSystem.sharedInstance.shuttles.forEach({shuttleAnnontations.append($0.annotation)})
         
         updateMapAnnotations()
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatingShuttles", name: Notification.UpdatingShuttles.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didUpdateShuttles", name: Notification.UpdatedShuttles.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didFailToUpdateShuttles:", name: Notification.FailedToUpdateShuttles.rawValue, object: nil)
+        ShuttleSystem.sharedInstance.liveShuttlesDelegate = self
         
         loadingBarButton = createLoadingBarButtonItem()
         reloadBarButton = navigationItem.leftBarButtonItem!
@@ -87,7 +84,7 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
     /**
     Called when the latest shuttle data is downloaded
     */
-    func didUpdateShuttles() {
+    func updatedShuttles() {
         dispatch_async(dispatch_get_main_queue(), {
             self.shuttleAnnontations.forEach({$0.hasUpdatedLocation = false})
             for shuttle in ShuttleSystem.sharedInstance.shuttles {
@@ -122,10 +119,10 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate {
         })
     }
     
-    func didFailToUpdateShuttles(notification: NSNotification) {
+    func failedToUpdateShuttles(message: String) {
         dispatch_async(dispatch_get_main_queue(), {
             self.navigationItem.leftBarButtonItem = self.reloadBarButton
-            guard self.navigationController?.visibleViewController == self, let message = notification.object as? String else {
+            guard self.navigationController?.visibleViewController == self else {
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = false
                 return
             }

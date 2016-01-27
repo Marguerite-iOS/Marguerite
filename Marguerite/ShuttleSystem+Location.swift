@@ -8,6 +8,11 @@
 
 import MapKit
 
+protocol ShuttleSystemLocationDelegate {
+    func locationAvailable()
+    func locationUnavailable()
+}
+
 extension ShuttleSystem: CoreLocationControllerDelegate {
     
     // MARK: - Shuttle system attributes
@@ -48,25 +53,20 @@ extension ShuttleSystem: CoreLocationControllerDelegate {
     func locationAuthorizationStatusChanged(nowEnabled: Bool) {
         if nowEnabled {
             locationController.refreshLocation()
+            locationDelegate?.locationAvailable()
+        } else {
+            locationDelegate?.locationUnavailable()
         }
-        let notificationName = nowEnabled ? Notification.LocationAvailable.rawValue : Notification.LocationUnavailable.rawValue
-        dispatch_async(dispatch_get_main_queue(),{
-            NSNotificationCenter.defaultCenter().postNotificationName(notificationName, object: nil)
-        })
     }
     
     func locationUpdate(location: CLLocation) {
         closestStops = getClosestStops(25, location: location)
-        dispatch_async(dispatch_get_main_queue(),{
-            NSNotificationCenter.defaultCenter().postNotificationName(Notification.LocationAvailable.rawValue, object: nil)
-        })
+        locationDelegate?.locationAvailable()
     }
     
     func locationError(error: NSError) {
         print("GPS location error: \(error.localizedDescription)")
-        dispatch_async(dispatch_get_main_queue(),{
-            NSNotificationCenter.defaultCenter().postNotificationName(Notification.LocationUnavailable.rawValue, object: nil)
-        })
+        locationDelegate?.locationUnavailable()
     }
     
     // MARK: - Other

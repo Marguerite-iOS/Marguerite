@@ -8,6 +8,12 @@
 
 import Crashlytics
 
+protocol ShuttleSystemLiveShuttlesDelegate {
+    func updatingShuttles()
+    func updatedShuttles()
+    func failedToUpdateShuttles(message: String)
+}
+
 extension ShuttleSystem: ShuttleGetterProtocol {
     // MARK: - Realtime buses protocol
     
@@ -32,7 +38,7 @@ extension ShuttleSystem: ShuttleGetterProtocol {
         })
         dispatch_async(dispatch_get_main_queue(),{
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            NSNotificationCenter.defaultCenter().postNotificationName(Notification.UpdatedShuttles.rawValue, object: nil)
+            self.liveShuttlesDelegate?.updatedShuttles()
             self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(15.0, target: self, selector: "updateRealtimeLocations", userInfo: nil, repeats: false)
         })
         updatingShuttles = false
@@ -58,9 +64,7 @@ extension ShuttleSystem: ShuttleGetterProtocol {
             return
         }
         Answers.logCustomEventWithName("3.0: Displayed Live Map Error", customAttributes: [:])
-        dispatch_async(dispatch_get_main_queue(),{
-            NSNotificationCenter.defaultCenter().postNotificationName(Notification.FailedToUpdateShuttles.rawValue, object: message)
-        })
+        self.liveShuttlesDelegate?.failedToUpdateShuttles(message)
     }
     
     func updateRealtimeLocations() {
@@ -70,7 +74,7 @@ extension ShuttleSystem: ShuttleGetterProtocol {
                 self.updateTimer?.invalidate()
                 self.realtimeShuttlesGetter.update()
                 UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-                NSNotificationCenter.defaultCenter().postNotificationName(Notification.UpdatingShuttles.rawValue, object: nil)
+                self.liveShuttlesDelegate?.updatingShuttles()
             })
         }
     }

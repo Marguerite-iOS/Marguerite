@@ -6,15 +6,20 @@
 //  Copyright © 2015 Andrew Finke. All rights reserved.
 //
 
-
-
 import UIKit
 
 let showStopInfoSegueIdentifier = "showStopInfo"
 
+protocol StopInfoTableViewControllerDelegate {
+    func addStopToFavorites(stop: ShuttleStop)
+    func removeStopFromFavorites(stop: ShuttleStop)
+}
+
 class StopInfoTableViewController: UITableViewController {
 
     @IBOutlet private weak var favoriteBarButtonItem: UIBarButtonItem!
+    
+    var delegate: StopInfoTableViewControllerDelegate?
     
     private var seperatorColor: UIColor!
     private var tableViewBackgroundColor: UIColor!
@@ -82,9 +87,9 @@ class StopInfoTableViewController: UITableViewController {
             return
         }
         if ShuttleSystem.sharedInstance.isStopFavorited(stop) {
-            NSNotificationCenter.defaultCenter().postNotificationName(Notification.RemoveStopFromFavorites.rawValue, object: self.stop)
+            delegate?.removeStopFromFavorites(stop)
         } else {
-            NSNotificationCenter.defaultCenter().postNotificationName(Notification.AddStopToFavorites.rawValue, object: self.stop)
+            delegate?.addStopToFavorites(stop)
         }
     }
     
@@ -181,11 +186,11 @@ class StopInfoTableViewController: UITableViewController {
         var previewAction: UIPreviewAction!
         if ShuttleSystem.sharedInstance.isStopFavorited(stop) {
             previewAction = UIPreviewAction(title: "Remove from Favorites", style: .Destructive) { (previewAction: UIPreviewAction, viewController: UIViewController) -> Void in
-                NSNotificationCenter.defaultCenter().postNotificationName(Notification.RemoveStopFromFavorites.rawValue, object: self.stop)
+                self.delegate?.removeStopFromFavorites(stop)
             }
         } else {
             previewAction = UIPreviewAction(title: "Add to Favorites", style: .Default) { (previewAction: UIPreviewAction, viewController: UIViewController) -> Void in
-                NSNotificationCenter.defaultCenter().postNotificationName(Notification.AddStopToFavorites.rawValue, object: self.stop)
+                self.delegate?.addStopToFavorites(stop)
             }
         }
         return [previewAction]

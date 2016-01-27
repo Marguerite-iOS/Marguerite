@@ -459,8 +459,8 @@
 		14FD8FA51B43C41B00C42F7F /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				14CE353F1C580B6A00FD480B /* Constants.swift */,
 				14DC0A241B5F14720041C979 /* Secrets.swift */,
+				14CE353F1C580B6A00FD480B /* Constants.swift */,
 				149984E11B4EF2FD00EF92C9 /* FileHelper.swift */,
 				14491E981B5C993100A65C87 /* ExtraColors.swift */,
 				149AC2BA1B40BF1F00E0C5B7 /* DefaultsHelper.swift */,
