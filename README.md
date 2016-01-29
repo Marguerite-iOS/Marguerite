@@ -1,14 +1,10 @@
 # Marguerite
 
-Marguerite is an iOS app that makes it easier for riders to use the free [Stanford Marguerite shuttle bus system](http://transportation.stanford.edu/marguerite/). Previous versions of the app are located [here](https://github.com/cardinaldevs/marguerite-ios).
+Marguerite is an iOS app that makes it easier for riders to use the free [Stanford Marguerite shuttle bus system](http://transportation.stanford.edu/marguerite/). Previous versions of the app are located [here](https://github.com/cardinaldevs/marguerite-ios). Built with Xcode 7.2
 
 ### Features
 * See what buses are arriving next at the Marguerite stop closest to your current location.
 * View the real-time locations of all shuttles.
-
-### Notices
-* You will need to modifiy the secrets file for some features to work. Email margueriteprojectmaintainer [at] gmail [dot] com for the keys.
-* Built with Xcode 7.2
 
 ## Attributions
 This app would not have been possible without the following open-source libraries:
