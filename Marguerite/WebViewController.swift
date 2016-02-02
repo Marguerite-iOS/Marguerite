@@ -103,7 +103,7 @@ class WebViewController: UIViewController, WKNavigationDelegate {
     }
     
     func showProgressView() {
-        progressView.setProgress(max(0.05, self.progressView.progress), animated: false)
+        progressView.setProgress(max(0.05, progressView.progress), animated: false)
         progressView.hidden = false
     }
     

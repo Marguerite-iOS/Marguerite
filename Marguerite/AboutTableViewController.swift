@@ -123,6 +123,7 @@ class AboutTableViewController: UITableViewController, SFSafariViewControllerDel
                 UIApplication.sharedApplication().statusBarStyle = .Default
                 UIBarButtonItem.appearance().tintColor = UIColor.cardinalColor()
                 let controller = SFSafariViewController(URL: url)
+                controller.modalPresentationStyle = .FormSheet
                 controller.delegate = self
                 presentViewController(controller, animated: true, completion: nil)
             } else {
