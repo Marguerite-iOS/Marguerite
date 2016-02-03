@@ -1,5 +1,5 @@
 //
-//  FileHelper.swift
+//  GTFSHelper.swift
 //  Marguerite
 //
 //  Created by Andrew Finke on 7/9/15.
@@ -11,7 +11,7 @@ import UIKit
 let appGroupIdentifier = "group.edu.stanford.Marguerite"
 let MovedGTFSBundleKey = "Moved GTFS From Bundle"
 
-class FileHelper: NSObject, SSZipArchiveDelegate {
+class GTFSHelper: NSObject, SSZipArchiveDelegate {
     
     private let fileManager = NSFileManager.defaultManager()
     
@@ -38,11 +38,13 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
     Gets the latest GTFS data from the stanford website
     */
     func getLatestGTFSData() {
+        // FIXME: Remove for full app
+        return
         if let url = NSURL(string: MargueriteGTFSDataURL) {
             let task = NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
                 if let data = data where error == nil {
                     print("Downloaded new gtfs data")
-                    data.writeToFile(FileHelper.tempZipPath, atomically: true)
+                    data.writeToFile(GTFSHelper.tempZipPath, atomically: true)
                     self.movedNewZipToTempFolder()
                 }
             })
@@ -75,8 +77,8 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
     Starts to unzip the gtfs zip file
     */
     private func movedNewZipToTempFolder() {
-        let tempFolder = FileHelper.tempFolderPath
-        let tempZipPath = FileHelper.tempZipPath
+        let tempFolder = GTFSHelper.tempFolderPath
+        let tempZipPath = GTFSHelper.tempZipPath
         
         SSZipArchive.unzipFileAtPath(tempZipPath, toDestination: tempFolder, progressHandler: nil) { (path: String!, succeeded: Bool, error: NSError!) -> Void in
             let latestFileInTemp = self.getLatestFileInFolder(tempFolder)
@@ -110,8 +112,8 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
     Moves the newer files to the main transit files folder
     */
     private func moveTempFilesToTransitFolder() {
-        let tempFolder = FileHelper.tempFolderPath
-        for fileName in FileHelper.gtfsFileNames {
+        let tempFolder = GTFSHelper.tempFolderPath
+        for fileName in GTFSHelper.gtfsFileNames {
             let destinationPath = Util.getTransitFilesBasepath().stringByAppendingString("/" + fileName + ".txt")
             if NSFileManager.defaultManager().fileExistsAtPath(destinationPath) {
                 do {
@@ -137,7 +139,7 @@ class FileHelper: NSObject, SSZipArchiveDelegate {
                 print(error)
             }
         }
-        ShuttleSystem.sharedInstance.fileHelper.movedNewZipToTempFolder()
+        ShuttleSystem.sharedInstance.gtfsHelper.movedNewZipToTempFolder()
     }
     
     /**

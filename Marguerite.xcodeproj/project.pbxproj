@@ -25,7 +25,7 @@
 		14757DD31BE2DF820047D87F /* AboutView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 14757DD21BE2DF820047D87F /* AboutView.storyboard */; };
 		147EC3AB1B311063006A4607 /* LiveMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 147EC3AA1B311063006A4607 /* LiveMapViewController.swift */; };
 		1490A2301B3F1B0A00172CA4 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1490A22F1B3F1B0A00172CA4 /* libsqlite3.0.dylib */; };
-		149984E21B4EF2FD00EF92C9 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149984E11B4EF2FD00EF92C9 /* FileHelper.swift */; };
+		149984E21B4EF2FD00EF92C9 /* GTFSHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149984E11B4EF2FD00EF92C9 /* GTFSHelper.swift */; };
 		149AC2B71B40BDA700E0C5B7 /* CoreLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149AC2B61B40BDA700E0C5B7 /* CoreLocationController.swift */; };
 		149AC2BB1B40BF1F00E0C5B7 /* DefaultsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149AC2BA1B40BF1F00E0C5B7 /* DefaultsHelper.swift */; };
 		149AC3341B40C28300E0C5B7 /* CSVImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 149AC30D1B40C28300E0C5B7 /* CSVImporter.m */; };
@@ -101,7 +101,7 @@
 		147EC3AA1B311063006A4607 /* LiveMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveMapViewController.swift; sourceTree = "<group>"; };
 		1490A1EA1B3F194D00172CA4 /* Marguerite-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Marguerite-Bridging-Header.h"; sourceTree = "<group>"; };
 		1490A22F1B3F1B0A00172CA4 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
-		149984E11B4EF2FD00EF92C9 /* FileHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
+		149984E11B4EF2FD00EF92C9 /* GTFSHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GTFSHelper.swift; sourceTree = "<group>"; };
 		149AC2B61B40BDA700E0C5B7 /* CoreLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreLocationController.swift; sourceTree = "<group>"; };
 		149AC2BA1B40BF1F00E0C5B7 /* DefaultsHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultsHelper.swift; sourceTree = "<group>"; };
 		149AC30C1B40C28300E0C5B7 /* CSVImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVImporter.h; sourceTree = "<group>"; };
@@ -461,7 +461,7 @@
 			children = (
 				14DC0A241B5F14720041C979 /* Secrets.swift */,
 				14CE353F1C580B6A00FD480B /* Constants.swift */,
-				149984E11B4EF2FD00EF92C9 /* FileHelper.swift */,
+				149984E11B4EF2FD00EF92C9 /* GTFSHelper.swift */,
 				14491E981B5C993100A65C87 /* ExtraColors.swift */,
 				149AC2BA1B40BF1F00E0C5B7 /* DefaultsHelper.swift */,
 				149AC2B61B40BDA700E0C5B7 /* CoreLocationController.swift */,
@@ -573,7 +573,7 @@
 				14DC0A251B5F14720041C979 /* Secrets.swift in Sources */,
 				14CE353E1C5808AB00FD480B /* StopsTableViewController+UIViewControllerPreviewing.swift in Sources */,
 				149AC3431B40C28300E0C5B7 /* StopTime.m in Sources */,
-				149984E21B4EF2FD00EF92C9 /* FileHelper.swift in Sources */,
+				149984E21B4EF2FD00EF92C9 /* GTFSHelper.swift in Sources */,
 				14FE60161B5B552900ABAD94 /* StopTableViewCell.swift in Sources */,
 				14F910D11B4EFF9900D9B83E /* zip.c in Sources */,
 				149AC33C1B40C28300E0C5B7 /* Calendar.m in Sources */,
