@@ -18,12 +18,11 @@ class AboutTableViewController: UITableViewController, SFSafariViewControllerDel
     
     private let headers: [String?] = [NSLocalizedString("Credits Header", comment: ""), NSLocalizedString("Contact Marguerite Header", comment: ""), NSLocalizedString("Open-source Header", comment: ""), NSLocalizedString("Other Apps Header", comment: ""), nil]
     private let creditsStrings: [String] = [NSLocalizedString("Updated Version Title", comment: ""), NSLocalizedString("Original App Title", comment: ""), NSLocalizedString("Branding Title", comment: ""), NSLocalizedString("Misc. Images Title", comment: "")]
-    private let contactStrings: [String] = [NSLocalizedString("Main Office Title", comment: ""), NSLocalizedString("Lost and Found Title", comment: ""), NSLocalizedString("Website Title", comment: ""), NSLocalizedString("Website Map Title", comment: "")]
+    private let contactStrings: [String] = [NSLocalizedString("Main Office Title", comment: ""), NSLocalizedString("Website Title", comment: "")]
 
     // MARK: - Links
     
     private let officePhoneNumber = "650-724-9339"
-    private let lostAndFoundPhoneNumber = "650-724-4309"
     private let websiteURL = "http://transportation.stanford.edu/marguerite"
     private let gitHubURL = "http://atfinkeproductions.com/Marguerite"
     
@@ -82,8 +81,6 @@ class AboutTableViewController: UITableViewController, SFSafariViewControllerDel
             case 0:
                 callPhoneNumber(officePhoneNumber)
             case 1:
-                callPhoneNumber(lostAndFoundPhoneNumber)
-            case 2:
                 openSafariController(websiteURL)
             default:
                 break

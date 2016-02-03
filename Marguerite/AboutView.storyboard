@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oyz-53-ANv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="oyz-53-ANv">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
     </dependencies>
     <scenes>
@@ -156,32 +157,8 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="rY9-ov-bKx" detailTextLabel="Lvk-N4-yKJ" style="IBUITableViewCellStyleValue1" id="M2z-LK-7Mq" customClass="GenericTableViewCell" customModule="Marguerite" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="375.5" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="M2z-LK-7Mq" id="rsb-gK-d6f">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Lost and Found" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="rY9-ov-bKx">
-                                                    <rect key="frame" x="15" y="12" width="112.5" height="19.5"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="(650) 724-4309" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Lvk-N4-yKJ">
-                                                    <rect key="frame" x="466" y="12" width="119" height="19.5"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="Jlx-CY-kvJ" style="IBUITableViewCellStyleDefault" id="DVQ-DB-ufJ" customClass="GenericTableViewCell" customModule="Marguerite" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="419.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="375.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DVQ-DB-ufJ" id="JvS-Ft-G72">
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
@@ -203,7 +180,7 @@
                                 <string key="footerTitle">This app is open-source. All of the code is available on GitHub, and anyone can contribute to improving the app. Using SSZipArchive, GTFS Importer, and FMDB.</string>
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="1lU-mZ-L5I" style="IBUITableViewCellStyleDefault" id="nMs-pR-iCf" customClass="GenericTableViewCell" customModule="Marguerite" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="505.5" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="461.5" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nMs-pR-iCf" id="TLJ-om-i3m">
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
@@ -225,7 +202,7 @@
                                 <string key="footerTitle">This app is open-source. All of the code is available on GitHub, and anyone can contribute to improving the app. Using SSZipArchive, GTFS Importer, and FMDB.</string>
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="hYQ-cE-z5N" style="IBUITableViewCellStyleDefault" id="wiC-k7-DBK" customClass="GenericTableViewCell" customModule="Marguerite" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="632" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="588" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wiC-k7-DBK" id="6dP-Vg-T3a">
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
