@@ -13,7 +13,7 @@ class ShuttleSystem: NSObject {
     var locationDelegate: ShuttleSystemLocationDelegate?
     var liveShuttlesDelegate: ShuttleSystemLiveShuttlesDelegate?
     
-    let fileHelper = FileHelper()
+    let gtfsHelper = GTFSHelper()
     let locationController = CoreLocationController()
     let realtimeShuttlesGetter = ShuttleGetter(urlString: MargueriteShuttlesLocationURL)
     
@@ -53,7 +53,7 @@ class ShuttleSystem: NSObject {
     }
     
     func start() {
-        if fileHelper.hasCompletedInitalSetup {
+        if gtfsHelper.hasCompletedInitalSetup {
             print("Device has GTFS")
             loadData()
         } else {
@@ -79,10 +79,13 @@ class ShuttleSystem: NSObject {
             importer.addAgency()
             importer.addRoute()
             importer.addStop()
+            // FIXME: Remove comment for full app
+            /*
             importer.addCalendarDate()
             importer.addTrip()
             importer.addStopTime()
             importer.addStopRoutes()
+            */
             importer.vacuum()
             importer.reindex()
             print("--- Finished Updating Database ---")
@@ -110,7 +113,7 @@ class ShuttleSystem: NSObject {
         realtimeShuttlesGetter.update()
         loadFavorites()
         
-        ShuttleSystem.sharedInstance.fileHelper.getLatestGTFSData()
+        ShuttleSystem.sharedInstance.gtfsHelper.getLatestGTFSData()
         
         print("*** Finished Loading Shuttle System ***")
     }

@@ -78,6 +78,9 @@ class ShuttleStop: NSObject {
     - returns: The next stop times.
     */
     private func getShuttleStopTimes() -> [ShuttleStopTime] {
+        // FIXME: Remove for full app
+        return []
+        
         if let db = FMDatabase.databaseWithPath(Util.getDatabasePath()) as? FMDatabase {
             if !db.open() { return []  }
             let currentDate = NSDate()

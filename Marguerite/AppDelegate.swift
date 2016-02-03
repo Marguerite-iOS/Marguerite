@@ -30,6 +30,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         loadAppearances()
         loadInterface()
         
+        // FIXME: Remove for full app
+        (window!.rootViewController as! UITabBarController).viewControllers = [(window!.rootViewController as! UITabBarController).viewControllers![1]]
+        
         return true
     }
     
@@ -57,6 +60,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
      Loads the controllers and shortcuts
      */
     func loadInterface() {
+        UIApplication.sharedApplication().statusBarHidden = false
+        
         let tabBarController = window!.rootViewController as! UITabBarController
         let splitViewController = tabBarController.viewControllers![0] as! UISplitViewController
         let navigationController = splitViewController.viewControllers[splitViewController.viewControllers.count-1] as! UINavigationController
@@ -65,24 +70,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         splitViewController.preferredPrimaryColumnWidthFraction = 0.5
         splitViewController.delegate = self
         
+        // FIXME: Remove for full app
+        return
         if #available(iOS 9.0, *) {
             let map = UIApplicationShortcutItem(type: ShortcutIdentifier.OpenLiveMap.rawValue, localizedTitle: NSLocalizedString("Show Map Shortcut", comment: ""), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(templateImageName: "MapEmpty"), userInfo: nil)
             let stops = UIApplicationShortcutItem(type: ShortcutIdentifier.OpenStops.rawValue, localizedTitle: NSLocalizedString("Show Stops Shortcut", comment: ""), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(templateImageName: "BusEmpty"), userInfo: nil)
             UIApplication.sharedApplication().shortcutItems = [stops, map]
         }
-        
-        UIApplication.sharedApplication().statusBarHidden = false
     }
     
     /**
      Make sure the GTFS files have been moved to the right place
      */
     func checkIntegrity() {
-        FileHelper.ensureFolderExistance()
+        GTFSHelper.ensureFolderExistance()
         if !DefaultsHelper.key(MovedGTFSBundleKey) {
-            FileHelper.moveBundleToTempFolder()
+            GTFSHelper.moveBundleToTempFolder()
             DefaultsHelper.keyIs(true, key: MovedGTFSBundleKey)
         }
+        // FIXME: Remove for full app
+        return
         if !DefaultsHelper.key("VERSION>3.0") {
             DefaultsHelper.keyIs(true, key: "VERSION>3.0")
             DefaultsHelper.keyIs(true, key: DataKey.NeedsDatabaseUpdate.rawValue)

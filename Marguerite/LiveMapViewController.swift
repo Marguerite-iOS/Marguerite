@@ -208,7 +208,8 @@ class LiveMapViewController: UIViewController, MKMapViewDelegate, ShuttleSystemL
                 let pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "Stop")
                 pinView.pinColor = .Red
                 pinView.canShowCallout = true
-                pinView.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
+                // FIXME: Remove comment for full app
+                //pinView.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
                 return pinView
             case .Shuttle:
                 return ShuttleSystemShuttleAnnotationView(annotation: annotation)
