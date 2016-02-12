@@ -60,6 +60,7 @@
 		14CE35481C580E2D00FD480B /* ShuttleSystem+LiveShuttles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE35471C580E2D00FD480B /* ShuttleSystem+LiveShuttles.swift */; };
 		14CE354A1C580EB800FD480B /* ShuttleSystem+Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14CE35491C580EB800FD480B /* ShuttleSystem+Formatters.swift */; };
 		14DC0A251B5F14720041C979 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14DC0A241B5F14720041C979 /* Secrets.swift */; };
+		14E0593E1C6A7D8E00F6774C /* SWXMLHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E0593D1C6A7D8E00F6774C /* SWXMLHash.swift */; };
 		14E63CE71B424FE3009ECC37 /* ShuttleGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E63CE61B424FE3009ECC37 /* ShuttleGetter.swift */; };
 		14F4A2811B43BE6900F5D1D6 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F4A2801B43BE6900F5D1D6 /* WebViewController.swift */; };
 		14F910CE1B4EFF9900D9B83E /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 14F910C41B4EFF9900D9B83E /* ioapi.c */; };
@@ -160,6 +161,7 @@
 		14CE35471C580E2D00FD480B /* ShuttleSystem+LiveShuttles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ShuttleSystem+LiveShuttles.swift"; sourceTree = "<group>"; };
 		14CE35491C580EB800FD480B /* ShuttleSystem+Formatters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ShuttleSystem+Formatters.swift"; sourceTree = "<group>"; };
 		14DC0A241B5F14720041C979 /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		14E0593D1C6A7D8E00F6774C /* SWXMLHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SWXMLHash.swift; sourceTree = "<group>"; };
 		14E63CE61B424FE3009ECC37 /* ShuttleGetter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShuttleGetter.swift; sourceTree = "<group>"; };
 		14F4A2801B43BE6900F5D1D6 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		14F910C31B4EFF9900D9B83E /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 			children = (
 				1425EBC61B311B3300EE7EEC /* ShuttleStop.swift */,
 				14E63CE61B424FE3009ECC37 /* ShuttleGetter.swift */,
+				14E0593D1C6A7D8E00F6774C /* SWXMLHash.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -577,6 +580,7 @@
 				14FE60161B5B552900ABAD94 /* StopTableViewCell.swift in Sources */,
 				14F910D11B4EFF9900D9B83E /* zip.c in Sources */,
 				149AC33C1B40C28300E0C5B7 /* Calendar.m in Sources */,
+				14E0593E1C6A7D8E00F6774C /* SWXMLHash.swift in Sources */,
 				149AC33D1B40C28300E0C5B7 /* CalendarDate.m in Sources */,
 				1425EBC51B311B2B00EE7EEC /* Shuttle.swift in Sources */,
 				14F910CE1B4EFF9900D9B83E /* ioapi.c in Sources */,
@@ -733,6 +737,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Marguerite",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Marguerite/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
@@ -758,6 +763,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Marguerite",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Marguerite/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;

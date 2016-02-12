@@ -11,12 +11,8 @@ import CoreLocation
 struct ShuttleElement {
     static let name = "name"
     static let routeId = "routeid"
-    static let tripId = "tripid"
-    static let heading = "heading"
     static let latitude = "latitude"
     static let longitude = "longitude"
-    static let speed = "speed"
-    static let time = "time"
 }
 
 struct Shuttle {

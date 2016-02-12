@@ -39,7 +39,7 @@ extension ShuttleSystem: ShuttleGetterProtocol {
         dispatch_async(dispatch_get_main_queue(),{
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             self.liveShuttlesDelegate?.updatedShuttles()
-            self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(15.0, target: self, selector: "updateRealtimeLocations", userInfo: nil, repeats: false)
+            self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(30.0, target: self, selector: "updateRealtimeLocations", userInfo: nil, repeats: false)
         })
         updatingShuttles = false
         Answers.logCustomEventWithName("3.0: Live Map Updated", customAttributes: [:])

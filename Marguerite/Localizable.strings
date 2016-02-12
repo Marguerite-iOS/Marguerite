@@ -46,7 +46,7 @@
 "Open-source Header" = "Open-source";
 "Other Apps Header" = "Other Apps";
 "GitHub Title" = "On GitHub";
-"Open-source Footer" = "This app is open-source. All of the code is available on GitHub, and anyone can contribute to improving the app. Using SSZipArchive, GTFS Importer, and FMDB.";
+"Open-source Footer" = "This app is open-source. All of the code is available on GitHub, and anyone can contribute to improving the app. Using SSZipArchive, GTFS Importer, SWXMLHash, and FMDB.";
 
 "Show Stops Shortcut" = "Show Stops";
 "Show Map Shortcut" = "Show Live Map";

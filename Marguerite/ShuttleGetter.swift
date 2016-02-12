@@ -38,6 +38,13 @@ class ShuttleGetter: NSObject, NSXMLParserDelegate {
     Refresh the buses by downloading the XML feed, asynchronously.
     */
     func update() {
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(NSURLRequest(URL: NSURL(string: "http://lbre-apps.stanford.edu/transportation/stanford_ivl/locations.cfm")!)) { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
+            if let data = data, xml = String(data: data, encoding: NSUTF8StringEncoding) {
+                self.parseXML(xml)
+            }
+        }
+        task.resume()
+        
         guard let url = NSURL(string: urlString) else {
             delegate?.busUpdateDidFail(.URLFormattingError)
             return
@@ -60,57 +67,32 @@ class ShuttleGetter: NSObject, NSXMLParserDelegate {
         self.urlString = urlString
     }
     
-    // MARK: - NSXMLParserDelegate
-    
-    private struct XMLElement {
-        static let vehicle = "vehicle"
-        
-        static let commStatus = "comm-status"
-        static let gpsStatus = "gps-status"
-        static let opStatus = "op-status"
-        
-        static let goodStatus = "good"
-        static let noStatus = "none"
-    }
-    
-    private var parsingVehicle = false
-    private var currentElement: String?
-    private var currentVehicleDictionary: [String: String]?
     private var vehicleDictionaries = [[String: String]]()
-    
-    func parserDidStartDocument(parser: NSXMLParser) {
+
+    func parseXML(xml: String) {
         vehicleDictionaries = []
-    }
-    
-    func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String: String]) {
-        if !parsingVehicle && elementName == XMLElement.vehicle, let gpsStatus = attributeDict[XMLElement.gpsStatus], _ = attributeDict[XMLElement.opStatus] where gpsStatus == XMLElement.goodStatus {
-            currentVehicleDictionary = [String:String]()
-            parsingVehicle = true
-        }
-        currentElement = elementName
-    }
-    
-    func parser(parser: NSXMLParser, foundCharacters string: String) {
-        guard parsingVehicle, let currentElement = currentElement else {
+        let xml = SWXMLHash.parse(xml)
+        do {
+            let vehicles = try xml.byKey("vehicle-locations").byKey("vehicle")
+            for vehicles in vehicles {
+                do {
+                    var vehicleDictionary = [String: String]()
+                    vehicleDictionary[ShuttleElement.name] = try vehicles.byKey(ShuttleElement.name).element?.text
+                    vehicleDictionary[ShuttleElement.routeId] = try vehicles.byKey(ShuttleElement.routeId).element?.text
+                    vehicleDictionary[ShuttleElement.latitude] = try vehicles.byKey(ShuttleElement.latitude).element?.text
+                    vehicleDictionary[ShuttleElement.longitude] = try vehicles.byKey(ShuttleElement.longitude).element?.text
+                    vehicleDictionaries.append(vehicleDictionary)
+                } catch {
+                }
+            }
+        } catch {
+            self.delegate?.busUpdateDidFail(.ParserDataError)
             return
         }
-        if var currentVehicleDictionary = currentVehicleDictionary {
-            currentVehicleDictionary[currentElement] = string
-            self.currentVehicleDictionary = currentVehicleDictionary
-        }
+        compiledVehicleDictionaries()
     }
     
-    func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        if elementName == XMLElement.vehicle {
-            if parsingVehicle, let currentVehicleDictionary = currentVehicleDictionary {
-                vehicleDictionaries.append(currentVehicleDictionary)
-                self.currentVehicleDictionary = nil
-            }
-            parsingVehicle = false
-        }
-    }
-    
-    func parserDidEndDocument(parser: NSXMLParser) {
+    func compiledVehicleDictionaries() {
         // Construct vehicle ID string for POST request
         let vehicleIdString = extractVehicleIdsFromBusDictionaries(vehicleDictionaries)
         
