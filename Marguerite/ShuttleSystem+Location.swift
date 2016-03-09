@@ -92,6 +92,10 @@ extension ShuttleSystem: CoreLocationControllerDelegate {
             return first.distance < second.distance
         }
         
+        guard stopsSortedByDistance.count > 0 else {
+            return []
+        }
+        
         return [ShuttleStop](stopsSortedByDistance[0...n-1])
     }
 }
