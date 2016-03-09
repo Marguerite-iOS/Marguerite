@@ -79,13 +79,10 @@ class ShuttleSystem: NSObject {
             importer.addAgency()
             importer.addRoute()
             importer.addStop()
-            // FIXME: Remove comment for full app
-            /*
             importer.addCalendarDate()
             importer.addTrip()
             importer.addStopTime()
             importer.addStopRoutes()
-            */
             importer.vacuum()
             importer.reindex()
             print("--- Finished Updating Database ---")

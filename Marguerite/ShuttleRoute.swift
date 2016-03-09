@@ -10,7 +10,7 @@ struct ShuttleRoute {
     
     // Necessary
     let routeID: Int!
-    var shortName: String!
+    let shortName: String!
     let routeColor: UIColor!
     let routeTextColor: UIColor!
     var image: UIImage!
@@ -41,12 +41,6 @@ struct ShuttleRoute {
         
         if let dictionaryLongName = dictionary["route_long_name"] as? String where dictionaryLongName.characters.count > 3 {
             longName = dictionaryLongName
-            if longName == "Va Tram" {
-                shortName = "VA"
-            } else if longName == "Mc Holiday" {
-                shortName = "MCH"
-                longName = "MC Holiday"
-            }
         }
         image = RouteBubbleView.bubbleForRoute(self)
     }

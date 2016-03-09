@@ -30,9 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         loadAppearances()
         loadInterface()
         
-        // FIXME: Remove for full app
-        (window!.rootViewController as! UITabBarController).viewControllers = [(window!.rootViewController as! UITabBarController).viewControllers![1]]
-        
         return true
     }
     
@@ -69,9 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         splitViewController.preferredDisplayMode = .AllVisible
         splitViewController.preferredPrimaryColumnWidthFraction = 0.5
         splitViewController.delegate = self
-        
-        // FIXME: Remove for full app
-        return
+
         if #available(iOS 9.0, *) {
             let map = UIApplicationShortcutItem(type: ShortcutIdentifier.OpenLiveMap.rawValue, localizedTitle: NSLocalizedString("Show Map Shortcut", comment: ""), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(templateImageName: "MapEmpty"), userInfo: nil)
             let stops = UIApplicationShortcutItem(type: ShortcutIdentifier.OpenStops.rawValue, localizedTitle: NSLocalizedString("Show Stops Shortcut", comment: ""), localizedSubtitle: nil, icon: UIApplicationShortcutIcon(templateImageName: "BusEmpty"), userInfo: nil)
@@ -88,8 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             GTFSHelper.moveBundleToTempFolder()
             DefaultsHelper.keyIs(true, key: MovedGTFSBundleKey)
         }
-        // FIXME: Remove for full app
-        return
+
         if !DefaultsHelper.key("VERSION>3.0") {
             DefaultsHelper.keyIs(true, key: "VERSION>3.0")
             DefaultsHelper.keyIs(true, key: DataKey.NeedsDatabaseUpdate.rawValue)
