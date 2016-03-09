@@ -38,8 +38,6 @@ class GTFSHelper: NSObject, SSZipArchiveDelegate {
     Gets the latest GTFS data from the stanford website
     */
     func getLatestGTFSData() {
-        // FIXME: Remove for full app
-        return
         if let url = NSURL(string: MargueriteGTFSDataURL) {
             let task = NSURLSession.sharedSession().dataTaskWithURL(url, completionHandler: { (data: NSData?, response: NSURLResponse?, error: NSError?) -> Void in
                 if let data = data where error == nil {
@@ -59,14 +57,13 @@ class GTFSHelper: NSObject, SSZipArchiveDelegate {
     */
     private func getLatestFileInFolder(path: String) -> NSDate {
         var latestDate = NSDate(timeIntervalSince1970: 0)
-        if let contents = try? fileManager.contentsOfDirectoryAtPath(path) {
-            for fileName in contents {
-                if let url = NSURL(string: fileName) where url.pathExtension == "txt" {
-                    let path = path.stringByAppendingString("/" + fileName)
-                    let attributes = try? fileManager.attributesOfItemAtPath(path)
-                    if let modificationDate = attributes?[NSFileModificationDate] as? NSDate where latestDate.timeIntervalSinceDate(modificationDate) < 0 {
-                        latestDate = modificationDate
-                    }
+        let enumerator = fileManager.enumeratorAtPath(path)
+        while let element = enumerator?.nextObject() as? String {
+            if element.containsString(".txt") {
+                let path = path.stringByAppendingString("/" + element)
+                let attributes = try? fileManager.attributesOfItemAtPath(path)
+                if let modificationDate = attributes?[NSFileModificationDate] as? NSDate where latestDate.timeIntervalSinceDate(modificationDate) < 0 {
+                    latestDate = modificationDate
                 }
             }
         }
@@ -79,8 +76,7 @@ class GTFSHelper: NSObject, SSZipArchiveDelegate {
     private func movedNewZipToTempFolder() {
         let tempFolder = GTFSHelper.tempFolderPath
         let tempZipPath = GTFSHelper.tempZipPath
-        
-        SSZipArchive.unzipFileAtPath(tempZipPath, toDestination: tempFolder, progressHandler: nil) { (path: String!, succeeded: Bool, error: NSError!) -> Void in
+        SSZipArchive.unzipFileAtPath(tempZipPath, toDestination: tempFolder, progressHandler: nil) { (path: String!, succeeded: Bool, error: NSError?) -> Void in
             let latestFileInTemp = self.getLatestFileInFolder(tempFolder)
             let latestFileInCurrent = self.getLatestFileInFolder(Util.getTransitFilesBasepath())
             print("--- New GTFS Data ---")
@@ -113,17 +109,17 @@ class GTFSHelper: NSObject, SSZipArchiveDelegate {
     */
     private func moveTempFilesToTransitFolder() {
         let tempFolder = GTFSHelper.tempFolderPath
-        for fileName in GTFSHelper.gtfsFileNames {
-            let destinationPath = Util.getTransitFilesBasepath().stringByAppendingString("/" + fileName + ".txt")
-            if NSFileManager.defaultManager().fileExistsAtPath(destinationPath) {
-                do {
-                    try NSFileManager.defaultManager().removeItemAtPath(destinationPath)
-                } catch _ {
+        let enumerator = fileManager.enumeratorAtPath(tempFolder)
+        while let element = enumerator?.nextObject() as? String {
+            for fileName in GTFSHelper.gtfsFileNames {
+                if element.containsString(fileName + ".txt") {
+                    let elementPath = tempFolder.stringByAppendingString("/" + element)
+                    let destinationPath = Util.getTransitFilesBasepath().stringByAppendingString("/" + fileName + ".txt")
+                    if NSFileManager.defaultManager().fileExistsAtPath(destinationPath) {
+                        try! NSFileManager.defaultManager().removeItemAtPath(destinationPath)
+                    }
+                    try! NSFileManager.defaultManager().moveItemAtPath(elementPath, toPath: destinationPath)
                 }
-            }
-            do {
-                try NSFileManager.defaultManager().moveItemAtPath(tempFolder.stringByAppendingString("/" + fileName + ".txt"), toPath: destinationPath)
-            } catch _ {
             }
         }
     }
