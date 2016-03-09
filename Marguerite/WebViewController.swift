@@ -21,10 +21,15 @@ class WebViewController: UIViewController, WKNavigationDelegate {
             segmentedControl.setTitle(NSLocalizedString("Schedule Title", comment: ""), forSegmentAtIndex: 1)
         }
     }
-    
+    var shouldShowSchedule = false
     var route: ShuttleRoute! {
         didSet {
-            webView.loadRequest(NSURLRequest(URL: getMapURLForRoute()))
+            if shouldShowSchedule {
+                segmentedControl.selectedSegmentIndex = 1
+                webView.loadRequest(NSURLRequest(URL: getScheduleURLForRoute()))
+            } else {
+                webView.loadRequest(NSURLRequest(URL: getMapURLForRoute()))
+            }
             title = route.displayName
         }
     }
@@ -135,13 +140,13 @@ class WebViewController: UIViewController, WKNavigationDelegate {
     - returns: The URL for the map of the given route.
     */
     private func getMapURLForRoute() -> NSURL {
-        switch route!.shortName.lowercaseString {
+        switch route.shortName.lowercaseString {
         case "w":
             return NSURL(string: "http://transportation.stanford.edu/marguerite/w/map.pdf")!
         case "mc-hol":
             return NSURL(string: "http://transportation.stanford.edu/marguerite/mch/map.pdf")!
         default:
-            return route!.routeURL.URLByAppendingPathComponent("map.pdf")
+            return route.routeURL.URLByAppendingPathComponent("map.pdf")
         }
     }
 
@@ -162,21 +167,11 @@ class WebViewController: UIViewController, WKNavigationDelegate {
             return NSURL(string: "http://transportation.stanford.edu/marguerite/mch/mch.pdf")!
         case "h-dir":
             return NSURL(string: "http://transportation.stanford.edu/marguerite/hd/hd.pdf")!
-        case "se":
-            return isSESpecial() ? NSURL(string: "http://transportation.stanford.edu/marguerite/sesp/sesp.pdf")! : route.routeURL.URLByAppendingPathComponent(route.shortName.lowercaseString + ".pdf")
+        case "ae-f":
+            return NSURL(string: "http://transportation.stanford.edu/marguerite/aef/aef.pdf")!
         default:
             return route.routeURL.URLByAppendingPathComponent(route.shortName.lowercaseString + ".pdf")
         }
-    }
-    
-    /**
-    During the summer the shopping express has a special version.
-    */
-    private func isSESpecial() -> Bool {
-        if ShuttleSystem.sharedInstance.databaseDateFormatter.dateFromString("2015-09-10")?.timeIntervalSinceNow > 0 {
-            return true
-        }
-        return false
     }
     
     // MARK: - Actions

@@ -166,6 +166,7 @@ class StopInfoTableViewController: UITableViewController {
         if indexPath.section == 1 {
             let webViewNavigationController = UIStoryboard(name: "WebView", bundle: nil).instantiateInitialViewController() as! UINavigationController
             webViewNavigationController.modalPresentationStyle = .FormSheet
+            (webViewNavigationController.topViewController as! WebViewController).shouldShowSchedule = true
             (webViewNavigationController.topViewController as! WebViewController).route = stop.stopTimes[indexPath.row].route
             presentViewController(webViewNavigationController, animated: true, completion: nil)
         }
